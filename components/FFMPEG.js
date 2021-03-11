@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react"; // import React, { useState, imagetgif from "react";
 import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
-import DragAndDrop from "../components/DragAndDrop";
-import Head from "next/head";
-// import Link from "next/link";
-import styles from "../styles/Home.module.css";
 
 const ffmpeg = createFFmpeg({ log: true });
 
-export default function Home() {
+export default function FFMPEG() {
   const [ready, setReady] = useState("false");
   const [video, setVideo] = useState();
   const [gif, setGif] = useState();
@@ -54,7 +50,6 @@ export default function Home() {
 
   const convertToGif = async (props) => {
     // Write the file to memory
-    const [gif, setGif] = useState();
     ffmpeg.FS("writeFile", "test.mp4", await fetchFile(video));
 
     // Run the FFMpeg command
@@ -103,51 +98,5 @@ export default function Home() {
     setVideo(url);
   };
 
-  //   /**
-  // Memory management
-  // Each time you call createObjectURL(), a new object URL is created, even if you've already created one for the same object. Each of these must be released by calling URL.revokeObjectURL() when you no longer need them.
-  //    */
-
-  const reducer = (state, action) => {
-    switch (action.type) {
-      case "SET_DROP_DEPTH":
-        return { ...state, dropDepth: action.dropDepth };
-      case "SET_IN_DROP_ZONE":
-        return { ...state, inDropZone: action.inDropZone };
-      case "ADD_FILE_TO_LIST":
-        return { ...state, fileList: state.fileList.concat(action.files) };
-      default:
-        return state;
-    }
-  };
-  const [data, dispatch] = React.useReducer(reducer, {
-    dropDepth: 0,
-    inDropZone: false,
-    fileList: [],
-  });
-
-  return ready ? (
-    <div className="App">
-      <Head>
-        <title>Ad Video Editor</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      {video && (
-        <>
-          <video controls width="600" id="player" src={video}></video>
-          <div id="current">0:00</div>
-        </>
-      )}
-      <DragAndDrop data={data} dispatch={dispatch} setVideo={setVideo} />
-      <h2>GIF Preview</h2>
-      <button onClick={convertToGif}>Convert to GIF</button>&nbsp;
-      <button onClick={convertToJpg}>Convert to Jpg</button>&nbsp;
-      <button onClick={saveFrame}>Frame?</button>&nbsp;
-      <button onClick={convertVideo}>Convert To MP4</button>
-      {gif && <img src={gif} width="250" alt="" />}
-      {jpg && <img src={jpg} width="250" alt="" />}
-    </div>
-  ) : (
-    <p>Loading...</p>
-  );
+  return <div></div>;
 }
