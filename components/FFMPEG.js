@@ -61,71 +61,12 @@ export default function FFMPEG() {
     setVideo(url);
   };
 
-  // ////////////////////
-  //  GIF
-  // ////////////////////
-
-  const convertToGif = async () => {
-    // Write the file to memory
-    // console.log({ time });
-    ffmpeg.FS("writeFile", "test.mp4", await fetchFile(video));
-    const dims = getPosition();
-    // Run the FFMpeg command
-    await ffmpeg.run(
-      "-i",
-      "test.mp4",
-      "-t",
-      "1.2",
-      "-ss",
-      `${time}`,
-      "-filter:v",
-      `crop=${dims.width}:${dims.height}:${dims.left}:${dims.top}`,
-      "out.gif"
-    );
-    // Read the result
-    const data = ffmpeg.FS("readFile", "out.gif");
-    // Create a URL
-    const url = URL.createObjectURL(
-      new Blob([data.buffer], { type: "image/gif" })
-    );
-    setGif(url);
-  };
-
-  // ////////////////////
-  //  JPG
-  // ////////////////////
-
-  const convertToJpg = async () => {
-    console.log({ time });
-    const dims = getPosition();
-    // Write the file to memory
-    ffmpeg.FS("writeFile", "test.mp4", await fetchFile(video));
-    // Run the FFMpeg command
-    await ffmpeg.run(
-      "-i",
-      "test.mp4",
-      "-ss",
-      `${time}`,
-      "-filter:v",
-      `crop=${dims.width}:${dims.height}:${dims.left}:${dims.top}`,
-      "out.jpg"
-    );
-    // Read the result
-    const data = ffmpeg.FS("readFile", "out.jpg");
-    // Create a URL
-    const url = URL.createObjectURL(
-      new Blob([data.buffer], { type: "image/jpg" })
-    );
-    setJpg(url);
-  };
-
   async function exportFormat(mimType, length, state) {
-    //   // Write the file to memory
-    //   // console.log({ time });
     const ext = mimType.split("/").pop();
     ffmpeg.FS("writeFile", "test.mp4", await fetchFile(video));
     const dims = getPosition();
-    //   // Run the FFMpeg command
+
+    // Run the FFMpeg command
     await ffmpeg.run(
       "-i",
       "test.mp4",
@@ -146,33 +87,6 @@ export default function FFMPEG() {
     state(url);
   }
 
-  const cropVideo = async () => {
-    const dims = getPosition();
-
-    ffmpeg.FS("writeFile", "test.mp4", await fetchFile(video));
-    // Video
-    await ffmpeg.run(
-      "-t",
-      "2",
-      "-ss",
-      `${time}`,
-      "-i",
-      "test.mp4",
-      "-filter:v",
-      `crop=${dims.width}:${dims.height}:${dims.left}:${dims.top}`,
-      // "-c:a",
-      // "copy",
-      "output.mp4"
-    );
-    //await ffmpeg.run("-i", "test.mp4", "output.mp4");
-    const data = ffmpeg.FS("readFile", "output.mp4");
-    const url = URL.createObjectURL(
-      new Blob([data.buffer], {
-        type: "video/mp4",
-      })
-    );
-    setCrop(url);
-  };
   // ////////////////////
   //  DROPZONE
   // ////////////////////
@@ -244,24 +158,16 @@ export default function FFMPEG() {
           <div id="current">0:00</div>
         </>
       )}
-      {crop && (
-        <>
-          <div className="parent">
-            <video controls id="playerCrop" src={crop}></video>
-          </div>
-        </>
-      )}
       <DragAndDrop data={data} dispatch={dispatch} setVideo={setVideo} />
       <h2>GIF Preview</h2>
       &nbsp;
       <button
         onClick={() => {
-          exportFormat("image/gif", "5", setGif);
+          exportFormat("image/gif", "1", setGif);
         }}
       >
         Export GIF
       </button>
-      <button onClick={convertToGif}>Convert to GIF</button>
       <button
         onClick={() => {
           exportFormat("image/jpg", "5", setJpg);
@@ -270,7 +176,6 @@ export default function FFMPEG() {
         Convert to Jpg
       </button>
       &nbsp;
-      <button onClick={convertVideo}>Convert To MP4</button>
       <button
         onClick={() => {
           exportFormat("video/mp4", "15", setCrop);
@@ -278,12 +183,44 @@ export default function FFMPEG() {
       >
         Crop MP4
       </button>
+      <button onClick={convertVideo}>Convert To MP4</button>
       {gif && (
         <>
-          <img src={gif} width="250" alt="" />
+          <img
+            src={gif}
+            width={() => {
+              const dims = getPosition();
+              dims.width;
+            }}
+            height={() => {
+              const dims = getPosition();
+              dims.height;
+            }}
+            alt=""
+          />
         </>
       )}
-      {jpg && <img src={jpg} width="250" alt="" />}
+      {jpg && (
+        <img
+          src={jpg}
+          width={() => {
+            const dims = getPosition();
+            dims.width;
+          }}
+          height={() => {
+            const dims = getPosition();
+            dims.height;
+          }}
+          alt=""
+        />
+      )}
+      {crop && (
+        <>
+          <div className="parent">
+            <video controls id="playerCrop" src={crop}></video>
+          </div>
+        </>
+      )}
     </>
   ) : (
     <p>Loading...</p>
