@@ -1,0 +1,7 @@
+<!-- Static background image -->
+<section class="ad__content--desktop is-editing__{{ desktop_background_image.isEditing }}" style="background-image: url({{ desktop_background_image.value }});">
+  <!-- Real-time editing preview -->
+  <svg class="image-preview" :view-box="{{ desktop_background_image.viewBox }}" preserveAspectRatio="xMidYMid slice">
+    <image xlink:href="{{ desktop_background_image.originalUrl }}" x="0" y="0" :width="{{ desktop_background_image.originalSize.width }}" :height="{{ desktop_background_image.originalSize.height }}" />
+  </svg>
+</section>

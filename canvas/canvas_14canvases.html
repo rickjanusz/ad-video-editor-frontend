@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      canvas {
+        border: 1px solid red;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <video id="video" width="720" src="3dphotos.mp4" controls="false"></video>
+      <canvas class="canvas1" width="720" height="400"></canvas>
+      <canvas class="canvasCopy" width="720" height="400"></canvas>
+      <canvas class="canvasCopy2" width="720" height="400"></canvas>
+      <canvas class="canvasCopy3" width="720" height="400"></canvas>
+      <canvas class="canvasCopy4" width="720" height="400"></canvas>
+      <canvas class="canvasCopy5" width="720" height="400"></canvas>
+      <canvas class="canvasCopy6" width="720" height="400"></canvas>
+      <canvas class="canvasCopy7" width="720" height="400"></canvas>
+      <canvas class="canvasCopy8" width="720" height="400"></canvas>
+      <canvas class="canvasCopy9" width="720" height="400"></canvas>
+      <canvas class="canvasCopy10" width="720" height="400"></canvas>
+      <canvas class="canvasCopy11" width="720" height="400"></canvas>
+      <canvas class="canvasCopy12" width="720" height="400"></canvas>
+      <canvas class="canvasCopy13" width="720" height="400"></canvas>
+      <canvas class="canvasCopy14" width="720" height="400"></canvas>
+    </div>
+
+    <script>
+      const video = document.querySelector("video");
+
+      const canvas = document.querySelector("canvas");
+      const canvasCopy = document.querySelector(".canvasCopy");
+      const canvasCopy2 = document.querySelector(".canvasCopy2");
+      const canvasCopy3 = document.querySelector(".canvasCopy3");
+      const canvasCopy4 = document.querySelector(".canvasCopy4");
+      const canvasCopy5 = document.querySelector(".canvasCopy5");
+      const canvasCopy6 = document.querySelector(".canvasCopy6");
+      const canvasCopy7 = document.querySelector(".canvasCopy7");
+      const canvasCopy8 = document.querySelector(".canvasCopy8");
+      const canvasCopy9 = document.querySelector(".canvasCopy9");
+      const canvasCopy10 = document.querySelector(".canvasCopy10");
+      const canvasCopy11 = document.querySelector(".canvasCopy11");
+      const canvasCopy12 = document.querySelector(".canvasCopy12");
+      const canvasCopy13 = document.querySelector(".canvasCopy13");
+      const canvasCopy14 = document.querySelector(".canvasCopy14");
+
+      const ctx = canvas.getContext("2d");
+      const ctxCopy = canvasCopy.getContext("2d");
+      const ctxCopy2 = canvasCopy2.getContext("2d");
+      const ctxCopy3 = canvasCopy3.getContext("2d");
+      const ctxCopy4 = canvasCopy4.getContext("2d");
+      const ctxCopy5 = canvasCopy5.getContext("2d");
+      const ctxCopy6 = canvasCopy6.getContext("2d");
+      const ctxCopy7 = canvasCopy7.getContext("2d");
+      const ctxCopy8 = canvasCopy8.getContext("2d");
+      const ctxCopy9 = canvasCopy9.getContext("2d");
+      const ctxCopy10 = canvasCopy10.getContext("2d");
+      const ctxCopy11 = canvasCopy11.getContext("2d");
+      const ctxCopy12 = canvasCopy12.getContext("2d");
+      const ctxCopy13 = canvasCopy13.getContext("2d");
+      const ctxCopy14 = canvasCopy14.getContext("2d");
+
+      function step() {
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        ctxCopy.drawImage(video, 0, 0, canvasCopy.width, canvasCopy.height);
+        ctxCopy2.drawImage(video, 0, 0, canvasCopy2.width, canvasCopy2.height);
+        ctxCopy3.drawImage(video, 0, 0, canvasCopy3.width, canvasCopy3.height);
+        ctxCopy4.drawImage(video, 0, 0, canvasCopy4.width, canvasCopy4.height);
+        ctxCopy5.drawImage(video, 0, 0, canvasCopy5.width, canvasCopy5.height);
+        ctxCopy6.drawImage(video, 0, 0, canvasCopy6.width, canvasCopy6.height);
+        ctxCopy7.drawImage(video, 0, 0, canvasCopy7.width, canvasCopy7.height);
+        ctxCopy8.drawImage(video, 0, 0, canvasCopy8.width, canvasCopy8.height);
+        ctxCopy9.drawImage(video, 0, 0, canvasCopy9.width, canvasCopy9.height);
+        ctxCopy10.drawImage(
+          video,
+          0,
+          0,
+          canvasCopy10.width,
+          canvasCopy10.height
+        );
+        ctxCopy11.drawImage(
+          video,
+          0,
+          0,
+          canvasCopy11.width,
+          canvasCopy11.height
+        );
+        ctxCopy12.drawImage(
+          video,
+          0,
+          0,
+          canvasCopy12.width,
+          canvasCopy12.height
+        );
+        ctxCopy13.drawImage(
+          video,
+          0,
+          0,
+          canvasCopy13.width,
+          canvasCopy13.height
+        );
+        ctxCopy14.drawImage(
+          video,
+          0,
+          0,
+          canvasCopy14.width,
+          canvasCopy14.height
+        );
+        requestAnimationFrame(step);
+      }
+
+      video.addEventListener("play", () => {
+        requestAnimationFrame(step);
+      });
+    </script>
+  </body>
+</html>

@@ -25,12 +25,46 @@ a {
 .drag-drop-zone p {
   color: #fff;
 }
-.drag-drop-zone.inside-drag-area {
+.drag-drop-zone.inside-drag-area :hover {
   opacity: 0.7;
+  border: 5px dashed greenyellow;
 }
 .dropped-files li {
   color: #07f;
   padding: 3px;
   text-align: left;
   font-weight: bold;
+}
+
+.draggy {
+  width: 728px;
+  height: 90px;
+  resize: horizontal;
+  overflow: auto;
+  border: 1px solid #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 1);
+}
+
+.handle {
+  height: 100%;
+  /* cursor: move; */
+  pointer-events: auto;
+}
+.parent {
+  position: relative;
+  height: 409.5px;
+  width: 728px;
+}
+.draggable-parent {
+  /* background-color: green; */
+  width: 728px;
+  height: 409.5px;
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  pointer-events: none;
+}
+
+.App {
+  background-color: pink;
 }

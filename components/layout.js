@@ -39,17 +39,16 @@ const GlobalStyles = createGlobalStyle`
   `;
 
 const InnerStyles = styled.div`
-  max-width: var(--maxWidth);
-  margin: 0 auto;
-  padding: 2rem;
+  width: 90vw;
+  margin: 10px 5vw;
 `;
 
 export default function Layout({ children }) {
   return (
-    <div>
+    <>
       <GlobalStyles />
       <InnerStyles>{children}</InnerStyles>
-    </div>
+    </>
   );
 }
 
