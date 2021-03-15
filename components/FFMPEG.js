@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react"; // import React, { useState, imagetgif from "react";
+import React, { useEffect, useRef } from "react"; // import React, { useState, imagetgif from "react";
 import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
 import DragAndDrop from "../components/DragAndDrop";
 import Draggable from "react-draggable";
@@ -6,19 +6,25 @@ import Draggable from "react-draggable";
 
 const ffmpeg = createFFmpeg({ log: true });
 
-export default function FFMPEG() {
+export default function FFMPEG({ props }) {
+  const {
+    ready,
+    setReady,
+    video,
+    setVideo,
+    crop,
+    setCrop,
+    gif,
+    setGif,
+    jpg,
+    setJpg,
+    time,
+    setTime,
+  } = props;
+  console.log({ props });
   // ////////////////////
   // STATE: FFMPEG READY
   // ////////////////////
-
-  const [ready, setReady] = useState("false");
-
-  const [video, setVideo] = useState();
-  const [crop, setCrop] = useState();
-  const [gif, setGif] = useState();
-  const [jpg, setJpg] = useState();
-
-  const [time, setTime] = useState(0);
 
   const load = async () => {
     await ffmpeg.load();
@@ -28,6 +34,24 @@ export default function FFMPEG() {
   useEffect(() => {
     load();
   }, []);
+
+  const obj = useRef(null);
+  const objParent = useRef(null);
+
+  function handleStop() {
+    getPosition();
+  }
+  function getPosition() {
+    const childDims = obj.current.getBoundingClientRect();
+    const parentPos = objParent.current.getBoundingClientRect();
+    const childOffset = {
+      top: childDims.top - parentPos.top,
+      left: childDims.left - parentPos.left,
+      width: childDims.width,
+      height: childDims.height,
+    };
+    return childOffset;
+  }
 
   // ////////////////////
   //  VIDEO
@@ -44,11 +68,10 @@ export default function FFMPEG() {
     vid.addEventListener("timeupdate", (event) => {
       cur.innerHTML = event.srcElement.currentTime;
       setTime(event.srcElement.currentTime);
-      // console.log(currentFrameTime);
     });
   }
 
-  const convertVideo = async () => {
+  const convertVideoToMP4 = async () => {
     ffmpeg.FS("writeFile", "test.mp4", await fetchFile(video));
     // Video
     await ffmpeg.run("-i", "test.mp4", "output.mp4");
@@ -109,28 +132,6 @@ export default function FFMPEG() {
     fileList: [],
   });
 
-  const obj = useRef(null);
-  const objParent = useRef(null);
-
-  function handleStop() {
-    getPosition();
-    // const offset = obj.current.getBoundingClientRect();
-    // console.log(offset);
-  }
-  function getPosition() {
-    const childDims = obj.current.getBoundingClientRect();
-    const parentPos = objParent.current.getBoundingClientRect();
-    // return console.log(childPos);
-    const childOffset = {
-      top: childDims.top - parentPos.top,
-      left: childDims.left - parentPos.left,
-      width: childDims.width,
-      height: childDims.height,
-    };
-    console.log({ childOffset });
-    return childOffset;
-  }
-
   return ready ? (
     <>
       {video && (
@@ -162,6 +163,7 @@ export default function FFMPEG() {
       <h2>GIF Preview</h2>
       &nbsp;
       <button
+        gif={gif}
         onClick={() => {
           exportFormat("image/gif", "1", setGif);
         }}
@@ -183,37 +185,9 @@ export default function FFMPEG() {
       >
         Crop MP4
       </button>
-      <button onClick={convertVideo}>Convert To MP4</button>
-      {gif && (
-        <>
-          <img
-            src={gif}
-            width={() => {
-              const dims = getPosition();
-              dims.width;
-            }}
-            height={() => {
-              const dims = getPosition();
-              dims.height;
-            }}
-            alt=""
-          />
-        </>
-      )}
-      {jpg && (
-        <img
-          src={jpg}
-          width={() => {
-            const dims = getPosition();
-            dims.width;
-          }}
-          height={() => {
-            const dims = getPosition();
-            dims.height;
-          }}
-          alt=""
-        />
-      )}
+      <button onClick={convertVideoToMP4}>Convert To MP4</button>
+      {gif && <img src={gif} alt="" />}
+      {jpg && <img src={jpg} alt="" />}
       {crop && (
         <>
           <div className="parent">
