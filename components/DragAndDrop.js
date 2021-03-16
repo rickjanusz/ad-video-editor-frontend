@@ -1,4 +1,5 @@
 import React from "react";
+import NProgress from "nprogress";
 
 const DragAndDrop = (props) => {
   const { data, dispatch, setVideo } = props;
@@ -31,13 +32,29 @@ const DragAndDrop = (props) => {
     let files = [...e.dataTransfer.files];
     const reader = new FileReader();
 
+    reader.addEventListener("loadstart", (event) => {
+      NProgress.start();
+    });
+    reader.addEventListener("loadend", (event) => {
+      // console.log("FILEEEEEEEEREEEEEEADER: ", event);
+      NProgress.done();
+    });
+
+    // reader.addEventListener("progress", (event) => {
+    //   // console.log("FILEEEEEEEEREEEEEEADER: ", event);
+    //   // NProgress.set(event.);
+    // });
+
     reader.addEventListener("load", (event) => {
       const result = event.target.result;
-      // const url = URL.createObjectURL(result);
-      // console.log(url);
       setVideo(result);
-      localStorage.setItem("video", result);
+
+      // TODO: MOV throws filesize error...
+      // TODO: need to implement a DB
+      // localStorage.clear();
+      // localStorage.setItem("video", result);
     });
+    console.log(files);
 
     reader.readAsDataURL(files[0]);
 
@@ -46,7 +63,7 @@ const DragAndDrop = (props) => {
       files = files.filter((f) => !existingFiles.includes(f.name));
 
       dispatch({ type: "ADD_FILE_TO_LIST", files });
-      // e.dataTransfer.clearData();
+      e.dataTransfer.clearData();
       dispatch({ type: "SET_DROP_DEPTH", dropDepth: 0 });
       dispatch({ type: "SET_IN_DROP_ZONE", inDropZone: false });
     }

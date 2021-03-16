@@ -3,7 +3,7 @@ import Router from "next/router";
 import Layout from "../components/layout";
 import "../styles/globals.css";
 import "../styles/nprogress.css";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useReducer } from "react";
 
 Router.events.on("routeChangeStart", () => NProgress.start());
 Router.events.on("routeChangeComplete", () => NProgress.done());
@@ -30,15 +30,35 @@ function App({ Component, pageProps }) {
       const func = item[1];
       const temp = localStorage.getItem(ref);
       if (temp) {
-        console.log("ref!!!!!!!!!!!!: ", temp);
+        // console.log("ref!!!!!!!!!!!!: ", temp);
         func(temp);
       }
     });
   }, []);
 
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case "SET_DROP_DEPTH":
+        return { ...state, dropDepth: action.dropDepth };
+      case "SET_IN_DROP_ZONE":
+        return { ...state, inDropZone: action.inDropZone };
+      case "ADD_FILE_TO_LIST":
+        return { ...state, fileList: state.fileList.concat(action.files) };
+      default:
+        return state;
+    }
+  };
+  const [data, dispatch] = React.useReducer(reducer, {
+    dropDepth: 0,
+    inDropZone: false,
+    fileList: [],
+  });
+
   return (
     <Layout>
       <Component
+        data={data}
+        dispatch={dispatch}
         ready={ready}
         setReady={setReady}
         video={video}

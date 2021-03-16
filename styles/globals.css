@@ -54,6 +54,8 @@ a {
   position: relative;
   height: 409.5px;
   width: 728px;
+  resize: both;
+  overflow: auto;
 }
 .draggable-parent {
   /* background-color: green; */

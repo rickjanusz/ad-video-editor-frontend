@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react"; // import React, { useState, i
 import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
 import DragAndDrop from "../components/DragAndDrop";
 import Draggable from "react-draggable";
+import NProgress from "nprogress";
 import getPosition from "../utils/getPosition";
 // import CropVideo from "./CropVideo";
 
@@ -10,6 +11,8 @@ const ffmpeg = createFFmpeg({ log: true });
 
 export default function FFMPEG({ props }) {
   const {
+    data,
+    dispatch,
     ready,
     setReady,
     video,
@@ -73,7 +76,10 @@ export default function FFMPEG({ props }) {
   // ////////////////////
 
   useEffect(() => {
-    if (video) saveFrame();
+    if (video) {
+      saveFrame();
+      // localStorage.setItem("video", video);
+    }
   }, [video]);
 
   function saveFrame() {
@@ -97,7 +103,7 @@ export default function FFMPEG({ props }) {
       // "-vcodec",
       // "libx265",
       // "-crf",
-      "28",
+      // "28",
       "output.mp4"
     );
     const data = ffmpeg.FS("readFile", "output.mp4");
@@ -119,6 +125,14 @@ export default function FFMPEG({ props }) {
     ffmpeg.FS("writeFile", "test.mp4", await fetchFile(video));
     const dims = getPosition();
 
+    await ffmpeg.setProgress(({ ratio }) => {
+      NProgress.set(ratio);
+      console.log({ ratio });
+      if (ratio === 1) {
+        NProgress.done();
+      }
+    });
+
     // Run the FFMpeg command
     await ffmpeg.run(
       "-i",
@@ -131,6 +145,7 @@ export default function FFMPEG({ props }) {
       `crop=${dims.width}:${dims.height}:${dims.left}:${dims.top}`,
       `out.${ext}`
     );
+
     //   // Read the result
     const data = ffmpeg.FS("readFile", `out.${ext}`);
     // Create a URL
@@ -139,28 +154,6 @@ export default function FFMPEG({ props }) {
     );
     stateFunc(url);
   }
-
-  // ////////////////////
-  //  DROPZONE
-  // ////////////////////
-
-  const reducer = (state, action) => {
-    switch (action.type) {
-      case "SET_DROP_DEPTH":
-        return { ...state, dropDepth: action.dropDepth };
-      case "SET_IN_DROP_ZONE":
-        return { ...state, inDropZone: action.inDropZone };
-      case "ADD_FILE_TO_LIST":
-        return { ...state, fileList: state.fileList.concat(action.files) };
-      default:
-        return state;
-    }
-  };
-  const [data, dispatch] = React.useReducer(reducer, {
-    dropDepth: 0,
-    inDropZone: false,
-    fileList: [],
-  });
 
   return ready ? (
     <>
