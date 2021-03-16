@@ -2,8 +2,10 @@ import React, { useEffect, useRef } from "react"; // import React, { useState, i
 import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
 import DragAndDrop from "../components/DragAndDrop";
 import Draggable from "react-draggable";
+import getPosition from "../utils/getPosition";
 // import CropVideo from "./CropVideo";
 
+// TODO: This should init at App level
 const ffmpeg = createFFmpeg({ log: true });
 
 export default function FFMPEG({ props }) {
@@ -21,7 +23,7 @@ export default function FFMPEG({ props }) {
     time,
     setTime,
   } = props;
-  console.log({ props });
+
   // ////////////////////
   // STATE: FFMPEG READY
   // ////////////////////
@@ -32,15 +34,23 @@ export default function FFMPEG({ props }) {
   };
 
   useEffect(() => {
+    // TODO: HANDLE THIS!!!!
+    // TODO: We load without checking- what is the right method?...
+    // TODO: HANDLE THIS!!!! the currently commented out code is...
+    // TODO: not right, not enough, whatever...
+    // if (!ffmpeg.isLoaded) {
     load();
+    // }
   }, []);
+
+  // ////////////////////
+  // GET POSITION OF CROPPER:
+  // TODO: Move this into utils
+  // ////////////////////
 
   const obj = useRef(null);
   const objParent = useRef(null);
 
-  function handleStop() {
-    getPosition();
-  }
   function getPosition() {
     const childDims = obj.current.getBoundingClientRect();
     const parentPos = objParent.current.getBoundingClientRect();
@@ -53,8 +63,13 @@ export default function FFMPEG({ props }) {
     return childOffset;
   }
 
+  function handleStop() {
+    getPosition();
+  }
+
   // ////////////////////
-  //  VIDEO
+  // GET/SET VIDEO TIME
+  // TODO: Move this into utils
   // ////////////////////
 
   useEffect(() => {
@@ -74,7 +89,17 @@ export default function FFMPEG({ props }) {
   const convertVideoToMP4 = async () => {
     ffmpeg.FS("writeFile", "test.mp4", await fetchFile(video));
     // Video
-    await ffmpeg.run("-i", "test.mp4", "output.mp4");
+    await ffmpeg.run(
+      "-i",
+      "test.mp4",
+      // TODO: Figure out 265 codec...
+      // TODO: for enhanced optimization
+      // "-vcodec",
+      // "libx265",
+      // "-crf",
+      "28",
+      "output.mp4"
+    );
     const data = ffmpeg.FS("readFile", "output.mp4");
     const url = URL.createObjectURL(
       new Blob([data.buffer], {
@@ -84,7 +109,12 @@ export default function FFMPEG({ props }) {
     setVideo(url);
   };
 
-  async function exportFormat(mimType, length, state) {
+  // ////////////////////
+  // CAPTURE CROP/GIF/JPG
+  // TODO: Move this into utils
+  // ////////////////////
+
+  async function exportFormat(mimType, length, stateFunc, localItem) {
     const ext = mimType.split("/").pop();
     ffmpeg.FS("writeFile", "test.mp4", await fetchFile(video));
     const dims = getPosition();
@@ -107,7 +137,7 @@ export default function FFMPEG({ props }) {
     const url = URL.createObjectURL(
       new Blob([data.buffer], { type: `${mimType}` })
     );
-    state(url);
+    stateFunc(url);
   }
 
   // ////////////////////
@@ -165,14 +195,14 @@ export default function FFMPEG({ props }) {
       <button
         gif={gif}
         onClick={() => {
-          exportFormat("image/gif", "1", setGif);
+          exportFormat("image/gif", "1", setGif, "gif");
         }}
       >
         Export GIF
       </button>
       <button
         onClick={() => {
-          exportFormat("image/jpg", "5", setJpg);
+          exportFormat("image/jpg", "5", setJpg, "jpg");
         }}
       >
         Convert to Jpg
@@ -180,7 +210,7 @@ export default function FFMPEG({ props }) {
       &nbsp;
       <button
         onClick={() => {
-          exportFormat("video/mp4", "15", setCrop);
+          exportFormat("video/mp4", "15", setCrop, "crop");
         }}
       >
         Crop MP4

@@ -36,6 +36,7 @@ const DragAndDrop = (props) => {
       // const url = URL.createObjectURL(result);
       // console.log(url);
       setVideo(result);
+      localStorage.setItem("video", result);
     });
 
     reader.readAsDataURL(files[0]);

@@ -3,7 +3,7 @@ import Router from "next/router";
 import Layout from "../components/layout";
 import "../styles/globals.css";
 import "../styles/nprogress.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 Router.events.on("routeChangeStart", () => NProgress.start());
 Router.events.on("routeChangeComplete", () => NProgress.done());
@@ -16,6 +16,25 @@ function App({ Component, pageProps }) {
   const [gif, setGif] = useState();
   const [jpg, setJpg] = useState();
   const [time, setTime] = useState(0);
+
+  useEffect(() => {
+    const localStorageItems = [
+      ["video", setVideo],
+      // ["crop", setCrop],
+      // ["gif", setGif],
+      // ["jpg", setJpg],
+    ];
+
+    localStorageItems.map((item) => {
+      const ref = item[0];
+      const func = item[1];
+      const temp = localStorage.getItem(ref);
+      if (temp) {
+        console.log("ref!!!!!!!!!!!!: ", temp);
+        func(temp);
+      }
+    });
+  }, []);
 
   return (
     <Layout>
