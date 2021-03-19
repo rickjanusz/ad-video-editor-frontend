@@ -3,7 +3,6 @@ import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
 import DragAndDrop from "../components/DragAndDrop";
 import Draggable from "react-draggable";
 import NProgress from "nprogress";
-import getPosition from "../utils/getPosition";
 // import CropVideo from "./CropVideo";
 
 // TODO: This should init at App level
@@ -11,8 +10,10 @@ const ffmpeg = createFFmpeg({ log: true });
 
 export default function FFMPEG({ props }) {
   const {
+    // Drag&Drop state
     data,
     dispatch,
+    // FFMPEG state
     ready,
     setReady,
     video,
@@ -35,12 +36,16 @@ export default function FFMPEG({ props }) {
     await ffmpeg.load();
     setReady(true);
   };
+  const obj = useRef();
+  const objParent = useRef();
 
   useEffect(() => {
     // TODO: HANDLE THIS!!!!
     // TODO: We load without checking- what is the right method?...
     // TODO: HANDLE THIS!!!! the currently commented out code is...
     // TODO: not right, not enough, whatever...
+    // const o = obj.current;
+    // const oP = objParent.current;
     // if (!ffmpeg.isLoaded) {
     load();
     // }
@@ -50,9 +55,6 @@ export default function FFMPEG({ props }) {
   // GET POSITION OF CROPPER:
   // TODO: Move this into utils
   // ////////////////////
-
-  const obj = useRef(null);
-  const objParent = useRef(null);
 
   function getPosition() {
     const childDims = obj.current.getBoundingClientRect();
@@ -66,6 +68,7 @@ export default function FFMPEG({ props }) {
     return childOffset;
   }
 
+  // Drag & Drop callback
   function handleStop() {
     getPosition();
   }

@@ -1,16 +1,20 @@
-import NProgress from "nprogress";
-import Router from "next/router";
-import Layout from "../components/layout";
-import "../styles/globals.css";
-import "../styles/nprogress.css";
-import React, { useEffect, useState, useReducer } from "react";
+import React, { useEffect, useState, useReducer } from 'react';
+import { ApolloProvider } from '@apollo/client';
+import NProgress from 'nprogress';
+import Router from 'next/router';
+import Layout from '../components/layout';
+import withData from '../lib/withData';
+import '../styles/globals.css';
+import '../styles/nprogress.css';
+import b64toBlob from '../utils/b64toBlob';
 
-Router.events.on("routeChangeStart", () => NProgress.start());
-Router.events.on("routeChangeComplete", () => NProgress.done());
-Router.events.on("routeChangeError", () => NProgress.done());
+Router.events.on('routeChangeStart', () => NProgress.start());
+Router.events.on('routeChangeComplete', () => NProgress.done());
+Router.events.on('routeChangeError', () => NProgress.done());
 
-function App({ Component, pageProps }) {
-  const [ready, setReady] = useState("false");
+function App({ Component, pageProps, apollo }) {
+  console.log(apollo);
+  const [ready, setReady] = useState('false');
   const [video, setVideo] = useState();
   const [crop, setCrop] = useState();
   const [gif, setGif] = useState();
@@ -19,7 +23,7 @@ function App({ Component, pageProps }) {
 
   useEffect(() => {
     const localStorageItems = [
-      ["video", setVideo],
+      ['video', setVideo],
       // ["crop", setCrop],
       // ["gif", setGif],
       // ["jpg", setJpg],
@@ -30,19 +34,27 @@ function App({ Component, pageProps }) {
       const func = item[1];
       const temp = localStorage.getItem(ref);
       if (temp) {
-        // console.log("ref!!!!!!!!!!!!: ", temp);
+        // console.log('ref!!!!!!!!!!!!: ', temp);
         func(temp);
+
+        // const contentType = 'video/mp4';
+        // const b64Data = temp;
+
+        // const blob = b64toBlob(b64Data, contentType);
+        // // const blobUrl = URL.createObjectURL(blob);
+
+        // console.log(blob);
       }
     });
   }, []);
 
   const reducer = (state, action) => {
     switch (action.type) {
-      case "SET_DROP_DEPTH":
+      case 'SET_DROP_DEPTH':
         return { ...state, dropDepth: action.dropDepth };
-      case "SET_IN_DROP_ZONE":
+      case 'SET_IN_DROP_ZONE':
         return { ...state, inDropZone: action.inDropZone };
-      case "ADD_FILE_TO_LIST":
+      case 'ADD_FILE_TO_LIST':
         return { ...state, fileList: state.fileList.concat(action.files) };
       default:
         return state;
@@ -55,25 +67,27 @@ function App({ Component, pageProps }) {
   });
 
   return (
-    <Layout>
-      <Component
-        data={data}
-        dispatch={dispatch}
-        ready={ready}
-        setReady={setReady}
-        video={video}
-        setVideo={setVideo}
-        crop={crop}
-        setCrop={setCrop}
-        gif={gif}
-        setGif={setGif}
-        jpg={jpg}
-        setJpg={setJpg}
-        time={time}
-        setTime={setTime}
-        {...pageProps}
-      />
-    </Layout>
+    <ApolloProvider client={apollo}>
+      <Layout>
+        <Component
+          data={data}
+          dispatch={dispatch}
+          ready={ready}
+          setReady={setReady}
+          video={video}
+          setVideo={setVideo}
+          crop={crop}
+          setCrop={setCrop}
+          gif={gif}
+          setGif={setGif}
+          jpg={jpg}
+          setJpg={setJpg}
+          time={time}
+          setTime={setTime}
+          {...pageProps}
+        />
+      </Layout>
+    </ApolloProvider>
   );
 }
 
@@ -86,4 +100,4 @@ App.getInitialProps = async function ({ Component, ctx }) {
   return { pageProps };
 };
 
-export default App;
+export default withData(App);

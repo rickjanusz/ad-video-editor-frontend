@@ -1,5 +1,5 @@
-import React from "react";
-import NProgress from "nprogress";
+import React from 'react';
+import NProgress from 'nprogress';
 
 const DragAndDrop = (props) => {
   const { data, dispatch, setVideo } = props;
@@ -8,22 +8,22 @@ const DragAndDrop = (props) => {
     e.preventDefault();
     e.stopPropagation();
 
-    dispatch({ type: "SET_DROP_DEPTH", dropDepth: data.dropDepth + 1 });
+    dispatch({ type: 'SET_DROP_DEPTH', dropDepth: data.dropDepth + 1 });
   };
   const handleDragLeave = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    dispatch({ type: "SET_DROP_DEPTH", dropDepth: data.dropDepth - 1 });
+    dispatch({ type: 'SET_DROP_DEPTH', dropDepth: data.dropDepth - 1 });
     if (data.dropDepth > 0) return;
-    dispatch({ type: "SET_IN_DROP_ZONE", inDropZone: false });
+    dispatch({ type: 'SET_IN_DROP_ZONE', inDropZone: false });
   };
   const handleDragOver = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    e.dataTransfer.dropEffect = "copy";
-    dispatch({ type: "SET_IN_DROP_ZONE", inDropZone: true });
+    e.dataTransfer.dropEffect = 'copy';
+    dispatch({ type: 'SET_IN_DROP_ZONE', inDropZone: true });
   };
   const handleDrop = (e) => {
     e.preventDefault();
@@ -32,29 +32,26 @@ const DragAndDrop = (props) => {
     let files = [...e.dataTransfer.files];
     const reader = new FileReader();
 
-    reader.addEventListener("loadstart", (event) => {
+    reader.addEventListener('loadstart', (event) => {
       NProgress.start();
     });
-    reader.addEventListener("loadend", (event) => {
-      // console.log("FILEEEEEEEEREEEEEEADER: ", event);
+    reader.addEventListener('loadend', (event) => {
       NProgress.done();
+      const { result } = event.target;
+      // console.log(result);
+      const trimResult = result.replace('data:video/mp4;base64,', '');
+
+      console.log(trimResult);
+      // const blob = new Blob(trimResult, { type: 'video/mp4' });
+      // setVideo(result);
+
+      localStorage.setItem('video', result);
     });
 
-    // reader.addEventListener("progress", (event) => {
-    //   // console.log("FILEEEEEEEEREEEEEEADER: ", event);
-    //   // NProgress.set(event.);
-    // });
-
-    reader.addEventListener("load", (event) => {
-      const result = event.target.result;
-      setVideo(result);
-
+    reader.addEventListener('load', async (event) => {
       // TODO: MOV throws filesize error...
       // TODO: need to implement a DB
-      // localStorage.clear();
-      // localStorage.setItem("video", result);
     });
-    console.log(files);
 
     reader.readAsDataURL(files[0]);
 
@@ -62,16 +59,16 @@ const DragAndDrop = (props) => {
       const existingFiles = data.fileList.map((f) => f.name);
       files = files.filter((f) => !existingFiles.includes(f.name));
 
-      dispatch({ type: "ADD_FILE_TO_LIST", files });
+      dispatch({ type: 'ADD_FILE_TO_LIST', files });
       e.dataTransfer.clearData();
-      dispatch({ type: "SET_DROP_DEPTH", dropDepth: 0 });
-      dispatch({ type: "SET_IN_DROP_ZONE", inDropZone: false });
+      dispatch({ type: 'SET_DROP_DEPTH', dropDepth: 0 });
+      dispatch({ type: 'SET_IN_DROP_ZONE', inDropZone: false });
     }
   };
   return (
     <div
       className={
-        data.inDropZone ? "drag-drop-zone inside-drag-area" : "drag-drop-zone"
+        data.inDropZone ? 'drag-drop-zone inside-drag-area' : 'drag-drop-zone'
       }
       onDrop={(e) => handleDrop(e)}
       onDragOver={(e) => handleDragOver(e)}
