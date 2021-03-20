@@ -3,6 +3,7 @@ import { gql } from 'graphql-tag';
 import Head from 'next/head';
 import Link from 'next/link';
 import FFMPEG from '../components/FFMPEG';
+import tmData from '../data/treatmentData';
 
 const ALL_VIDEOS_QUERY = gql`
   query ALL_VIDEOS_QUERY {
@@ -14,9 +15,27 @@ const ALL_VIDEOS_QUERY = gql`
 `;
 
 const Home = (props) => {
-  // console.log({ props });
+  function getDimensions(field, data) {
+    const dims = data.map((data) => {
+      if (data.name === field) {
+        const newObj = {
+          size: `${data.sizeX}x${data.sizeY}`,
+          top: data.top,
+          left: data.left,
+          width: data.width,
+          height: data.height,
+        };
+        return console.table(field, newObj);
+      }
+    });
+  }
+
+  // getDimensions('lifestyle_img', tmData[0]);
+  // getDimensions('subhead_text', tmData[0]);
+  // getDimensions('headline_text', tmData[0]);
+
   const { data, loading, error } = useQuery(ALL_VIDEOS_QUERY);
-  console.log({ data, loading, error });
+  // console.log({ mydata, myloading, myerror });
 
   return (
     <>
