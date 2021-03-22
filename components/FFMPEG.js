@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from "react"; // import React, { useState, imagetgif from "react";
-import { createFFmpeg, fetchFile } from "@ffmpeg/ffmpeg";
-import DragAndDrop from "../components/DragAndDrop";
-import Draggable from "react-draggable";
-import NProgress from "nprogress";
+import React, { useEffect, useRef } from 'react'; // import React, { useState, imagetgif from "react";
+import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
+import Draggable from 'react-draggable';
+import NProgress from 'nprogress';
+import DragAndDrop from './DragAndDrop';
 // import CropVideo from "./CropVideo";
 
 // TODO: This should init at App level
@@ -86,33 +86,33 @@ export default function FFMPEG({ props }) {
   }, [video]);
 
   function saveFrame() {
-    const vid = document.querySelector("#player");
-    const cur = document.querySelector("#current");
+    const vid = document.querySelector('#player');
+    const cur = document.querySelector('#current');
 
-    vid.addEventListener("timeupdate", (event) => {
+    vid.addEventListener('timeupdate', (event) => {
       cur.innerHTML = event.srcElement.currentTime;
       setTime(event.srcElement.currentTime);
     });
   }
 
   const convertVideoToMP4 = async () => {
-    ffmpeg.FS("writeFile", "test.mp4", await fetchFile(video));
+    ffmpeg.FS('writeFile', 'test.mp4', await fetchFile(video));
     // Video
     await ffmpeg.run(
-      "-i",
-      "test.mp4",
+      '-i',
+      'test.mp4',
       // TODO: Figure out 265 codec...
       // TODO: for enhanced optimization
       // "-vcodec",
       // "libx265",
       // "-crf",
       // "28",
-      "output.mp4"
+      'output.mp4'
     );
-    const data = ffmpeg.FS("readFile", "output.mp4");
+    const data = ffmpeg.FS('readFile', 'output.mp4');
     const url = URL.createObjectURL(
       new Blob([data.buffer], {
-        type: "video/mp4",
+        type: 'video/mp4',
       })
     );
     setVideo(url);
@@ -124,8 +124,8 @@ export default function FFMPEG({ props }) {
   // ////////////////////
 
   async function exportFormat(mimType, length, stateFunc, localItem) {
-    const ext = mimType.split("/").pop();
-    ffmpeg.FS("writeFile", "test.mp4", await fetchFile(video));
+    const ext = mimType.split('/').pop();
+    ffmpeg.FS('writeFile', 'test.mp4', await fetchFile(video));
     const dims = getPosition();
 
     await ffmpeg.setProgress(({ ratio }) => {
@@ -138,19 +138,19 @@ export default function FFMPEG({ props }) {
 
     // Run the FFMpeg command
     await ffmpeg.run(
-      "-i",
-      "test.mp4",
-      "-t",
+      '-i',
+      'test.mp4',
+      '-t',
       `${length}`,
-      "-ss",
+      '-ss',
       `${time}`,
-      "-filter:v",
+      '-filter:v',
       `crop=${dims.width}:${dims.height}:${dims.left}:${dims.top}`,
       `out.${ext}`
     );
 
     //   // Read the result
-    const data = ffmpeg.FS("readFile", `out.${ext}`);
+    const data = ffmpeg.FS('readFile', `out.${ext}`);
     // Create a URL
     const url = URL.createObjectURL(
       new Blob([data.buffer], { type: `${mimType}` })
@@ -163,7 +163,7 @@ export default function FFMPEG({ props }) {
       {video && (
         <>
           <div className="parent">
-            <video controls width="728" id="player" src={video}></video>
+            <video controls width="728" id="player" src={video} />
             <div className="draggable-parent" ref={objParent}>
               <Draggable
                 axis="both"
@@ -177,7 +177,7 @@ export default function FFMPEG({ props }) {
                 onStop={handleStop}
               >
                 <div className="draggy" ref={obj}>
-                  <div className="handle"></div>
+                  <div className="handle" />
                 </div>
               </Draggable>
             </div>
@@ -191,14 +191,14 @@ export default function FFMPEG({ props }) {
       <button
         gif={gif}
         onClick={() => {
-          exportFormat("image/gif", "1", setGif, "gif");
+          exportFormat('image/gif', '1', setGif, 'gif');
         }}
       >
         Export GIF
       </button>
       <button
         onClick={() => {
-          exportFormat("image/jpg", "5", setJpg, "jpg");
+          exportFormat('image/jpg', '5', setJpg, 'jpg');
         }}
       >
         Convert to Jpg
@@ -206,7 +206,7 @@ export default function FFMPEG({ props }) {
       &nbsp;
       <button
         onClick={() => {
-          exportFormat("video/mp4", "15", setCrop, "crop");
+          exportFormat('video/mp4', '15', setCrop, 'crop');
         }}
       >
         Crop MP4
@@ -217,7 +217,7 @@ export default function FFMPEG({ props }) {
       {crop && (
         <>
           <div className="parent">
-            <video controls id="playerCrop" src={crop}></video>
+            <video controls id="playerCrop" muted src={crop} />
           </div>
         </>
       )}
