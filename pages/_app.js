@@ -6,14 +6,18 @@ import Layout from '../components/layout';
 import withData from '../lib/withData';
 import '../styles/globals.css';
 import '../styles/nprogress.css';
-import b64toBlob from '../utils/b64toBlob';
+// import b64toBlob from '../utils/b64toBlob';t React, { useState, imagetgif from "react";
+import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
+import Header from '../components/Header';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
 
+const ffmpeg = createFFmpeg({ log: true });
+
 function App({ Component, pageProps, apollo }) {
-  console.log(apollo);
+  // console.log(apollo);
   const [ready, setReady] = useState('false');
   const [video, setVideo] = useState();
   const [crop, setCrop] = useState();
@@ -28,6 +32,8 @@ function App({ Component, pageProps, apollo }) {
       // ["gif", setGif],
       // ["jpg", setJpg],
     ];
+
+    load();
 
     localStorageItems.map((item) => {
       const ref = item[0];
@@ -47,6 +53,11 @@ function App({ Component, pageProps, apollo }) {
       }
     });
   }, []);
+
+  const load = async () => {
+    await ffmpeg.load();
+    setReady(true);
+  };
 
   const reducer = (state, action) => {
     switch (action.type) {
@@ -69,6 +80,7 @@ function App({ Component, pageProps, apollo }) {
   return (
     <ApolloProvider client={apollo}>
       <Layout>
+        <Header />
         <Component
           data={data}
           dispatch={dispatch}
@@ -84,6 +96,7 @@ function App({ Component, pageProps, apollo }) {
           setJpg={setJpg}
           time={time}
           setTime={setTime}
+          ffmpeg={ffmpeg}
           {...pageProps}
         />
       </Layout>

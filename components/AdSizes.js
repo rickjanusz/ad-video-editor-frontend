@@ -1,30 +1,29 @@
-import { useRef } from 'react';
-
+import styled from 'styled-components';
 import AdSize from './AdSize';
 import getAdSizes from '../utils/getAdSizes';
-import getDimensions from '../utils/getDimensions';
 import tmData from '../data/treatmentData';
 
-export default function AdSizes() {
-  const sizesCont = useRef();
+const AdGrid = styled.div`
+  display: grid;
+  max-width: 1200px;
+  gap: 3px;
+  position: relative;
+  grid-template-columns: repeat(40, 1fr);
+  grid-auto-flow: dense;
+`;
 
-  const ls_img = getDimensions('lifestyle_img', tmData[0]);
-  const sh_txt = getDimensions('subhead_text', tmData[0]);
-  const hl_txt = getDimensions('headline_text', tmData[0]);
-
-  const fieldData = [ls_img, sh_txt, hl_txt];
-
+export default function AdSizes({ props }) {
   return (
-    <div className="sizes" ref={sizesCont}>
+    <AdGrid>
       {getAdSizes(tmData[0]).map((sizeData, i) => (
         // console.log(sizeData);
         <AdSize
           tmData={tmData}
           sizeData={sizeData}
-          fieldData={fieldData}
-          key={`${sizeData}_${i}`}
+          key={`${sizeData.size}_${i}`}
+          props={props}
         />
       ))}
-    </div>
+    </AdGrid>
   );
 }

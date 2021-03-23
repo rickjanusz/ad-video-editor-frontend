@@ -3,27 +3,20 @@ import styled from 'styled-components';
 import AdContent from './AdContent';
 
 const AdStyle = styled.div`
-  border: 1px solid black;
+  background-color: rgba(0, 0, 0, 0.5);
   position: relative;
+  margin: 2px;
 `;
 
-export default function AdSize({ sizeData, fieldData }) {
-  // console.log({ fieldData });
-  const wh = sizeData.split('x');
-  const dimensions = {
-    width: `${wh[0]}px`,
-    height: `${wh[1]}px`,
-  };
-
+export default function AdSize({ sizeData, props }) {
   return (
-    <AdStyle className={`size_${sizeData}`} style={dimensions}>
-      {/* I'm a {sizeData} */}
-      <AdContent sizeData={sizeData} fieldData={fieldData} />
+    <AdStyle style={sizeData.props}>
+      <AdContent sizeData={sizeData.size} props={props} />
     </AdStyle>
   );
 }
 
 AdSize.propTypes = {
-  sizeData: PropTypes.string,
-  fieldData: PropTypes.array,
+  sizeData: PropTypes.any,
+  props: PropTypes.any,
 };

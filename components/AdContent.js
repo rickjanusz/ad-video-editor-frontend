@@ -1,66 +1,56 @@
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { useRef } from 'react';
+import getDimensions from '../utils/getDimensions';
+import tmData from '../data/treatmentData';
 
 const ContentStyles = styled.div`
-  border: 1px solid red;
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(255, 0, 0, 0.5);
 `;
 
-export default function AdContent({ fieldData, sizeData }) {
-  // console.log('COOOOOOONTEEEEENT: ', fieldData);
+export default function AdContent({ sizeData, props }) {
   const f = []; // fields
-  const h = []; // height
-  const w = []; // width
-  const l = []; // left
-  const t = []; // top
-  const styles = [];
+  const styles = []; // props
+
+  const lsImg = getDimensions('lifestyle_img', tmData[0]);
+  const shTxt = getDimensions('subhead_text', tmData[0]);
+  const hlTxt = getDimensions('headline_text', tmData[0]);
+
+  const fieldData = [lsImg, shTxt, hlTxt];
 
   fieldData.forEach((fields) => {
     fields.map((field) => {
       if (field.size === sizeData) {
         f.push(field.field);
-
-        const temp = {
-          height: `${field.height}px`,
-          width: `${field.width}px`,
-          left: `${field.left}px`,
-          top: `${field.top}px`,
-        };
-        styles.push(temp);
-        h.push(field.height);
-        w.push(field.width);
-        l.push(field.left);
-        t.push(field.top);
-
-        // console.log('YAHHHOOOOOO', currentField, currentFieldProps);
+        styles.push(field.props);
       }
     });
   });
+
+  // Start video / canvas
+  // const video = useRef(videoPlayer);
+  // const canvas = document.querySelector('canvas');
+  // const ctx = canvas.getContext('2d');
+
+  function step() {
+    // ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    requestAnimationFrame(step);
+  }
+
   return (
     <>
       {f.map((field, i) => (
-        // console.log('YAHHHOOOOOO', t[i], w[i], h[i], l[i]);
-
-        // console.log(mystyles);
-        <ContentStyles style={styles[i]}>
-          {/* <p>{field}</p>
-          <p>top {t[i]}</p>
-          <p>left {l[i]}</p>
-          <p>height {h[i]}</p>
-          <p>width {w[i]}</p> */}
-        </ContentStyles>
+        <ContentStyles style={styles[i]} key={field + i} />
       ))}
+
+      {/* <canvas className="canvas1" width="720" height="400" /> */}
     </>
   );
 }
 
 AdContent.propTypes = {
-  sizeData: PropTypes.string,
-  fieldData: PropTypes.array,
+  sizeData: PropTypes.any,
+  props: PropTypes.any,
 };
-
-// <p>{currentFieldProps.height}</p>
-// <p> {currentFieldProps.width}</p>
-// <p> {currentFieldProps.top}</p>
-// <p> {currentFieldProps.left}</p>

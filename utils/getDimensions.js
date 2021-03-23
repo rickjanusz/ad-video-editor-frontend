@@ -5,15 +5,17 @@ const getDimensions = (field, data) => {
       fieldData.push({
         field,
         size: `${data.sizeX}x${data.sizeY}`,
-        top: data.top,
-        left: data.left,
-        width: data.width,
-        height: data.height,
+        props: {
+          top: `${data.top}px`,
+          left: `${data.left}px`,
+          width: `${data.width}px`,
+          height: `${data.height}px`,
+        },
       });
       // return console.table(field, newObj);
     }
   });
-  console.log({ fieldData });
+  // console.log({ fieldData });
   return fieldData;
 };
 

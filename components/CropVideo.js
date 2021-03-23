@@ -1,10 +1,10 @@
-import React, { useRef } from "react";
+import React, { useRef } from 'react';
 
-export default function CropVideo(ref = "canvas1", height = 400, width = 720) {
+export default function CropVideo(ref = 'canvas1', height = 400, width = 720) {
   const canvas = useRef(ref);
   //   const video = document.querySelector("video");
 
-  const ctx = canvas.getContext("2d");
+  const ctx = canvas.getContext('2d');
 
   function step() {
     // ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -12,17 +12,12 @@ export default function CropVideo(ref = "canvas1", height = 400, width = 720) {
     requestAnimationFrame(step);
   }
 
-  video.addEventListener("play", () => {
+  video.addEventListener('play', () => {
     requestAnimationFrame(step);
   });
   return (
     <div>
-      <canvas
-        ref={canvas}
-        class="canvas1"
-        width={width}
-        height={height}
-      ></canvas>
+      <canvas ref={canvas} className="canvas1" width={width} height={height} />
     </div>
   );
 }

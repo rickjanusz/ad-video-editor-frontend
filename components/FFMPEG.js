@@ -3,10 +3,6 @@ import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 import Draggable from 'react-draggable';
 import NProgress from 'nprogress';
 import DragAndDrop from './DragAndDrop';
-// import CropVideo from "./CropVideo";
-
-// TODO: This should init at App level
-const ffmpeg = createFFmpeg({ log: true });
 
 export default function FFMPEG({ props }) {
   const {
@@ -15,7 +11,6 @@ export default function FFMPEG({ props }) {
     dispatch,
     // FFMPEG state
     ready,
-    setReady,
     video,
     setVideo,
     crop,
@@ -26,30 +21,11 @@ export default function FFMPEG({ props }) {
     setJpg,
     time,
     setTime,
+    ffmpeg,
   } = props;
 
-  // ////////////////////
-  // STATE: FFMPEG READY
-  // ////////////////////
-
-  const load = async () => {
-    await ffmpeg.load();
-    setReady(true);
-  };
   const obj = useRef();
   const objParent = useRef();
-
-  useEffect(() => {
-    // TODO: HANDLE THIS!!!!
-    // TODO: We load without checking- what is the right method?...
-    // TODO: HANDLE THIS!!!! the currently commented out code is...
-    // TODO: not right, not enough, whatever...
-    // const o = obj.current;
-    // const oP = objParent.current;
-    // if (!ffmpeg.isLoaded) {
-    load();
-    // }
-  }, []);
 
   // ////////////////////
   // GET POSITION OF CROPPER:
@@ -130,7 +106,7 @@ export default function FFMPEG({ props }) {
 
     await ffmpeg.setProgress(({ ratio }) => {
       NProgress.set(ratio);
-      console.log({ ratio });
+      // console.log({ ratio });
       if (ratio === 1) {
         NProgress.done();
       }
@@ -189,7 +165,6 @@ export default function FFMPEG({ props }) {
       <h2>GIF Preview</h2>
       &nbsp;
       <button
-        gif={gif}
         onClick={() => {
           exportFormat('image/gif', '1', setGif, 'gif');
         }}
