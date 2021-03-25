@@ -6,17 +6,21 @@ const AdStyle = styled.div`
   background-color: rgba(0, 0, 0, 0.5);
   position: relative;
   margin: 2px;
+  float: left;
+  overflow: hidden;
 `;
 
-export default function AdSize({ sizeData, props }) {
-  return (
-    <AdStyle style={sizeData.props}>
-      <AdContent sizeData={sizeData.size} props={props} />
-    </AdStyle>
-  );
-}
+const AdSize = ({ children, sizeData, props }) => (
+  <AdStyle className={`size_${sizeData.size}`} style={sizeData.props}>
+    {children}
+    <AdContent sizeData={sizeData.size} props={props} />
+  </AdStyle>
+);
 
 AdSize.propTypes = {
   sizeData: PropTypes.any,
   props: PropTypes.any,
+  children: PropTypes.any,
 };
+
+export default AdSize;

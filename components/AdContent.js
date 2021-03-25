@@ -9,7 +9,7 @@ const ContentStyles = styled.div`
   background-color: rgba(255, 0, 0, 0.5);
 `;
 
-export default function AdContent({ sizeData, props }) {
+export default function AdContent({ sizeData }) {
   const f = []; // fields
   const styles = []; // props
 
@@ -28,24 +28,11 @@ export default function AdContent({ sizeData, props }) {
     });
   });
 
-  // Start video / canvas
-  // const video = useRef(videoPlayer);
-  // const canvas = document.querySelector('canvas');
-  // const ctx = canvas.getContext('2d');
-
-  function step() {
-    // ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-    requestAnimationFrame(step);
-  }
-
   return (
     <>
       {f.map((field, i) => (
         <ContentStyles style={styles[i]} key={field + i} />
       ))}
-
-      {/* <canvas className="canvas1" width="720" height="400" /> */}
     </>
   );
 }
