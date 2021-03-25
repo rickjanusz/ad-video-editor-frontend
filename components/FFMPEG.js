@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react'; // import React, { useState, i
 import { fetchFile } from '@ffmpeg/ffmpeg';
 import Draggable from 'react-draggable';
 import NProgress from 'nprogress';
+import PropTypes from 'prop-types';
 import DragAndDrop from './DragAndDrop';
 
 export default function FFMPEG({ props }) {
@@ -74,16 +75,24 @@ export default function FFMPEG({ props }) {
 
   const convertVideoToMP4 = async () => {
     ffmpeg.FS('writeFile', 'test.mp4', await fetchFile(video));
+
+    await ffmpeg.setProgress(({ ratio }) => {
+      NProgress.set(ratio);
+      // console.log({ ratio });
+      if (ratio === 1) {
+        NProgress.done();
+      }
+    });
     // Video
     await ffmpeg.run(
       '-i',
       'test.mp4',
       // TODO: Figure out 265 codec...
       // TODO: for enhanced optimization
-      // '-vcodec',
-      // 'libx265',
-      // '-crf',
-      // '28',
+      // "-vcodec",
+      // "libx265",
+      // "-crf",
+      // "28",
       'output.mp4'
     );
     const data = ffmpeg.FS('readFile', 'output.mp4');
@@ -126,7 +135,7 @@ export default function FFMPEG({ props }) {
       `out.${ext}`
     );
     //   // Read the result
-    console.log(`out.${ext}`);
+    console.log(`out.${ext}!!!!`);
     const data = ffmpeg.FS('readFile', `out.${ext}`);
 
     // Create a URL
@@ -167,6 +176,7 @@ export default function FFMPEG({ props }) {
       <h2>GIF Preview</h2>
       &nbsp;
       <button
+        type="button"
         onClick={() => {
           exportFormat('image/gif', '1', setGif, 'gif');
         }}
@@ -174,6 +184,7 @@ export default function FFMPEG({ props }) {
         Export GIF
       </button>
       <button
+        type="button"
         onClick={() => {
           exportFormat('image/jpg', '5', setJpg, 'jpg');
         }}
@@ -182,13 +193,16 @@ export default function FFMPEG({ props }) {
       </button>
       &nbsp;
       <button
+        type="button"
         onClick={() => {
           exportFormat('video/mp4', '15', setCrop, 'crop');
         }}
       >
         Crop MP4
       </button>
-      <button onClick={convertVideoToMP4}>Convert To MP4</button>
+      <button type="button" onClick={convertVideoToMP4}>
+        Convert To MP4
+      </button>
       {gif && <img src={gif} alt="" />}
       {jpg && <img src={jpg} alt="" />}
       {crop && (
@@ -203,3 +217,20 @@ export default function FFMPEG({ props }) {
     <p>Loading...</p>
   );
 }
+
+FFMPEG.propTypes = {
+  data: PropTypes.object,
+  dispatch: PropTypes.object,
+  ready: PropTypes.string,
+  video: PropTypes.string,
+  setVideo: PropTypes.string,
+  crop: PropTypes.string,
+  setCrop: PropTypes.string,
+  gif: PropTypes.string,
+  setGif: PropTypes.string,
+  jpg: PropTypes.string,
+  setJpg: PropTypes.string,
+  time: PropTypes.string,
+  setTime: PropTypes.string,
+  ffmpeg: PropTypes.string,
+};

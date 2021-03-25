@@ -1,5 +1,6 @@
 import React from 'react';
 import NProgress from 'nprogress';
+import PropTypes from 'prop-types';
 
 const DragAndDrop = (props) => {
   const { data, dispatch, setVideo } = props;
@@ -33,24 +34,25 @@ const DragAndDrop = (props) => {
     const reader = new FileReader();
 
     reader.addEventListener('loadstart', (event) => {
+      // console.log(event);
       NProgress.start();
     });
     reader.addEventListener('loadend', (event) => {
       NProgress.done();
-      const { result } = event.target;
-      // console.log(result);
+      // console.log(event);
       // const trimResult = result.replace('data:video/mp4;base64,', '');
 
       // console.log(trimResult);
       // const blob = new Blob(trimResult, { type: 'video/mp4' });
-      // setVideo(result);
-
-      localStorage.setItem('video', result);
     });
 
-    reader.addEventListener('load', async (event) => {
+    reader.addEventListener('load', (event) => {
+      const { result } = event.target;
+      // console.log('event');
+      setVideo(result);
       // TODO: MOV throws filesize error...
       // TODO: need to implement a DB
+      localStorage.setItem('video', result);
     });
 
     reader.readAsDataURL(files[0]);
@@ -81,3 +83,9 @@ const DragAndDrop = (props) => {
   );
 };
 export default DragAndDrop;
+
+DragAndDrop.propTypes = {
+  setVideo: PropTypes.any,
+  data: PropTypes.any,
+  dispatch: PropTypes.any,
+};
