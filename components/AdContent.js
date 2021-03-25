@@ -6,7 +6,7 @@ import tmData from '../data/treatmentData';
 
 const ContentStyles = styled.div`
   position: absolute;
-  background-color: rgba(255, 0, 0, 0.5);
+  border: 1px solid rgba(255, 0, 0, 0.5);
 `;
 
 export default function AdContent({ sizeData }) {

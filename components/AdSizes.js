@@ -34,27 +34,28 @@ export default function AdSizes({ props, forwardedRef }) {
     // TODO -- performance win
     // TODO: :::::::::::::::::::::::::::::::::::::  PRERENDER FUNCTION
 
-    function prerenderVideo() {
-      const ctx = osRef.current.getContext('2d');
-      ctx.drawImage(
-        vid,
-        0, //  left
-        0, //  top
-        720, //  width
-        400 //  height
-      );
-    }
+    // function prerenderVideo() {
+    //   const ctx = osRef.current.getContext('2d');
+    //   ctx.drawImage(
+    //     vid,
+    //     0, //  left
+    //     0, //  top
+    //     720, //  width
+    //     400 //  height
+    //   );
+    // }
 
-    function step() {
-      prerenderVideo();
-      requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
+    // function step() {
+    //   prerenderVideo();
+    //   requestAnimationFrame(step);
+    // }
+    // requestAnimationFrame(step);
 
-    vid.addEventListener('play', () => {
-      requestAnimationFrame(step);
-    });
+    // vid.addEventListener('play', () => {
+    //   requestAnimationFrame(step);
+    // });
 
+    // <canvas ref={osRef} width="720" height="400" />
     // TODO: :::::::::::::::::::::::::::::::::::::  END PRERENDER FUNCTION
     // TODO: :::::::::::::::::::::::::::::::::::::  END PRERENDER FUNCTION
 
@@ -63,38 +64,38 @@ export default function AdSizes({ props, forwardedRef }) {
     // ::::::::::::::::::::::::::::::::::::::::::::::  Needs off screen rendering
     // ::::::::::::::::::::::::::::::::::::::::::::::  SEE osRef VAR ABOVE
 
-    // // Loop through all refs (1 per canvas) and create video context
-    // function drawCtxImage() {
-    //   canvasRefs.current.forEach((canvas, i) => {
-    //     // console.log(canvas.current);
-    //     ctxArr[i] = canvas.current.getContext('2d');
-    //     ctxArr[i].drawImage(
-    //       vid,
-    //       0, // crop left
-    //       0, // crop top
-    //       lsImg[i].dims.width, // crop width
-    //       lsImg[i].dims.height, // crop height
-    //       lsImg[i].dims.left, // left
-    //       lsImg[i].dims.top, // top
-    //       lsImg[i].dims.width, // width
-    //       lsImg[i].dims.height // height
-    //     );
-    //   });
-    // }
+    // Loop through all refs (1 per canvas) and create video context
+    function drawCtxImage() {
+      canvasRefs.current.forEach((canvas, i) => {
+        // console.log(canvas.current);
+        ctxArr[i] = canvas.current.getContext('2d');
+        ctxArr[i].drawImage(
+          vid,
+          0, // crop left
+          0, // crop top
+          lsImg[i].dims.width, // crop width
+          lsImg[i].dims.height, // crop height
+          lsImg[i].dims.left, // left
+          lsImg[i].dims.top, // top
+          lsImg[i].dims.width, // width
+          lsImg[i].dims.height // height
+        );
+      });
+    }
 
-    // // Redraw video frames to canvas
-    // function step() {
-    //   drawCtxImage();
-    //   requestAnimationFrame(step);
-    // }
+    // Redraw video frames to canvas
+    function step() {
+      drawCtxImage();
+      requestAnimationFrame(step);
+    }
 
-    // // Populate videos right away
-    // requestAnimationFrame(step);
+    // Populate videos right away
+    requestAnimationFrame(step);
 
-    // // Listen for scrub or play
-    // vid.addEventListener('play', () => {
-    //   requestAnimationFrame(step);
-    // });
+    // Listen for scrub or play
+    vid.addEventListener('play', () => {
+      requestAnimationFrame(step);
+    });
 
     // ::::::::::::::::::::::::::::::::::::::::::::::  //
     // ::::::::::::::::::::::::::::::::::::::::::::::  //
@@ -107,7 +108,6 @@ export default function AdSizes({ props, forwardedRef }) {
   // console.log('FORRRWARRDDED!!!! ', forwardedRef.current);
   return (
     <AdGrid>
-      <canvas ref={osRef} width="720" height="400" />
       {getAdSizes(tmData[0]).map((sizeData, i) => (
         // console.log('DIMMMMMD', lsImg[i].dimensions);
         // console.log(sizeData.props.width);
