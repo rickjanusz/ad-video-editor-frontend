@@ -3,7 +3,6 @@ import { fetchFile } from '@ffmpeg/ffmpeg';
 import Draggable from 'react-draggable';
 import NProgress from 'nprogress';
 import DragAndDrop from './DragAndDrop';
-import b64toBlob from '../utils/b64toBlob';
 
 export default function FFMPEG({ props }) {
   const {
@@ -81,10 +80,10 @@ export default function FFMPEG({ props }) {
       'test.mp4',
       // TODO: Figure out 265 codec...
       // TODO: for enhanced optimization
-      // "-vcodec",
-      // "libx265",
-      // "-crf",
-      // "28",
+      // '-vcodec',
+      // 'libx265',
+      // '-crf',
+      // '28',
       'output.mp4'
     );
     const data = ffmpeg.FS('readFile', 'output.mp4');
@@ -142,7 +141,7 @@ export default function FFMPEG({ props }) {
       {video && (
         <>
           <div className="parent">
-            <video controls width="728" id="player" src={video} />
+            <video controls width="728" id="player" muted src={video} />
             <div className="draggable-parent" ref={objParent}>
               <Draggable
                 axis="both"
