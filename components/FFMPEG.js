@@ -1,8 +1,9 @@
 import React, { useEffect, useRef } from 'react'; // import React, { useState, imagetgif from "react";
-import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
+import { fetchFile } from '@ffmpeg/ffmpeg';
 import Draggable from 'react-draggable';
 import NProgress from 'nprogress';
 import DragAndDrop from './DragAndDrop';
+import b64toBlob from '../utils/b64toBlob';
 
 export default function FFMPEG({ props }) {
   const {
@@ -53,13 +54,8 @@ export default function FFMPEG({ props }) {
   // GET/SET VIDEO TIME
   // TODO: Move this into utils
   // ////////////////////
-
-  useEffect(() => {
-    if (video) {
-      saveFrame();
-      // localStorage.setItem("video", video);
-    }
-  }, [video]);
+  // const blah = URL.createObjectURL(new Blob(video, { type: 'video/mp4' }));
+  // console.log(blah);
 
   function saveFrame() {
     const vid = document.querySelector('#player');
@@ -70,6 +66,12 @@ export default function FFMPEG({ props }) {
       setTime(event.srcElement.currentTime);
     });
   }
+
+  useEffect(() => {
+    if (video) {
+      saveFrame();
+    }
+  });
 
   const convertVideoToMP4 = async () => {
     ffmpeg.FS('writeFile', 'test.mp4', await fetchFile(video));
@@ -99,7 +101,7 @@ export default function FFMPEG({ props }) {
   // TODO: Move this into utils
   // ////////////////////
 
-  async function exportFormat(mimType, length, stateFunc, localItem) {
+  async function exportFormat(mimType, length, stateFunc) {
     const ext = mimType.split('/').pop();
     ffmpeg.FS('writeFile', 'test.mp4', await fetchFile(video));
     const dims = getPosition();
@@ -124,9 +126,10 @@ export default function FFMPEG({ props }) {
       `crop=${dims.width}:${dims.height}:${dims.left}:${dims.top}`,
       `out.${ext}`
     );
-
     //   // Read the result
+    console.log(`out.${ext}`);
     const data = ffmpeg.FS('readFile', `out.${ext}`);
+
     // Create a URL
     const url = URL.createObjectURL(
       new Blob([data.buffer], { type: `${mimType}` })

@@ -39,9 +39,9 @@ const DragAndDrop = (props) => {
       NProgress.done();
       const { result } = event.target;
       // console.log(result);
-      const trimResult = result.replace('data:video/mp4;base64,', '');
+      // const trimResult = result.replace('data:video/mp4;base64,', '');
 
-      console.log(trimResult);
+      // console.log(trimResult);
       // const blob = new Blob(trimResult, { type: 'video/mp4' });
       // setVideo(result);
 

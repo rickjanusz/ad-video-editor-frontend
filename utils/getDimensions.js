@@ -11,6 +11,12 @@ const getDimensions = (field, data) => {
           width: `${data.width}px`,
           height: `${data.height}px`,
         },
+        dims: {
+          top: data.top,
+          left: data.left,
+          width: data.width,
+          height: data.height,
+        },
       });
       // return console.table(field, newObj);
     }
