@@ -3,7 +3,7 @@ import NProgress from 'nprogress';
 import PropTypes from 'prop-types';
 
 const DragAndDrop = (props) => {
-  const { data, dispatch, setVideo } = props;
+  const { data, dispatch, setVideo, convertVideoToMp4 } = props;
 
   const handleDragEnter = (e) => {
     e.preventDefault();
@@ -57,6 +57,34 @@ const DragAndDrop = (props) => {
 
     reader.readAsDataURL(files[0]);
 
+    function checkFileSize(file) {
+      let filesize;
+      let sizeWt;
+      if (file.size < 1000000) {
+        filesize = file.size / 1000;
+        sizeWt = `${filesize.toFixed(0)}kb`;
+      } else {
+        filesize = file.size / 1000000;
+        sizeWt = `${filesize.toFixed(1)}mb`;
+      }
+      return sizeWt;
+    }
+
+    function checkFileName(file) {
+      return file.name;
+    }
+
+    const fn = checkFileName(files[0]);
+    const chkExt = fn.split('.');
+
+    if (chkExt[1] !== 'mp4') {
+      // console.log()
+      console.log('NAME:', checkFileName(files[0]));
+      convertVideoToMp4(files[0]);
+    }
+
+    console.log('FILESIZE:', checkFileSize(files[0]));
+
     if (files && files.length > 0) {
       const existingFiles = data.fileList.map((f) => f.name);
       files = files.filter((f) => !existingFiles.includes(f.name));
@@ -88,4 +116,5 @@ DragAndDrop.propTypes = {
   setVideo: PropTypes.any,
   data: PropTypes.any,
   dispatch: PropTypes.any,
+  convertVideoToMp4: PropTypes.any,
 };

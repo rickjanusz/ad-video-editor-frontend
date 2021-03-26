@@ -73,7 +73,7 @@ export default function FFMPEG({ props }) {
     }
   });
 
-  const convertVideoToMP4 = async () => {
+  const convertVideoToMP4 = async (video) => {
     ffmpeg.FS('writeFile', 'test.mp4', await fetchFile(video));
 
     await ffmpeg.setProgress(({ ratio }) => {
@@ -172,7 +172,12 @@ export default function FFMPEG({ props }) {
           <div id="current">0:00</div>
         </>
       )}
-      <DragAndDrop data={data} dispatch={dispatch} setVideo={setVideo} />
+      <DragAndDrop
+        data={data}
+        dispatch={dispatch}
+        setVideo={setVideo}
+        convertVideoToMp4={convertVideoToMP4}
+      />
       <h2>GIF Preview</h2>
       &nbsp;
       <button
@@ -200,7 +205,12 @@ export default function FFMPEG({ props }) {
       >
         Crop MP4
       </button>
-      <button type="button" onClick={convertVideoToMP4}>
+      <button
+        type="button"
+        onClick={() => {
+          convertVideoToMP4(video);
+        }}
+      >
         Convert To MP4
       </button>
       {gif && <img src={gif} alt="" />}
