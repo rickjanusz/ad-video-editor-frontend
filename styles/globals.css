@@ -37,9 +37,9 @@ a {
 }
 
 .draggy {
-  width: 728px;
-  height: 90px;
-  resize: horizontal;
+  width: 150px;
+  height: 150px;
+  resize: both;
   overflow: auto;
   border: 1px solid #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 1);
@@ -52,7 +52,6 @@ a {
 }
 .parent {
   position: relative;
-  height: 409.5px;
   width: 728px;
   resize: both;
   overflow: auto;
@@ -60,7 +59,7 @@ a {
 .draggable-parent {
   /* background-color: green; */
   width: 728px;
-  height: 409.5px;
+  height: 100%;
   position: absolute;
   z-index: 2;
   top: 0;
@@ -69,4 +68,22 @@ a {
 
 .App {
   background-color: pink;
+}
+
+.x-preview {
+  display: flex;
+  flex: wrap;
+  align-items: center;
+  place-items: center;
+}
+.preview {
+}
+
+.download {
+  background-color: green;
+  display: inline-block;
+  color: white;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 5px;
 }

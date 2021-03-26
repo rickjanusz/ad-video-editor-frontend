@@ -23,6 +23,7 @@ function App({ Component, pageProps, apollo }) {
   const [crop, setCrop] = useState();
   const [gif, setGif] = useState();
   const [jpg, setJpg] = useState();
+  const [filename, setFilename] = useState();
   const [time, setTime] = useState(0);
 
   useEffect(() => {
@@ -40,16 +41,7 @@ function App({ Component, pageProps, apollo }) {
       const func = item[1];
       const temp = localStorage.getItem(ref);
       if (temp) {
-        // console.log('ref!!!!!!!!!!!!: ', temp);
         func(temp);
-
-        // const contentType = 'video/mp4';
-        // const b64Data = temp;
-
-        // const blob = b64toBlob(b64Data, contentType);
-        // // const blobUrl = URL.createObjectURL(blob);
-
-        // console.log(blob);
       }
     });
   }, []);
@@ -97,6 +89,8 @@ function App({ Component, pageProps, apollo }) {
           time={time}
           setTime={setTime}
           ffmpeg={ffmpeg}
+          filename={filename}
+          setFilename={setFilename}
           {...pageProps}
         />
       </Layout>

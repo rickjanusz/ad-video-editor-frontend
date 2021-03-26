@@ -3,8 +3,8 @@ import NProgress from 'nprogress';
 import PropTypes from 'prop-types';
 
 const DragAndDrop = (props) => {
-  const { data, dispatch, setVideo, convertVideoToMp4 } = props;
-
+  const { data, dispatch, setVideo, convertVideoToMp4, setFilename } = props;
+  // console.log(props);
   const handleDragEnter = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -34,16 +34,10 @@ const DragAndDrop = (props) => {
     const reader = new FileReader();
 
     reader.addEventListener('loadstart', (event) => {
-      // console.log(event);
       NProgress.start();
     });
     reader.addEventListener('loadend', (event) => {
       NProgress.done();
-      // console.log(event);
-      // const trimResult = result.replace('data:video/mp4;base64,', '');
-
-      // console.log(trimResult);
-      // const blob = new Blob(trimResult, { type: 'video/mp4' });
     });
 
     reader.addEventListener('load', (event) => {
@@ -52,10 +46,15 @@ const DragAndDrop = (props) => {
       setVideo(result);
       // TODO: MOV throws filesize error...
       // TODO: need to implement a DB
-      localStorage.setItem('video', result);
+      // localStorage.setItem('video', result);
     });
 
     reader.readAsDataURL(files[0]);
+    renameFile(files[0]);
+
+    // ::::::::::::::::::::::::::::::::::::::::::::::::::: //
+    // :::::::::::::::::::: BEGIN Custom Helper Functions  //
+    // ::::::::::::::::::::::::::::::::::::::::::::::::::: //
 
     function checkFileSize(file) {
       let filesize;
@@ -74,16 +73,30 @@ const DragAndDrop = (props) => {
       return file.name;
     }
 
-    const fn = checkFileName(files[0]);
-    const chkExt = fn.split('.');
+    function renameFile(file) {
+      const fn = file.name.split('.');
+      const name = fn[0];
+      // console.log({ outName });
+      setFilename(name);
+    }
 
-    if (chkExt[1] !== 'mp4') {
+    function returnExtension(file) {
+      const fn = checkFileName(file);
+      const ext = fn.split('.');
+      return ext[1];
+    }
+
+    if (returnExtension(files[0]) !== 'mp4') {
       // console.log()
-      console.log('NAME:', checkFileName(files[0]));
+      // console.log('NAME:', checkFileName(files[0]));
       convertVideoToMp4(files[0]);
     }
 
     console.log('FILESIZE:', checkFileSize(files[0]));
+
+    // ::::::::::::::::::::::::::::::::::::::::::::::::: //
+    // :::::::::::::::::::: END Custom Helper Functions  //
+    // ::::::::::::::::::::::::::::::::::::::::::::::::: //
 
     if (files && files.length > 0) {
       const existingFiles = data.fileList.map((f) => f.name);
@@ -117,4 +130,5 @@ DragAndDrop.propTypes = {
   data: PropTypes.any,
   dispatch: PropTypes.any,
   convertVideoToMp4: PropTypes.any,
+  setFilename: PropTypes.any,
 };

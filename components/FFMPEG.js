@@ -23,6 +23,8 @@ export default function FFMPEG({ props }) {
     time,
     setTime,
     ffmpeg,
+    filename,
+    setFilename,
   } = props;
 
   const obj = useRef();
@@ -73,8 +75,8 @@ export default function FFMPEG({ props }) {
     }
   });
 
-  const convertVideoToMP4 = async (video) => {
-    ffmpeg.FS('writeFile', 'test.mp4', await fetchFile(video));
+  const convertVideoToMP4 = async (video, ext) => {
+    ffmpeg.FS('writeFile', `input.${ext}`, await fetchFile(video));
 
     await ffmpeg.setProgress(({ ratio }) => {
       NProgress.set(ratio);
@@ -86,7 +88,7 @@ export default function FFMPEG({ props }) {
     // Video
     await ffmpeg.run(
       '-i',
-      'test.mp4',
+      `input.${ext}`,
       // TODO: Figure out 265 codec...
       // TODO: for enhanced optimization
       // "-vcodec",
@@ -102,6 +104,8 @@ export default function FFMPEG({ props }) {
       })
     );
     setVideo(url);
+
+    // localStorage.setItem('video', data);
   };
 
   // ////////////////////
@@ -142,6 +146,7 @@ export default function FFMPEG({ props }) {
     const url = URL.createObjectURL(
       new Blob([data.buffer], { type: `${mimType}` })
     );
+
     stateFunc(url);
   }
 
@@ -150,7 +155,7 @@ export default function FFMPEG({ props }) {
       {video && (
         <>
           <div className="parent">
-            <video controls width="728" id="player" muted src={video} />
+            <video controls id="player" muted src={video} />
             <div className="draggable-parent" ref={objParent}>
               <Draggable
                 axis="both"
@@ -177,13 +182,14 @@ export default function FFMPEG({ props }) {
         dispatch={dispatch}
         setVideo={setVideo}
         convertVideoToMp4={convertVideoToMP4}
+        setFilename={setFilename}
       />
       <h2>GIF Preview</h2>
       &nbsp;
       <button
         type="button"
         onClick={() => {
-          exportFormat('image/gif', '1', setGif, 'gif');
+          exportFormat('image/gif', '3', setGif, 'gif');
         }}
       >
         Export GIF
@@ -213,15 +219,59 @@ export default function FFMPEG({ props }) {
       >
         Convert To MP4
       </button>
-      {gif && <img src={gif} alt="" />}
-      {jpg && <img src={jpg} alt="" />}
-      {crop && (
-        <>
-          <div className="parent">
-            <video controls id="playerCrop" muted src={crop} />
+      <br />
+      <div className="x-preview">
+        {gif && (
+          <div>
+            <img className="preview gif" src={gif} alt="" />
+
+            <br />
+            <a
+              className="download"
+              title={`Download ${filename}`}
+              download={`${filename}.gif`}
+              href={gif}
+            >
+              Download gif
+            </a>
           </div>
-        </>
-      )}
+        )}
+        {jpg && (
+          <div>
+            <img className="preview jpg" src={jpg} alt="" />
+
+            <br />
+            <a
+              className="download"
+              title={`Download ${filename}`}
+              download={`${filename}.jpg`}
+              href={jpg}
+            >
+              Download Jpg
+            </a>
+          </div>
+        )}
+        {crop && (
+          <div>
+            <video
+              className="preview mp4"
+              controls
+              id="playerCrop"
+              muted
+              src={crop}
+            />
+            <br />
+            <a
+              className="download"
+              title={`Download ${filename}`}
+              download={`${filename}.mp4`}
+              href={crop}
+            >
+              Download Video
+            </a>
+          </div>
+        )}
+      </div>
     </>
   ) : (
     <p>Loading...</p>
@@ -243,4 +293,6 @@ FFMPEG.propTypes = {
   time: PropTypes.string,
   setTime: PropTypes.string,
   ffmpeg: PropTypes.string,
+  filename: PropTypes.any,
+  setFilename: PropTypes.any,
 };

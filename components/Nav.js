@@ -17,7 +17,7 @@ export default function Nav() {
         </li>
         <li>
           <Link href="/crop">
-            <a>Crop</a>
+            <a>Crop with Treatment Data</a>
           </Link>
         </li>
       </ul>
