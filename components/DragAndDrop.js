@@ -92,7 +92,7 @@ const DragAndDrop = (props) => {
       convertVideoToMp4(files[0]);
     }
 
-    console.log('FILESIZE:', checkFileSize(files[0]));
+    // console.log('FILESIZE:', checkFileSize(files[0]));
 
     // ::::::::::::::::::::::::::::::::::::::::::::::::: //
     // :::::::::::::::::::: END Custom Helper Functions  //

@@ -13,15 +13,13 @@ export default function AdSizes({ props, forwardedRef }) {
   // OFF SCREEN RENDERING
   // const osRef = useRef();
   // Loop through ad sizes and for each create a dynamic ref
-  canvasRefs.current = fieldData.map(
-    (sizeData, i) => canvasRefs.current[i] ?? React.createRef()
-  );
+  canvasRefs.current = fieldData.map((sizeData, i) => {
+    if (Object.keys(sizeData.ad.lifestyle).length !== 0) {
+      return canvasRefs.current[i] ?? React.createRef();
+    }
+  });
 
-  // console.log(canvasRefs.current);
   const ctxArr = [];
-  // const lsImg = getDimensions('lifestyle_img', tmData[0]);
-  // console.log(lsImg);
-  //  console.log(canvasRefs);
 
   useEffect(() => {
     const vid = forwardedRef.current;
@@ -48,83 +46,64 @@ export default function AdSizes({ props, forwardedRef }) {
     //   prerenderVideo();
     //   requestAnimationFrame(step);
     // }
-    // requestAnimationFrame(step);
-
-    // vid.addEventListener('play', () => {
-    //   requestAnimationFrame(step);
-    // });
 
     // <canvas ref={osRef} width="720" height="400" />
     // TODO: :::::::::::::::::::::::::::::::::::::  END PRERENDER FUNCTION
     // TODO: :::::::::::::::::::::::::::::::::::::  END PRERENDER FUNCTION
 
-    // ::::::::::::::::::::::::::::::::::::::::::::::  Working code
-    // ::::::::::::::::::::::::::::::::::::::::::::::  Not optimized
-    // ::::::::::::::::::::::::::::::::::::::::::::::  Needs off screen rendering
-    // ::::::::::::::::::::::::::::::::::::::::::::::  SEE osRef VAR ABOVE
-
     // Loop through all refs (1 per canvas) and create video context
-    // function drawCtxImage() {
-    //   canvasRefs.current.forEach((canvas, i) => {
-    //     // if (lsImg[i]) {
-    //     ctxArr[i] = canvas.current?.getContext('2d');
-    //     ctxArr[i].drawImage(
-    //       vid,
-    //       0, // crop left
-    //       0, // crop top
-    //       lsImg[i]?.dims.width, // crop width
-    //       lsImg[i]?.dims.height, // crop height
-    //       lsImg[i]?.dims.left, // left
-    //       lsImg[i]?.dims.top, // top
-    //       lsImg[i]?.dims.width, // width
-    //       lsImg[i]?.dims.height // height
-    //     );
-    //     // }
-    //   });
-    // }
-
+    function drawCtxImage() {
+      canvasRefs.current.forEach((canvas, i) => {
+        // console.log(canvas);
+        // console.log('ADDDDDDDDD: ', fieldData[i].ad.lifestyle.dims);
+        if (canvas !== undefined) {
+          const { width, height, left, top } = fieldData[i].ad.lifestyle.dims;
+          ctxArr[i] = canvas.current?.getContext('2d');
+          ctxArr[i]?.drawImage(
+            vid,
+            0, // crop left
+            0, // crop top
+            width, // crop width
+            height, // crop height
+            left, // left
+            top, // top
+            width, // width
+            height // height
+          );
+        }
+      });
+    }
     // Redraw video frames to canvas
-    // function step() {
-    //   drawCtxImage();
-    //   requestAnimationFrame(step);
-    // }
-
+    function step() {
+      drawCtxImage();
+      requestAnimationFrame(step);
+    }
     // Populate videos right away
-    // requestAnimationFrame(step);
-
-    // // Listen for scrub or play
-    // vid.addEventListener('play', () => {
-    //   requestAnimationFrame(step);
-    // });
-
-    // ::::::::::::::::::::::::::::::::::::::::::::::  //
-    // ::::::::::::::::::::::::::::::::::::::::::::::  //
-    // ::::::::::::::::::::::::::::::::::::::::::::::  Working code
-    // ::::::::::::::::::::::::::::::::::::::::::::::  SEE NOTES ABOVE
-    // ::::::::::::::::::::::::::::::::::::::::::::::  //
-    // ::::::::::::::::::::::::::::::::::::::::::::::  //
+    requestAnimationFrame(step);
+    // Listen for scrub or play
+    vid.addEventListener('play', () => {
+      requestAnimationFrame(step);
+    });
   }, []);
 
-  // console.log('FORRRWARRDDED!!!! ', forwardedRef.current);
   return (
     <AdGrid>
-      {fieldData.map((ad, i) => {
-        console.log({ ad });
-        return (
-          <AdSize sizeData={ad} key={ad.size}>
-            <canvas
-              ref={canvasRefs.current[i]}
-              width={ad.numX}
-              height={ad.numY}
-            />
-          </AdSize>
-        );
-      })}
+      {fieldData.map((sizeData, i) => (
+        <AdSize sizeData={sizeData} key={sizeData.size}>
+          <canvas
+            className=""
+            ref={canvasRefs.current[i]}
+            width={sizeData.ad.numX}
+            height={sizeData.ad.numY}
+          />
+        </AdSize>
+      ))}
     </AdGrid>
   );
 }
 
 AdSizes.propTypes = {
-  forwardedRef: PropTypes.object,
   props: PropTypes.any,
+  forwardedRef: PropTypes.object,
+  fieldData: PropTypes.object,
 };

@@ -23,13 +23,11 @@ export function getFieldData() {
     shTxt.map((sh) => {
       if (size.size === sh.size) {
         tempSh = sh;
-        //   console.log('SH', sh);
       }
     });
     hlTxt.map((hl) => {
       if (size.size === hl.size) {
         tempHl = hl;
-        // console.log('HL', hl);
       }
     });
     adData.push({
