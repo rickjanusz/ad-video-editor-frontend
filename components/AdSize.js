@@ -10,16 +10,18 @@ const AdStyle = styled.div`
   overflow: hidden;
 `;
 
-const AdSize = ({ children, sizeData, props }) => (
-  <AdStyle className={`size_${sizeData.size}`} style={sizeData.props}>
-    {children}
-    <AdContent sizeData={sizeData.size} props={props} />
-  </AdStyle>
-);
+const AdSize = ({ children, sizeData }) => {
+  const { ad } = sizeData;
+  return (
+    <AdStyle className={`size_${ad.size}`} style={ad.props}>
+      {children}
+      <AdContent sizeData={sizeData} />
+    </AdStyle>
+  );
+};
 
 AdSize.propTypes = {
   sizeData: PropTypes.any,
-  props: PropTypes.any,
   children: PropTypes.any,
 };
 

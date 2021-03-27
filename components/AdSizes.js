@@ -2,26 +2,25 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import React, { useEffect, useRef } from 'react';
 import AdSize from './AdSize';
-import getAdSizes from '../utils/getAdSizes';
-import tmData from '../data/treatmentData';
-import getDimensions from '../utils/getDimensions';
 
 const AdGrid = styled.div``;
 
 export default function AdSizes({ props, forwardedRef }) {
   // initialize ref array
   const canvasRefs = useRef([]);
+  const { fieldData } = props;
 
   // OFF SCREEN RENDERING
-  const osRef = useRef();
+  // const osRef = useRef();
   // Loop through ad sizes and for each create a dynamic ref
-  canvasRefs.current = getAdSizes(tmData[0]).map(
+  canvasRefs.current = fieldData.map(
     (sizeData, i) => canvasRefs.current[i] ?? React.createRef()
   );
 
+  // console.log(canvasRefs.current);
   const ctxArr = [];
-  const lsImg = getDimensions('lifestyle_img', tmData[0]);
-
+  // const lsImg = getDimensions('lifestyle_img', tmData[0]);
+  // console.log(lsImg);
   //  console.log(canvasRefs);
 
   useEffect(() => {
@@ -65,37 +64,38 @@ export default function AdSizes({ props, forwardedRef }) {
     // ::::::::::::::::::::::::::::::::::::::::::::::  SEE osRef VAR ABOVE
 
     // Loop through all refs (1 per canvas) and create video context
-    function drawCtxImage() {
-      canvasRefs.current.forEach((canvas, i) => {
-        // console.log(canvas.current);
-        ctxArr[i] = canvas.current.getContext('2d');
-        ctxArr[i].drawImage(
-          vid,
-          0, // crop left
-          0, // crop top
-          lsImg[i].dims.width, // crop width
-          lsImg[i].dims.height, // crop height
-          lsImg[i].dims.left, // left
-          lsImg[i].dims.top, // top
-          lsImg[i].dims.width, // width
-          lsImg[i].dims.height // height
-        );
-      });
-    }
+    // function drawCtxImage() {
+    //   canvasRefs.current.forEach((canvas, i) => {
+    //     // if (lsImg[i]) {
+    //     ctxArr[i] = canvas.current?.getContext('2d');
+    //     ctxArr[i].drawImage(
+    //       vid,
+    //       0, // crop left
+    //       0, // crop top
+    //       lsImg[i]?.dims.width, // crop width
+    //       lsImg[i]?.dims.height, // crop height
+    //       lsImg[i]?.dims.left, // left
+    //       lsImg[i]?.dims.top, // top
+    //       lsImg[i]?.dims.width, // width
+    //       lsImg[i]?.dims.height // height
+    //     );
+    //     // }
+    //   });
+    // }
 
     // Redraw video frames to canvas
-    function step() {
-      drawCtxImage();
-      requestAnimationFrame(step);
-    }
+    // function step() {
+    //   drawCtxImage();
+    //   requestAnimationFrame(step);
+    // }
 
     // Populate videos right away
-    requestAnimationFrame(step);
+    // requestAnimationFrame(step);
 
-    // Listen for scrub or play
-    vid.addEventListener('play', () => {
-      requestAnimationFrame(step);
-    });
+    // // Listen for scrub or play
+    // vid.addEventListener('play', () => {
+    //   requestAnimationFrame(step);
+    // });
 
     // ::::::::::::::::::::::::::::::::::::::::::::::  //
     // ::::::::::::::::::::::::::::::::::::::::::::::  //
@@ -108,22 +108,18 @@ export default function AdSizes({ props, forwardedRef }) {
   // console.log('FORRRWARRDDED!!!! ', forwardedRef.current);
   return (
     <AdGrid>
-      {getAdSizes(tmData[0]).map((sizeData, i) => (
-        // console.log('DIMMMMMD', lsImg[i].dimensions);
-        // console.log(sizeData.props.width);
-        <AdSize
-          tmData={tmData}
-          sizeData={sizeData}
-          key={sizeData.size}
-          props={props}
-        >
-          <canvas
-            ref={canvasRefs.current[i]}
-            width={sizeData.props.width}
-            height={sizeData.props.height}
-          />
-        </AdSize>
-      ))}
+      {fieldData.map((ad, i) => {
+        console.log({ ad });
+        return (
+          <AdSize sizeData={ad} key={ad.size}>
+            <canvas
+              ref={canvasRefs.current[i]}
+              width={ad.numX}
+              height={ad.numY}
+            />
+          </AdSize>
+        );
+      })}
     </AdGrid>
   );
 }

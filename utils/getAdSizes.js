@@ -8,6 +8,10 @@ const getAdSizes = (dataObj) => {
           width: `${data.sizeX}px`,
           height: `${data.sizeY}px`,
         },
+        dims: {
+          width: `${data.sizeX}`,
+          height: `${data.sizeY}`,
+        },
       });
       //   console.log(data);
     }

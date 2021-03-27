@@ -6,15 +6,16 @@ import Layout from '../components/layout';
 import withData from '../lib/withData';
 import '../styles/globals.css';
 import '../styles/nprogress.css';
-// import b64toBlob from '../utils/b64toBlob';t React, { useState, imagetgif from "react";
 import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 import Header from '../components/Header';
+import { getFieldData } from '../utils/processData';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
 
 const ffmpeg = createFFmpeg({ log: true });
+const fieldData = getFieldData();
 
 function App({ Component, pageProps, apollo }) {
   // console.log(apollo);
@@ -25,6 +26,8 @@ function App({ Component, pageProps, apollo }) {
   const [jpg, setJpg] = useState();
   const [filename, setFilename] = useState();
   const [time, setTime] = useState(0);
+
+  // console.log(fieldData);
 
   useEffect(() => {
     const localStorageItems = [
@@ -91,6 +94,7 @@ function App({ Component, pageProps, apollo }) {
           ffmpeg={ffmpeg}
           filename={filename}
           setFilename={setFilename}
+          fieldData={fieldData}
           {...pageProps}
         />
       </Layout>
