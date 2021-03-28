@@ -46,7 +46,7 @@ const DragAndDrop = (props) => {
       setVideo(result);
       // TODO: MOV throws filesize error...
       // TODO: need to implement a DB
-      // localStorage.setItem('video', result);
+      localStorage.setItem('video', result);
     });
 
     reader.readAsDataURL(files[0]);
@@ -78,6 +78,7 @@ const DragAndDrop = (props) => {
       const name = fn[0];
       // console.log({ outName });
       setFilename(name);
+      localStorage.setItem('filename', name);
     }
 
     function returnExtension(file) {

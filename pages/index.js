@@ -1,7 +1,7 @@
 import { useQuery, useRef } from '@apollo/client';
 import { gql } from 'graphql-tag';
 import Head from 'next/head';
-import FFMPEG from '../components/FFMPEG';
+import FfMpeg from '../components/FfMpeg';
 
 const ALL_VIDEOS_QUERY = gql`
   query ALL_VIDEOS_QUERY {
@@ -23,7 +23,7 @@ function Home(props) {
           <title>Ad Video Editor</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <FFMPEG props={props} />
+        <FfMpeg props={props} />
       </div>
     </>
   );

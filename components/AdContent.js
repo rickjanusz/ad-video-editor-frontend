@@ -9,16 +9,13 @@ const ContentStyles = styled.div`
 const ImgStyles = styled.div`
   position: absolute;
   border: 10px dotted orchid;
+  overflow: hidden;
 `;
 
 export default function AdContent({ sizeData }) {
   return (
-    <div className="adContent">
-      <ImgStyles
-        className="lifestyle_img"
-        style={sizeData.ad.lifestyle.dims}
-        // key={}
-      />
+    <div className="adContent" key={`adContent${sizeData.ad.size}`}>
+      <ImgStyles className="lifestyle_img" style={sizeData.ad.lifestyle.dims} />
       <ContentStyles style={sizeData.ad.headline.dims} />
       <ContentStyles style={sizeData.ad.subhead.dims} />
     </div>

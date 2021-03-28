@@ -3,9 +3,11 @@ import { fetchFile } from '@ffmpeg/ffmpeg';
 import Draggable from 'react-draggable';
 import NProgress from 'nprogress';
 import PropTypes from 'prop-types';
+import { debounce } from 'debounce';
+
 import DragAndDrop from './DragAndDrop';
 
-export default function FFMPEG({ props }) {
+export default function FfMpeg({ props }) {
   const {
     // Drag&Drop state
     data,
@@ -29,7 +31,8 @@ export default function FFMPEG({ props }) {
 
   const obj = useRef();
   const objParent = useRef();
-
+  const vidRef = useRef();
+  const timeRef = useRef();
   // ////////////////////
   // GET POSITION OF CROPPER:
   // TODO: Move this into utils
@@ -51,7 +54,6 @@ export default function FFMPEG({ props }) {
   function handleStop() {
     getPosition();
   }
-
   // ////////////////////
   // GET/SET VIDEO TIME
   // TODO: Move this into utils
@@ -59,18 +61,33 @@ export default function FFMPEG({ props }) {
   // const blah = URL.createObjectURL(new Blob(video, { type: 'video/mp4' }));
   // console.log(blah);
 
+  function videoLoaded() {
+    vidRef.current.addEventListener('onloadedmetadata', (e) => {
+      console.log(vid.style.height);
+    });
+  }
+
   function saveFrame() {
-    const vid = document.querySelector('#player');
+    const vid = document.querySelector('#video');
     const cur = document.querySelector('#current');
 
-    vid.addEventListener('timeupdate', (event) => {
-      cur.innerHTML = event.srcElement.currentTime;
-      setTime(event.srcElement.currentTime);
+    // vid.addEventListener('timeupdate', (event) => {
+    //   cur.innerHTML = event.srcElement.currentTime;
+    //   const time = event.srcElement.currentTime;
+
+    //   // setTime(event.srcElement.currentTime);
+    // });
+
+    vidRef.current.addEventListener('seeked', (event) => {
+      // console.log('seeking');
+      timeRef.current.innerHTML = event.srcElement.currentTime;
+      debounce(setTime(event.srcElement.currentTime), 2000);
     });
   }
 
   useEffect(() => {
     if (video) {
+      // videoLoaded();
       saveFrame();
     }
   });
@@ -139,7 +156,7 @@ export default function FFMPEG({ props }) {
       `out.${ext}`
     );
     //   // Read the result
-    console.log(`out.${ext}!!!!`);
+    // console.log(`out.${ext}!!!!`);
     const data = ffmpeg.FS('readFile', `out.${ext}`);
 
     // Create a URL
@@ -155,7 +172,7 @@ export default function FFMPEG({ props }) {
       {video && (
         <>
           <div className="parent">
-            <video controls id="player" muted src={video} />
+            <video controls ref={vidRef} id="video" muted src={video} />
             <div className="draggable-parent" ref={objParent}>
               <Draggable
                 axis="both"
@@ -174,7 +191,9 @@ export default function FFMPEG({ props }) {
               </Draggable>
             </div>
           </div>
-          <div id="current">0:00</div>
+          <div id="current" ref={timeRef}>
+            0:00
+          </div>
         </>
       )}
       <DragAndDrop
@@ -278,7 +297,7 @@ export default function FFMPEG({ props }) {
   );
 }
 
-FFMPEG.propTypes = {
+FfMpeg.propTypes = {
   data: PropTypes.object,
   dispatch: PropTypes.object,
   ready: PropTypes.string,

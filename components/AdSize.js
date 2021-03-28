@@ -13,7 +13,11 @@ const AdStyle = styled.div`
 const AdSize = ({ children, sizeData }) => {
   const { ad } = sizeData;
   return (
-    <AdStyle className={`size_${ad.size}`} style={ad.props}>
+    <AdStyle
+      className={`size_${ad.size}`}
+      style={ad.props}
+      key={`adsize_${ad.size}`}
+    >
       {children}
       <AdContent sizeData={sizeData} />
     </AdStyle>

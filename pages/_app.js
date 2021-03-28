@@ -2,13 +2,13 @@ import React, { useEffect, useState, useReducer } from 'react';
 import { ApolloProvider } from '@apollo/client';
 import NProgress from 'nprogress';
 import Router from 'next/router';
+import { createFFmpeg } from '@ffmpeg/ffmpeg';
 import Layout from '../components/layout';
 import withData from '../lib/withData';
-import '../styles/globals.css';
-import '../styles/nprogress.css';
-import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 import Header from '../components/Header';
 import { getFieldData } from '../utils/processData';
+import '../styles/globals.css';
+import '../styles/nprogress.css';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
@@ -32,6 +32,7 @@ function App({ Component, pageProps, apollo }) {
   useEffect(() => {
     const localStorageItems = [
       ['video', setVideo],
+      ['filename', setFilename],
       // ["crop", setCrop],
       // ["gif", setGif],
       // ["jpg", setJpg],
@@ -50,7 +51,7 @@ function App({ Component, pageProps, apollo }) {
   }, []);
 
   const load = async () => {
-    await ffmpeg.load();
+    await ffmpeg?.load();
     setReady(true);
   };
 
