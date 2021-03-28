@@ -295,7 +295,7 @@ export default function FFMPEG({ props }) {
             <a
               className="download"
               title={`Download ${filename}`}
-              download={`${filename}.gif`}
+              download={`${filename}_${cropWidth}x${cropHeight}.gif`}
               href={gif}
             >
               Download gif
@@ -309,7 +309,7 @@ export default function FFMPEG({ props }) {
             <a
               className="download"
               title={`Download ${filename}`}
-              download={`${filename}.jpg`}
+              download={`${filename}_${cropWidth}x${cropHeight}.jpg`}
               href={jpg}
             >
               Download Jpg
@@ -329,7 +329,7 @@ export default function FFMPEG({ props }) {
             <a
               className="download"
               title={`Download ${filename}`}
-              download={`${filename}.mp4`}
+              download={`${filename}_${cropWidth}x${cropHeight}.mp4`}
               href={crop}
             >
               Download Video
