@@ -1,27 +1,25 @@
 const getDimensions = (field, data) => {
   const fieldData = [];
-  const dims = data.map((data) => {
-    if (data.name === field) {
+  data.map((dataBits) => {
+    if (dataBits.name === field) {
       fieldData.push({
         field,
-        size: `${data.sizeX}x${data.sizeY}`,
+        size: `${dataBits.sizeX}x${dataBits.sizeY}`,
         props: {
-          top: `${data.top}px`,
-          left: `${data.left}px`,
-          width: `${data.width}px`,
-          height: `${data.height}px`,
+          top: `${dataBits.top}px`,
+          left: `${dataBits.left}px`,
+          width: `${dataBits.width}px`,
+          height: `${dataBits.height}px`,
         },
         dims: {
-          top: data.top,
-          left: data.left,
-          width: data.width,
-          height: data.height,
+          top: dataBits.top,
+          left: dataBits.left,
+          width: dataBits.width,
+          height: dataBits.height,
         },
       });
-      // return console.table(field, newObj);
     }
   });
-  // console.log({ fieldData });
   return fieldData;
 };
 

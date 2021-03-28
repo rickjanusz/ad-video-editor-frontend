@@ -33,12 +33,20 @@ const DragAndDrop = (props) => {
     let files = [...e.dataTransfer.files];
     const reader = new FileReader();
 
-    reader.addEventListener('loadstart', (event) => {
+    reader.addEventListener('loadstart', () => {
       NProgress.start();
     });
-    reader.addEventListener('loadend', (event) => {
+    reader.addEventListener('loadend', () => {
       NProgress.done();
     });
+
+    function renameFile(file) {
+      const fn = file.name.split('.');
+      const name = fn[0];
+      // console.log({ outName });
+      setFilename(name);
+      localStorage.setItem('filename', name);
+    }
 
     reader.addEventListener('load', (event) => {
       const { result } = event.target;
@@ -56,29 +64,21 @@ const DragAndDrop = (props) => {
     // :::::::::::::::::::: BEGIN Custom Helper Functions  //
     // ::::::::::::::::::::::::::::::::::::::::::::::::::: //
 
-    function checkFileSize(file) {
-      let filesize;
-      let sizeWt;
-      if (file.size < 1000000) {
-        filesize = file.size / 1000;
-        sizeWt = `${filesize.toFixed(0)}kb`;
-      } else {
-        filesize = file.size / 1000000;
-        sizeWt = `${filesize.toFixed(1)}mb`;
-      }
-      return sizeWt;
-    }
+    // function checkFileSize(file) {
+    //   let filesize;
+    //   let sizeWt;
+    //   if (file.size < 1000000) {
+    //     filesize = file.size / 1000;
+    //     sizeWt = `${filesize.toFixed(0)}kb`;
+    //   } else {
+    //     filesize = file.size / 1000000;
+    //     sizeWt = `${filesize.toFixed(1)}mb`;
+    //   }
+    //   return sizeWt;
+    // }
 
     function checkFileName(file) {
       return file.name;
-    }
-
-    function renameFile(file) {
-      const fn = file.name.split('.');
-      const name = fn[0];
-      // console.log({ outName });
-      setFilename(name);
-      localStorage.setItem('filename', name);
     }
 
     function returnExtension(file) {

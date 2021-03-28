@@ -7,7 +7,7 @@ import { debounce } from 'debounce';
 
 import DragAndDrop from './DragAndDrop';
 
-export default function FfMpeg({ props }) {
+export default function FFMPEG({ props }) {
   const {
     // Drag&Drop state
     data,
@@ -54,32 +54,9 @@ export default function FfMpeg({ props }) {
   function handleStop() {
     getPosition();
   }
-  // ////////////////////
-  // GET/SET VIDEO TIME
-  // TODO: Move this into utils
-  // ////////////////////
-  // const blah = URL.createObjectURL(new Blob(video, { type: 'video/mp4' }));
-  // console.log(blah);
-
-  function videoLoaded() {
-    vidRef.current.addEventListener('onloadedmetadata', (e) => {
-      console.log(vid.style.height);
-    });
-  }
 
   function saveFrame() {
-    const vid = document.querySelector('#video');
-    const cur = document.querySelector('#current');
-
-    // vid.addEventListener('timeupdate', (event) => {
-    //   cur.innerHTML = event.srcElement.currentTime;
-    //   const time = event.srcElement.currentTime;
-
-    //   // setTime(event.srcElement.currentTime);
-    // });
-
     vidRef.current.addEventListener('seeked', (event) => {
-      // console.log('seeking');
       timeRef.current.innerHTML = event.srcElement.currentTime;
       debounce(setTime(event.srcElement.currentTime), 2000);
     });
@@ -92,12 +69,11 @@ export default function FfMpeg({ props }) {
     }
   });
 
-  const convertVideoToMP4 = async (video, ext) => {
-    ffmpeg.FS('writeFile', `input.${ext}`, await fetchFile(video));
+  const convertVideoToMP4 = async (vid, ext) => {
+    ffmpeg.FS('writeFile', `input.${ext}`, await fetchFile(vid));
 
     await ffmpeg.setProgress(({ ratio }) => {
       NProgress.set(ratio);
-      // console.log({ ratio });
       if (ratio === 1) {
         NProgress.done();
       }
@@ -114,21 +90,15 @@ export default function FfMpeg({ props }) {
       // "28",
       'output.mp4'
     );
-    const data = ffmpeg.FS('readFile', 'output.mp4');
+    const fileBlob = ffmpeg.FS('readFile', 'output.mp4');
     const url = URL.createObjectURL(
-      new Blob([data.buffer], {
+      new Blob([fileBlob.buffer], {
         type: 'video/mp4',
       })
     );
     setVideo(url);
-
     // localStorage.setItem('video', data);
   };
-
-  // ////////////////////
-  // CAPTURE CROP/GIF/JPG
-  // TODO: Move this into utils
-  // ////////////////////
 
   async function exportFormat(mimType, length, stateFunc) {
     const ext = mimType.split('/').pop();
@@ -137,7 +107,6 @@ export default function FfMpeg({ props }) {
 
     await ffmpeg.setProgress(({ ratio }) => {
       NProgress.set(ratio);
-      // console.log({ ratio });
       if (ratio === 1) {
         NProgress.done();
       }
@@ -155,13 +124,12 @@ export default function FfMpeg({ props }) {
       `crop=${dims.width}:${dims.height}:${dims.left}:${dims.top}`,
       `out.${ext}`
     );
-    //   // Read the result
-    // console.log(`out.${ext}!!!!`);
-    const data = ffmpeg.FS('readFile', `out.${ext}`);
+
+    const fileBlob = ffmpeg.FS('readFile', `out.${ext}`);
 
     // Create a URL
     const url = URL.createObjectURL(
-      new Blob([data.buffer], { type: `${mimType}` })
+      new Blob([fileBlob.buffer], { type: `${mimType}` })
     );
 
     stateFunc(url);
@@ -297,7 +265,8 @@ export default function FfMpeg({ props }) {
   );
 }
 
-FfMpeg.propTypes = {
+FFMPEG.propTypes = {
+  props: PropTypes.any,
   data: PropTypes.object,
   dispatch: PropTypes.object,
   ready: PropTypes.string,
