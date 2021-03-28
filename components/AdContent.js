@@ -15,19 +15,15 @@ const ImgStyles = styled.div`
 export default function AdContent({ sizeData }) {
   return (
     <div className="adContent" key={`adContent${sizeData.ad.size}`}>
-      {sizeData.ad.lifestyle.dims && (
-        <ImgStyles
-          className="lifestyle_img"
-          data-size={sizeData.ad.size}
-          style={sizeData.ad.lifestyle.dims}
-        />
-      )}
-      {sizeData.ad.headline.dims && (
-        <ContentStyles style={sizeData.ad.headline.dims} />
-      )}
-      {sizeData.ad.subhead.dims && (
-        <ContentStyles style={sizeData.ad.subhead.dims} />
-      )}
+      <ImgStyles
+        className="lifestyle_img"
+        data-size={sizeData.ad.size}
+        style={sizeData.ad.lifestyle.dims}
+      />
+
+      <ContentStyles style={sizeData.ad.headline.dims} />
+
+      <ContentStyles style={sizeData.ad.subhead.dims} />
     </div>
   );
 }

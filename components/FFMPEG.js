@@ -4,8 +4,48 @@ import Draggable from 'react-draggable';
 import NProgress from 'nprogress';
 import PropTypes from 'prop-types';
 import { debounce } from 'debounce';
+import styled from 'styled-components';
 
 import DragAndDrop from './DragAndDrop';
+import ControlPanel from './ControlPanel';
+
+const Wrapper = styled.div`
+  display: flex;
+  flex: wrap;
+  label {
+    display: block;
+    margin: 10px;
+  }
+  .draggy {
+    width: 150px;
+    height: 150px;
+    resize: both;
+    overflow: auto;
+    /* background-color: rgba(255, 255, 255, 0.1); */
+    border: 3px dotted rgba(10, 50, 125, 0.3);
+    box-shadow: 0 0 0px 2000px rgba(0, 0, 0, 0.8);
+  }
+
+  .handle {
+    height: 100%;
+    /* cursor: move; */
+    pointer-events: auto;
+  }
+  .videoContainer {
+    position: relative;
+    resize: both;
+    overflow: auto;
+  }
+  .draggable-parent {
+    /* background-color: green; */
+    width: 728px;
+    height: 100%;
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    pointer-events: none;
+  }
+`;
 
 export default function FFMPEG({ props }) {
   const {
@@ -27,6 +67,14 @@ export default function FFMPEG({ props }) {
     ffmpeg,
     filename,
     setFilename,
+    cropHeight,
+    setCropHeight,
+    cropWidth,
+    setCropWidth,
+    length,
+    setLength,
+    scale,
+    setScale,
   } = props;
 
   const obj = useRef();
@@ -50,6 +98,12 @@ export default function FFMPEG({ props }) {
     return childOffset;
   }
 
+  function getVideoSize() {
+    const dims = vidRef.current.getBoundingClientRect();
+    console.log(dims.height);
+    vidRef.current.style.height = `${dims.height * scale}px`;
+  }
+
   // Drag & Drop callback
   function handleStop() {
     getPosition();
@@ -57,13 +111,15 @@ export default function FFMPEG({ props }) {
 
   function saveFrame() {
     vidRef.current.addEventListener('seeked', (event) => {
-      timeRef.current.innerHTML = event.srcElement.currentTime;
-      debounce(setTime(event.srcElement.currentTime), 2000);
+      const num = event.srcElement.currentTime;
+      timeRef.current.innerHTML = num.toFixed(2);
+      debounce(setTime(num.toFixed(2)), 2000);
     });
   }
 
   useEffect(() => {
     if (video) {
+      // getVideoSize();
       // videoLoaded();
       saveFrame();
     }
@@ -121,6 +177,8 @@ export default function FFMPEG({ props }) {
       '-ss',
       `${time}`,
       '-filter:v',
+      // `scale={728*${scale}}:-1`,
+      // `-c:a`,
       `crop=${dims.width}:${dims.height}:${dims.left}:${dims.top}`,
       `out.${ext}`
     );
@@ -129,17 +187,18 @@ export default function FFMPEG({ props }) {
 
     // Create a URL
     const url = URL.createObjectURL(
-      new Blob([fileBlob.buffer], { type: `${mimType}` })
+      new Blob([fileBlob.buffer], { type: `${mimType}`, autoRevoke: false })
     );
 
+    // localStorage.setItem(ext, url);
     stateFunc(url);
   }
 
   return ready ? (
     <>
       {video && (
-        <>
-          <div className="parent">
+        <Wrapper>
+          <div className="videoContainer">
             <video controls ref={vidRef} id="video" muted src={video} />
             <div className="draggable-parent" ref={objParent}>
               <Draggable
@@ -153,16 +212,37 @@ export default function FFMPEG({ props }) {
                 // onDrag={handleDrag}
                 onStop={handleStop}
               >
-                <div className="draggy" ref={obj}>
+                <div
+                  className="draggy"
+                  ref={obj}
+                  style={{
+                    height: `${cropHeight * scale}px`,
+                    width: `${cropWidth * scale}px`,
+                  }}
+                >
                   <div className="handle" />
                 </div>
               </Draggable>
             </div>
           </div>
-          <div id="current" ref={timeRef}>
-            0:00
+          <ControlPanel
+            props={props}
+            cropWidth={cropWidth}
+            setCropWidth={setCropWidth}
+            cropHeight={cropHeight}
+            setCropHeight={setCropHeight}
+            length={length}
+            setLength={setLength}
+            scale={scale}
+            setScale={setScale}
+          />
+          <div>
+            Current Time
+            <div id="current" ref={timeRef}>
+              0.00
+            </div>
           </div>
-        </>
+        </Wrapper>
       )}
       <DragAndDrop
         data={data}
@@ -171,47 +251,46 @@ export default function FFMPEG({ props }) {
         convertVideoToMp4={convertVideoToMP4}
         setFilename={setFilename}
       />
-      <h2>GIF Preview</h2>
       &nbsp;
       <button
         type="button"
         onClick={() => {
-          exportFormat('image/gif', '3', setGif, 'gif');
+          exportFormat('image/gif', length, setGif, 'gif');
         }}
       >
         Export GIF
       </button>
+      &nbsp;
       <button
         type="button"
         onClick={() => {
-          exportFormat('image/jpg', '5', setJpg, 'jpg');
+          exportFormat('image/jpg', length, setJpg, 'jpg');
         }}
       >
-        Convert to Jpg
+        Export Jpg
       </button>
       &nbsp;
       <button
         type="button"
         onClick={() => {
-          exportFormat('video/mp4', '15', setCrop, 'crop');
+          exportFormat('video/mp4', length, setCrop, 'crop');
         }}
       >
-        Crop MP4
+        Export MP4
       </button>
-      <button
+      {/* <button
         type="button"
         onClick={() => {
           convertVideoToMP4(video);
         }}
       >
         Convert To MP4
-      </button>
-      <br />
-      <div className="x-preview">
+      </button> */}
+      <h2>Preview &amp; Download</h2>
+      <div className="ex-preview">
         {gif && (
           <div>
             <img className="preview gif" src={gif} alt="" />
-
             <br />
             <a
               className="download"
@@ -226,7 +305,6 @@ export default function FFMPEG({ props }) {
         {jpg && (
           <div>
             <img className="preview jpg" src={jpg} alt="" />
-
             <br />
             <a
               className="download"
@@ -266,21 +344,29 @@ export default function FFMPEG({ props }) {
 }
 
 FFMPEG.propTypes = {
-  props: PropTypes.any,
-  data: PropTypes.object,
-  dispatch: PropTypes.object,
-  ready: PropTypes.string,
   video: PropTypes.string,
-  setVideo: PropTypes.string,
-  crop: PropTypes.string,
-  setCrop: PropTypes.string,
-  gif: PropTypes.string,
-  setGif: PropTypes.string,
-  jpg: PropTypes.string,
-  setJpg: PropTypes.string,
-  time: PropTypes.string,
-  setTime: PropTypes.string,
-  ffmpeg: PropTypes.string,
+  props: PropTypes.any,
+  data: PropTypes.any,
+  dispatch: PropTypes.any,
+  ready: PropTypes.any,
+  setVideo: PropTypes.any,
+  crop: PropTypes.any,
+  setCrop: PropTypes.any,
+  gif: PropTypes.any,
+  setGif: PropTypes.any,
+  jpg: PropTypes.any,
+  setJpg: PropTypes.any,
+  time: PropTypes.any,
+  setTime: PropTypes.any,
+  ffmpeg: PropTypes.any,
   filename: PropTypes.any,
   setFilename: PropTypes.any,
+  cropHeight: PropTypes.any,
+  setCropHeight: PropTypes.any,
+  cropWidth: PropTypes.any,
+  setCropWidth: PropTypes.any,
+  length: PropTypes.any,
+  setLength: PropTypes.any,
+  scale: PropTypes.any,
+  setScale: PropTypes.any,
 };

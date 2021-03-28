@@ -34,14 +34,18 @@ export default function AdSizes({ props, forwardedRef }) {
         height: 400,
         ref: canvasRefs.current[i],
       });
-      ReactDOM.render(canvas, imgArr[i]);
+      ReactDOM.render(canvas, img);
     });
     const vid = forwardedRef.current;
 
     // Loop through all refs (1 per canvas) and create video context
     function drawCtxImage() {
       canvasRefs.current.forEach((canvas, i) => {
-        console.log(canvas, i);
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // console.log(canvas, i);
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         if (canvas !== undefined) {
           ctxArr[i] = canvas.current?.getContext('2d', { alpha: false });
           ctxArr[i]?.drawImage(

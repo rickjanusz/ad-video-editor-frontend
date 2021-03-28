@@ -25,7 +25,11 @@ function App({ Component, pageProps, apollo }) {
   const [gif, setGif] = useState();
   const [jpg, setJpg] = useState();
   const [filename, setFilename] = useState();
+  const [cropWidth, setCropWidth] = useState();
+  const [cropHeight, setCropHeight] = useState();
   const [time, setTime] = useState(0);
+  const [length, setLength] = useState(2);
+  const [scale, setScale] = useState(1);
 
   // console.log(fieldData);
 
@@ -33,9 +37,13 @@ function App({ Component, pageProps, apollo }) {
     const localStorageItems = [
       ['video', setVideo],
       ['filename', setFilename],
+      ['cropWidth', setCropWidth],
+      ['cropHeight', setCropHeight],
+      ['length', setLength],
+      ['scale', setScale],
       // ["crop", setCrop],
-      // ["gif", setGif],
-      // ["jpg", setJpg],
+      // ['gif', setGif],
+      // ['jpg', setJpg],
     ];
 
     load();
@@ -96,6 +104,14 @@ function App({ Component, pageProps, apollo }) {
           filename={filename}
           setFilename={setFilename}
           fieldData={fieldData}
+          cropWidth={cropWidth}
+          setCropWidth={setCropWidth}
+          cropHeight={cropHeight}
+          setCropHeight={setCropHeight}
+          length={length}
+          setLength={setLength}
+          scale={scale}
+          setScale={setScale}
           {...pageProps}
         />
       </Layout>

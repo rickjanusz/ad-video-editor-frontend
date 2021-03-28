@@ -35,50 +35,13 @@ a {
   text-align: left;
   font-weight: bold;
 }
-
-.draggy {
-  width: 150px;
-  height: 150px;
-  resize: both;
-  overflow: auto;
-  border: 1px solid #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 1);
-}
-
-.handle {
-  height: 100%;
-  /* cursor: move; */
-  pointer-events: auto;
-}
-.parent {
-  position: relative;
-  width: 728px;
-  resize: both;
-  overflow: auto;
-}
-.draggable-parent {
-  /* background-color: green; */
-  width: 728px;
-  height: 100%;
-  position: absolute;
-  z-index: 2;
-  top: 0;
-  pointer-events: none;
-}
-
-.App {
-  background-color: pink;
-}
-
-.x-preview {
+.ex-preview {
+  max-width: 1200px;
   display: flex;
   flex: wrap;
   align-items: center;
   place-items: center;
 }
-.preview {
-}
-
 .download {
   background-color: green;
   display: inline-block;
@@ -86,4 +49,7 @@ a {
   font-weight: bold;
   padding: 10px;
   border-radius: 5px;
+}
+.App {
+  background-color: pink;
 }

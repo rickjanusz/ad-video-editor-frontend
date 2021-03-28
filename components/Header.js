@@ -6,9 +6,5 @@ const HeaderStyles = styled.header`
 `;
 
 export default function Header() {
-  return (
-    <HeaderStyles>
-      <Nav />
-    </HeaderStyles>
-  );
+  return <HeaderStyles>{/* <Nav /> */}</HeaderStyles>;
 }
