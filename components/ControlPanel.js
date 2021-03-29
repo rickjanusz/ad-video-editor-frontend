@@ -200,13 +200,6 @@ export default function ControlPanel(props) {
             labelId="demo-simple-select-filled-label"
             id="demo-simple-select-filled"
             name="selectASize"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <PhotoSizeSelectLargeSharpIcon color="primary" />
-                </InputAdornment>
-              ),
-            }}
             value={`${cropWidth}x${cropHeight}`}
             onChange={(e) => {
               const a = e.target.value;
