@@ -7,8 +7,8 @@ import Layout from '../components/layout';
 import withData from '../lib/withData';
 import Header from '../components/Header';
 import { getFieldData } from '../utils/processData';
-import '../styles/globals.css';
 import '../styles/nprogress.css';
+import '../styles/globals.css';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());

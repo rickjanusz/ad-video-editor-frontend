@@ -1,4 +1,3 @@
-import { useQuery, useRef } from '@apollo/client';
 import { gql } from 'graphql-tag';
 import Head from 'next/head';
 import FFMPEG from '../components/FFMPEG';
