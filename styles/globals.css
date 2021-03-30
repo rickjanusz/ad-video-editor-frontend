@@ -1,25 +1,27 @@
-body {
-  background-color: #000;
-}
 .drag-drop-zone {
   padding: 2rem;
   text-align: center;
-  background: #07f;
+  background: #3f51b5;
   border-radius: 0.5rem;
   box-shadow: 5px 5px 10px #c0c0c0;
 }
 .drag-drop-zone p {
   color: #fff;
+  padding: 100px;
 }
-.drag-drop-zone.inside-drag-area :hover {
+
+.drag-drop-zone {
+  border: 5px dashed #3f51b5;
+}
+
+.drag-drop-zone :hover {
   opacity: 0.7;
-  border: 5px dashed greenyellow;
+  border: 5px dashed white;
 }
 .dropped-files li {
-  color: #07f;
+  color: #3f51b5;
   padding: 3px;
   text-align: left;
-  font-weight: bold;
 }
 .ex-preview {
   max-width: 1200px;
@@ -29,5 +31,6 @@ body {
   place-items: center;
 }
 
-.App {
+label {
+  margin: 0 !important;
 }

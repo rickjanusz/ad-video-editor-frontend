@@ -5,10 +5,20 @@ import NProgress from 'nprogress';
 import PropTypes from 'prop-types';
 import { debounce } from 'debounce';
 import styled from 'styled-components';
-import { Button, Grid } from '@material-ui/core';
+import { Button, Grid, makeStyles } from '@material-ui/core';
 
 import DragAndDrop from './DragAndDrop';
 import ControlPanel from './ControlPanel';
+import ControlPanelDrawer from './ControlPanelDrawer';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+      width: '25ch',
+    },
+  },
+}));
 
 const Wrapper = styled.div`
   display: flex;
@@ -23,8 +33,8 @@ const Wrapper = styled.div`
     resize: both;
     overflow: auto;
     /* background-color: rgba(255, 255, 255, 0.1); */
-    border: 3px dotted rgba(10, 50, 125, 0.3);
-    box-shadow: 0 0 0px 2000px rgba(0, 0, 0, 0.5);
+    border: 3px dotted rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 0px 1000px rgba(0, 0, 0, 0.7);
   }
 
   .handle {
@@ -33,10 +43,15 @@ const Wrapper = styled.div`
     pointer-events: auto;
   }
   .videoContainer {
-    width: auto;
+    max-width: 1080px;
+    max-height: 610px;
     position: relative;
     resize: both;
     overflow: auto;
+  }
+  video {
+    max-width: 1080px;
+    max-height: 720px;
   }
   .draggable-parent {
     /* background-color: green; */
@@ -82,6 +97,7 @@ export default function FFMPEG({ props }) {
     setLength,
     scale,
     setScale,
+    theme,
   } = props;
 
   const obj = useRef();
@@ -203,16 +219,23 @@ export default function FFMPEG({ props }) {
 
   return ready ? (
     <>
-      <DragAndDrop
-        data={data}
-        dispatch={dispatch}
-        setVideo={setVideo}
-        convertVideoToMp4={convertVideoToMP4}
-        setFilename={setFilename}
-      />
-      <Grid container direction="row" justify="center" alignItems="flex-start">
-        {video && (
-          <Wrapper>
+      <div>
+        <ControlPanelDrawer
+          props={props}
+          cropWidth={cropWidth}
+          setCropWidth={setCropWidth}
+          cropHeight={cropHeight}
+          setCropHeight={setCropHeight}
+          length={length}
+          setLength={setLength}
+          scale={scale}
+          setScale={setScale}
+          theme={theme}
+        />
+      </div>
+      {video && (
+        <Wrapper>
+          <div className="video-cropper">
             <div className="videoContainer">
               <video controls ref={vidRef} id="video" muted src={video} />
               <div className="draggable-parent" ref={objParent}>
@@ -239,64 +262,51 @@ export default function FFMPEG({ props }) {
                   </div>
                 </Draggable>
               </div>
-              <div>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="button"
-                  onClick={() => {
-                    exportFormat('image/gif', length, setGif, 'gif');
-                  }}
-                >
-                  Export GIF
-                </Button>
-                &nbsp;
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="button"
-                  onClick={() => {
-                    exportFormat('image/jpg', length, setJpg, 'jpg');
-                  }}
-                >
-                  Export Jpg
-                </Button>
-                &nbsp;
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="button"
-                  onClick={() => {
-                    exportFormat('video/mp4', length, setCrop, 'crop');
-                  }}
-                >
-                  Export MP4
-                </Button>
-              </div>
             </div>
             <div>
-              <ControlPanel
-                props={props}
-                cropWidth={cropWidth}
-                setCropWidth={setCropWidth}
-                cropHeight={cropHeight}
-                setCropHeight={setCropHeight}
-                length={length}
-                setLength={setLength}
-                scale={scale}
-                setScale={setScale}
-              />
-
               <div>
                 Current Time:{' '}
                 <span id="current" ref={timeRef}>
                   0.00
                 </span>
               </div>
+              <Button
+                variant="contained"
+                color="primary"
+                type="button"
+                onClick={() => {
+                  exportFormat('image/gif', length, setGif, 'gif');
+                }}
+              >
+                Export GIF
+              </Button>
+              &nbsp;
+              <Button
+                variant="contained"
+                color="primary"
+                type="button"
+                onClick={() => {
+                  exportFormat('image/jpg', length, setJpg, 'jpg');
+                }}
+              >
+                Export Jpg
+              </Button>
+              &nbsp;
+              <Button
+                variant="contained"
+                color="primary"
+                type="button"
+                onClick={() => {
+                  exportFormat('video/mp4', length, setCrop, 'crop');
+                }}
+              >
+                Export MP4
+              </Button>
             </div>
-          </Wrapper>
-        )}
-        {/* <button
+          </div>
+        </Wrapper>
+      )}
+      {/* <button
         type="button"
         onClick={() => {
           convertVideoToMP4(video);
@@ -304,59 +314,69 @@ export default function FFMPEG({ props }) {
         >
         Convert To MP4
       </button> */}
-        <Grid className="ex-preview">
-          <h2>Preview &amp; Download</h2>
 
-          {gif && (
-            <div>
-              <img className="preview gif" src={gif} alt="" />
-              <br />
-              <a
-                className="download"
-                title={`Download ${filename}`}
-                download={`${filename}_${cropWidth}x${cropHeight}.gif`}
-                href={gif}
-              >
-                Download gif
-              </a>
-            </div>
-          )}
-          {jpg && (
-            <div>
-              <img className="preview jpg" src={jpg} alt="" />
-              <br />
-              <a
-                className="download"
-                title={`Download ${filename}`}
-                download={`${filename}_${cropWidth}x${cropHeight}.jpg`}
-                href={jpg}
-              >
-                Download Jpg
-              </a>
-            </div>
-          )}
-          {crop && (
-            <div>
-              <video
-                className="preview mp4"
-                controls
-                id="playerCrop"
-                muted
-                src={crop}
-              />
-              <br />
-              <a
-                className="download"
-                title={`Download ${filename}`}
-                download={`${filename}_${cropWidth}x${cropHeight}.mp4`}
-                href={crop}
-              >
-                Download Video
-              </a>
-            </div>
-          )}
-        </Grid>
-      </Grid>
+      <h2>Preview &amp; Download</h2>
+      <div className="ex-preview">
+        {gif && (
+          <div>
+            <img className="preview gif" src={gif} alt="" />
+            <br />
+            <Button
+              variant="contained"
+              color="secondary"
+              title={`Download ${filename}`}
+              download={`${filename}_${cropWidth}x${cropHeight}.gif`}
+              href={gif}
+            >
+              Download gif
+            </Button>
+          </div>
+        )}
+        {jpg && (
+          <div>
+            <img className="preview jpg" src={jpg} alt="" />
+            <br />
+            <Button
+              variant="contained"
+              color="secondary"
+              title={`Download ${filename}`}
+              download={`${filename}_${cropWidth}x${cropHeight}.jpg`}
+              href={jpg}
+            >
+              Download Jpg
+            </Button>
+          </div>
+        )}
+        {crop && (
+          <div>
+            <video
+              className="preview mp4"
+              controls
+              id="playerCrop"
+              muted
+              src={crop}
+            />
+            <br />
+            <Button
+              variant="contained"
+              color="secondary"
+              title={`Download ${filename}`}
+              download={`${filename}_${cropWidth}x${cropHeight}.mp4`}
+              href={crop}
+            >
+              Download Video
+            </Button>
+          </div>
+        )}
+      </div>
+
+      <DragAndDrop
+        data={data}
+        dispatch={dispatch}
+        setVideo={setVideo}
+        convertVideoToMp4={convertVideoToMP4}
+        setFilename={setFilename}
+      />
     </>
   ) : (
     <p>Loading...</p>

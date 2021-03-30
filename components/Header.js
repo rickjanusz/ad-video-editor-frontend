@@ -6,5 +6,9 @@ const HeaderStyles = styled.header`
 `;
 
 export default function Header() {
-  return <HeaderStyles>{/* <Nav /> */}</HeaderStyles>;
+  return (
+    <HeaderStyles>
+      <h1>Video Cropper</h1>
+    </HeaderStyles>
+  );
 }

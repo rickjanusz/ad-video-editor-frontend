@@ -1,28 +1,10 @@
 import PropTypes from 'prop-types';
-import styled, { createGlobalStyle } from 'styled-components';
+import styled from 'styled-components';
 
-const GlobalStyles = createGlobalStyle`
-    /* html {
-      box-sizing: border-box;
-      font-size: 10px;
-    }
-    *, *:before, *:after {
-      box-sizing: inherit;
-    } */
-  `;
-
-const InnerStyles = styled.div`
-  /* width: 90vw;
-  margin: 10px 5vw; */
-`;
+import Container from '@material-ui/core/Container';
 
 export default function Layout({ children }) {
-  return (
-    <>
-      <GlobalStyles />
-      <InnerStyles>{children}</InnerStyles>
-    </>
-  );
+  return <Container maxWidth="lg">{children}</Container>;
 }
 
 Layout.propTypes = {
