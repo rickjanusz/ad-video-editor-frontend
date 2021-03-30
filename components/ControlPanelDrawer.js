@@ -6,6 +6,7 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import Grid from '@material-ui/core/Grid';
 import CropOutlinedIcon from '@material-ui/icons/CropOutlined';
 // import SettingsApplicationsOutlinedIcon from '@material-ui/icons/SettingsApplicationsOutlined';
 import Typography from '@material-ui/core/Typography';
@@ -78,7 +79,7 @@ export default function ControlPanelDrawer(props) {
 
   return (
     <div>
-      {['right'].map((anchor) => (
+      {['top'].map((anchor) => (
         <React.Fragment key={anchor}>
           <Button onClick={toggleDrawer(anchor, true)}>Crop Settings</Button>
           <Drawer

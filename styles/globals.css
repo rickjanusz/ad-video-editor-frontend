@@ -23,13 +23,6 @@
   padding: 3px;
   text-align: left;
 }
-.ex-preview {
-  max-width: 1200px;
-  display: flex;
-  flex: wrap;
-  align-items: center;
-  place-items: center;
-}
 
 label {
   margin: 0 !important;

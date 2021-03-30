@@ -131,7 +131,7 @@ function App({ Component, pageProps, apollo }) {
       <ApolloProvider client={apollo}>
         <Layout>
           <CssBaseline />
-          <Header />
+          <Header theme={theme} />
           <Component
             data={data}
             dispatch={dispatch}

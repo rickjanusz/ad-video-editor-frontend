@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Container from '@material-ui/core/Container';
 
 export default function Layout({ children }) {
-  return <Container maxWidth="lg">{children}</Container>;
+  return <Container maxWidth="xl">{children}</Container>;
 }
 
 Layout.propTypes = {

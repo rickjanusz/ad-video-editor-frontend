@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
-import Avatar from '@material-ui/core/Avatar';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Grid from '@material-ui/core/Grid';
+import Avatar from '@material-ui/core/Avatar';
 import CropOutlinedIcon from '@material-ui/icons/CropOutlined';
 // import SettingsApplicationsOutlinedIcon from '@material-ui/icons/SettingsApplicationsOutlined';
 import Typography from '@material-ui/core/Typography';
@@ -30,10 +30,17 @@ export default function ControlPanel(props) {
 
   const useStyles = makeStyles(() => ({
     paper: {
-      marginTop: theme.spacing(8),
+      marginTop: theme.spacing(0),
+      marginBottom: theme.spacing(3),
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
+    },
+    avatar: {
+      margin: theme.spacing(0),
+      backgroundColor: theme.palette.primary.main,
+      height: 100,
+      width: 100,
     },
   }));
 
@@ -55,98 +62,119 @@ export default function ControlPanel(props) {
   ];
 
   return (
-    <Container component="main" maxWidth="xs">
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <CropOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Crop Settings
-        </Typography>
-      </div>
+    <Container component="main" maxWidth="xl">
       <form className={classes.form}>
-        <TextField
-          id="standard"
-          margin="normal"
-          label="Crop Width"
-          name="cropWidth"
-          fullWidth
-          autoComplete="off"
-          type="number"
-          value={cropWidth}
-          onChange={(e) => {
-            setCropWidth(e.target.value);
-            localStorage.setItem('cropWidth', e.target.value);
-          }}
-        />
-        <TextField
-          id="standard"
-          margin="normal"
-          label="Crop Height"
-          name="cropHeight"
-          fullWidth
-          type="number"
-          autoComplete="off"
-          value={cropHeight}
-          onChange={(e) => {
-            setCropHeight(e.target.value);
-            localStorage.setItem('cropHeight', e.target.value);
-          }}
-        />
+        <Grid container spacing={3}>
+          <Grid xs item>
+            <div className={classes.paper} />
+          </Grid>
 
-        <TextField
-          id="standard"
-          margin="normal"
-          label="Clip Length"
-          name="length"
-          fullWidth
-          type="number"
-          autoComplete="off"
-          value={length}
-          onChange={(e) => {
-            setLength(e.target.value);
-            localStorage.setItem('length', e.target.value);
-          }}
-        />
+          <Grid xs item>
+            <div className={classes.paper}>
+              <Avatar className={classes.avatar}>
+                <CropOutlinedIcon style={{ height: 50, width: 50 }} />
+              </Avatar>
+            </div>
+          </Grid>
+          <Grid xs item>
+            <TextField
+              id="standard"
+              margin="normal"
+              label="Crop Width"
+              name="cropWidth"
+              fullWidth
+              autoComplete="off"
+              type="number"
+              value={cropWidth}
+              onChange={(e) => {
+                setCropWidth(e.target.value);
+                localStorage.setItem('cropWidth', e.target.value);
+              }}
+            />
+          </Grid>
+          <Grid xs item>
+            <TextField
+              id="standard"
+              margin="normal"
+              label="Crop Height"
+              name="cropHeight"
+              fullWidth
+              type="number"
+              autoComplete="off"
+              value={cropHeight}
+              onChange={(e) => {
+                setCropHeight(e.target.value);
+                localStorage.setItem('cropHeight', e.target.value);
+              }}
+            />
+          </Grid>
 
-        <TextField
-          id="standard"
-          margin="normal"
-          label="Scale"
-          fullWidth
-          type="number"
-          autoComplete="off"
-          value={scale}
-          onChange={(e) => {
-            setScale(e.target.value);
-            localStorage.setItem('scale', e.target.value);
-          }}
-        />
+          <Grid xs item>
+            <TextField
+              id="standard"
+              margin="normal"
+              label="Clip Length"
+              name="length"
+              fullWidth
+              type="number"
+              autoComplete="off"
+              value={length}
+              onChange={(e) => {
+                setLength(e.target.value);
+                localStorage.setItem('length', e.target.value);
+              }}
+            />
+          </Grid>
+          <Grid xs item>
+            <TextField
+              id="standard"
+              margin="normal"
+              label="Scale"
+              fullWidth
+              type="number"
+              autoComplete="off"
+              value={scale}
+              onChange={(e) => {
+                setScale(e.target.value);
+                localStorage.setItem('scale', e.target.value);
+              }}
+            />
+          </Grid>
+          <Grid xs item>
+            <FormControl
+              fullWidth
+              margin="normal"
+              className={classes.formControl}
+            >
+              <InputLabel id="demo-simple-select-outlined-label">
+                Select A Size
+              </InputLabel>
+              <Select
+                labelId="standard"
+                name="selectASize"
+                value={`${cropWidth}x${cropHeight}`}
+                onChange={(e) => {
+                  const a = e.target.value;
+                  const b = a.split('x');
+                  setCropWidth(b[0]);
+                  setCropHeight(b[1]);
+                  console.log(e.target.value);
+                  // localStorage.setItem('scale', e.target.value);
+                }}
+              >
+                {options.map((option) => (
+                  <MenuItem value={`${option}`} key={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
 
-        <FormControl fullWidth margin="normal" className={classes.formControl}>
-          <InputLabel id="demo-simple-select-outlined-label">
-            Select A Size
-          </InputLabel>
-          <Select
-            labelId="standard"
-            name="selectASize"
-            value={`${cropWidth}x${cropHeight}`}
-            onChange={(e) => {
-              const a = e.target.value;
-              const b = a.split('x');
-              setCropWidth(b[0]);
-              setCropHeight(b[1]);
-              console.log(e.target.value);
-              // localStorage.setItem('scale', e.target.value);
-            }}
-          >
-            {options.map((option) => (
-              <MenuItem value={`${option}`} key={option}>
-                {option}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+          <Grid xs item>
+            <div className={classes.paper} />
+          </Grid>
+        </Grid>
       </form>
     </Container>
   );

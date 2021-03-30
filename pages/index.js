@@ -1,6 +1,7 @@
 import { gql } from 'graphql-tag';
 import Head from 'next/head';
 import FFMPEG from '../components/FFMPEG';
+import PersistentDrawerTop from '../components/PersistentDrawerTop';
 
 const ALL_VIDEOS_QUERY = gql`
   query ALL_VIDEOS_QUERY {
@@ -22,6 +23,7 @@ function Home(props) {
           <title>Ad Video Editor</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
+        {/* <PersistentDrawerTop props={props} /> */}
         <FFMPEG props={props} />
       </div>
     </>
