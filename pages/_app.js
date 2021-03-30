@@ -70,10 +70,10 @@ function App({ Component, pageProps, apollo }) {
   const [gif, setGif] = useState();
   const [jpg, setJpg] = useState();
   const [filename, setFilename] = useState();
-  const [cropWidth, setCropWidth] = useState();
-  const [cropHeight, setCropHeight] = useState();
+  const [cropWidth, setCropWidth] = useState(0);
+  const [cropHeight, setCropHeight] = useState(0);
   const [time, setTime] = useState(0);
-  const [length, setLength] = useState(2);
+  const [length, setLength] = useState(1);
   const [scale, setScale] = useState(1);
 
   // console.log(fieldData);

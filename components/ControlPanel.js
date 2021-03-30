@@ -146,11 +146,8 @@ export default function ControlPanel(props) {
               margin="normal"
               className={classes.formControl}
             >
-              <InputLabel id="demo-simple-select-outlined-label">
-                Select A Size
-              </InputLabel>
+              <InputLabel id="standard">Select A Size</InputLabel>
               <Select
-                labelId="standard"
                 name="selectASize"
                 value={`${cropWidth}x${cropHeight}`}
                 onChange={(e) => {

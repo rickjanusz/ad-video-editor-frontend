@@ -7,6 +7,7 @@ import { debounce } from 'debounce';
 import styled from 'styled-components';
 import { Button, Box, makeStyles } from '@material-ui/core';
 
+import Divider from '@material-ui/core/Divider';
 import DragAndDrop from './DragAndDrop';
 import ControlPanel from './ControlPanel';
 import ControlPanelDrawer from './ControlPanelDrawer';
@@ -22,10 +23,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Wrapper = styled.div`
   width: 100vw;
-  label {
-    display: block;
-    margin: 10px;
-  }
+  margin-bottom: 60px;
   .draggy {
     width: 150px;
     height: 150px;
@@ -315,14 +313,15 @@ export default function FFMPEG({ props }) {
         >
         Convert To MP4
       </button> */}
+      <Divider p={8} />
 
-      <Box justifyContent="center" display="flex">
+      <Box style={{ textAlign: 'center' }}>
         <h1>Preview &amp; Download</h1>
       </Box>
 
-      <Box justifyContent="center" display="flex" className="ex-preview">
+      <Box display="flex" justifyContent="center">
         {gif && (
-          <Box m={1}>
+          <Box display="flex" justifyContent="center" m={1}>
             <img className="preview gif" src={gif} alt="" />
             <br />
             <Button
@@ -337,7 +336,7 @@ export default function FFMPEG({ props }) {
           </Box>
         )}
         {jpg && (
-          <Box m={1}>
+          <Box display="flex" justifyContent="center" m={1}>
             <img className="preview jpg" src={jpg} alt="" />
             <br />
             <Button
@@ -352,7 +351,7 @@ export default function FFMPEG({ props }) {
           </Box>
         )}
         {crop && (
-          <Box m={1}>
+          <Box display="flex" justifyContent="center" m={1}>
             <video
               className="preview mp4"
               controls
@@ -368,7 +367,7 @@ export default function FFMPEG({ props }) {
               download={`${filename}_${cropWidth}x${cropHeight}.mp4`}
               href={crop}
             >
-              Download Video
+              Download MP4
             </Button>
           </Box>
         )}

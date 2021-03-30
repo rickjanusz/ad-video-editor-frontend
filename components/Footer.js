@@ -22,7 +22,7 @@ export default function Footer() {
 
   return (
     <FooterStyles>
-      <Box mt={8}>
+      <Box m={2} p={8}>
         <Copyright />
       </Box>
     </FooterStyles>
