@@ -26,8 +26,6 @@ export default function ControlPanel(props) {
     theme,
   } = props;
 
-  //   console.log(theme);
-
   const useStyles = makeStyles(() => ({
     paper: {
       marginTop: theme.spacing(0),
@@ -45,6 +43,7 @@ export default function ControlPanel(props) {
   }));
 
   const classes = useStyles();
+
   const options = [
     '300x1050',
     '300x250',
@@ -66,7 +65,7 @@ export default function ControlPanel(props) {
       <form className={classes.form}>
         <Grid container spacing={3}>
           <Grid xs item>
-            <div className={classes.paper} />
+            <div />
           </Grid>
 
           <Grid xs item>
@@ -78,7 +77,7 @@ export default function ControlPanel(props) {
           </Grid>
           <Grid xs item>
             <TextField
-              id="standard"
+              id="standard-number"
               margin="normal"
               label="Crop Width"
               name="cropWidth"
@@ -94,7 +93,7 @@ export default function ControlPanel(props) {
           </Grid>
           <Grid xs item>
             <TextField
-              id="standard"
+              id="standard-number"
               margin="normal"
               label="Crop Height"
               name="cropHeight"
@@ -111,7 +110,7 @@ export default function ControlPanel(props) {
 
           <Grid xs item>
             <TextField
-              id="standard"
+              id="standard-number"
               margin="normal"
               label="Clip Length"
               name="length"
@@ -127,7 +126,7 @@ export default function ControlPanel(props) {
           </Grid>
           <Grid xs item>
             <TextField
-              id="standard"
+              id="standard-number"
               margin="normal"
               label="Scale"
               fullWidth
@@ -169,7 +168,7 @@ export default function ControlPanel(props) {
           </Grid>
 
           <Grid xs item>
-            <div className={classes.paper} />
+            <div />
           </Grid>
         </Grid>
       </form>

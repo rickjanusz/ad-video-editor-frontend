@@ -6,23 +6,13 @@ import PropTypes from 'prop-types';
 import { debounce } from 'debounce';
 import styled from 'styled-components';
 import { Button, Box, makeStyles } from '@material-ui/core';
-
+import LaunchIcon from '@material-ui/icons/Launch';
+import SystemUpdateAltIcon from '@material-ui/icons/SystemUpdateAlt';
 import Divider from '@material-ui/core/Divider';
-import DragAndDrop from './DragAndDrop';
 import ControlPanel from './ControlPanel';
-import ControlPanelDrawer from './ControlPanelDrawer';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& > *': {
-      margin: theme.spacing(1),
-      width: '25ch',
-    },
-  },
-}));
 
 const Wrapper = styled.div`
-  width: 100vw;
+  width: 100%;
   margin-bottom: 60px;
   .draggy {
     width: 150px;
@@ -97,13 +87,36 @@ export default function FFMPEG({ props }) {
     theme,
   } = props;
 
+  const useStyles = makeStyles(() => ({
+    root: {
+      '& > *': {
+        margin: theme.spacing(1),
+        width: '25ch',
+      },
+    },
+    paper: {
+      marginTop: theme.spacing(0),
+      marginBottom: theme.spacing(3),
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
+    avatar: {
+      margin: theme.spacing(0),
+      backgroundColor: theme.palette.primary.main,
+      height: 100,
+      width: 100,
+    },
+  }));
+
   const obj = useRef();
   const objParent = useRef();
   const vidRef = useRef();
   const timeRef = useRef();
+  const classes = useStyles();
+
   // ////////////////////
   // GET POSITION OF CROPPER:
-  // TODO: Move this into utils
   // ////////////////////
 
   function getPosition() {
@@ -268,38 +281,46 @@ export default function FFMPEG({ props }) {
                     0.00
                   </span>
                 </div>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="button"
-                  onClick={() => {
-                    exportFormat('image/gif', length, setGif, 'gif');
-                  }}
-                >
-                  Export GIF
-                </Button>
-                &nbsp;
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="button"
-                  onClick={() => {
-                    exportFormat('image/jpg', length, setJpg, 'jpg');
-                  }}
-                >
-                  Export Jpg
-                </Button>
-                &nbsp;
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="button"
-                  onClick={() => {
-                    exportFormat('video/mp4', length, setCrop, 'crop');
-                  }}
-                >
-                  Export MP4
-                </Button>
+                <Box display="flex" justifyContent="center">
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    color="primary"
+                    type="button"
+                    endIcon={<LaunchIcon />}
+                    onClick={() => {
+                      exportFormat('image/gif', length, setGif, 'gif');
+                    }}
+                  >
+                    Export GIF
+                  </Button>
+                  &nbsp;
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    color="primary"
+                    type="button"
+                    endIcon={<LaunchIcon />}
+                    onClick={() => {
+                      exportFormat('image/jpg', length, setJpg, 'jpg');
+                    }}
+                  >
+                    Export Jpg
+                  </Button>
+                  &nbsp;
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    color="primary"
+                    type="button"
+                    endIcon={<LaunchIcon />}
+                    onClick={() => {
+                      exportFormat('video/mp4', length, setCrop, 'crop');
+                    }}
+                  >
+                    Export MP4
+                  </Button>
+                </Box>
               </div>
             </div>
           </Box>
@@ -319,67 +340,68 @@ export default function FFMPEG({ props }) {
         <h1>Preview &amp; Download</h1>
       </Box>
 
-      <Box display="flex" justifyContent="center">
+      <Box style={{ textAlign: 'center' }}>
         {gif && (
-          <Box display="flex" justifyContent="center" m={1}>
-            <img className="preview gif" src={gif} alt="" />
-            <br />
-            <Button
-              variant="contained"
-              color="secondary"
-              title={`Download ${filename}`}
-              download={`${filename}_${cropWidth}x${cropHeight}.gif`}
-              href={gif}
-            >
-              Download gif
-            </Button>
-          </Box>
+          <span style={{ display: 'inline-block' }}>
+            <Box display="flex" justifyContent="center">
+              <img className="preview gif" src={gif} alt="" />
+              <br />
+              <Button
+                variant="contained"
+                // color="secondary"
+                title={`Download ${filename}`}
+                endIcon={<SystemUpdateAltIcon />}
+                download={`${filename}_${cropWidth}x${cropHeight}.gif`}
+                href={gif}
+              >
+                Download gif
+              </Button>
+            </Box>
+          </span>
         )}
         {jpg && (
-          <Box display="flex" justifyContent="center" m={1}>
-            <img className="preview jpg" src={jpg} alt="" />
-            <br />
-            <Button
-              variant="contained"
-              color="secondary"
-              title={`Download ${filename}`}
-              download={`${filename}_${cropWidth}x${cropHeight}.jpg`}
-              href={jpg}
-            >
-              Download Jpg
-            </Button>
-          </Box>
+          <span style={{ display: 'inline-block' }}>
+            <Box display="flex" justifyContent="center" m={2}>
+              <img className="preview jpg" src={jpg} alt="" />
+              <br />
+              <Button
+                variant="contained"
+                // color="secondary"
+                title={`Download ${filename}`}
+                endIcon={<SystemUpdateAltIcon />}
+                download={`${filename}_${cropWidth}x${cropHeight}.jpg`}
+                href={jpg}
+              >
+                Download Jpg
+              </Button>
+            </Box>
+          </span>
         )}
         {crop && (
-          <Box display="flex" justifyContent="center" m={1}>
-            <video
-              className="preview mp4"
-              controls
-              id="playerCrop"
-              muted
-              src={crop}
-            />
-            <br />
-            <Button
-              variant="contained"
-              color="secondary"
-              title={`Download ${filename}`}
-              download={`${filename}_${cropWidth}x${cropHeight}.mp4`}
-              href={crop}
-            >
-              Download MP4
-            </Button>
-          </Box>
+          <span style={{ display: 'inline-block' }}>
+            <Box display="flex" justifyContent="center">
+              <video
+                className="preview mp4"
+                controls
+                id="playerCrop"
+                muted
+                src={crop}
+              />
+              <br />
+              <Button
+                variant="contained"
+                // color="secondary"
+                title={`Download ${filename}`}
+                endIcon={<SystemUpdateAltIcon />}
+                download={`${filename}_${cropWidth}x${cropHeight}.mp4`}
+                href={crop}
+              >
+                Download MP4
+              </Button>
+            </Box>
+          </span>
         )}
       </Box>
-
-      <DragAndDrop
-        data={data}
-        dispatch={dispatch}
-        setVideo={setVideo}
-        convertVideoToMp4={convertVideoToMP4}
-        setFilename={setFilename}
-      />
     </>
   ) : (
     <p>Loading...</p>
@@ -412,4 +434,5 @@ FFMPEG.propTypes = {
   setLength: PropTypes.any,
   scale: PropTypes.any,
   setScale: PropTypes.any,
+  theme: PropTypes.any,
 };
