@@ -130,6 +130,6 @@ DragAndDrop.propTypes = {
   setVideo: PropTypes.any,
   data: PropTypes.any,
   dispatch: PropTypes.any,
-  convertVideoToMp4: PropTypes.any,
+  convertVideoToMP4: PropTypes.any,
   setFilename: PropTypes.any,
 };
