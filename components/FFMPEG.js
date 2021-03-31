@@ -288,7 +288,7 @@ export default function FFMPEG({ props }) {
                   <Button
                     variant="outlined"
                     size="large"
-                    color={theme.palette.success.dark}
+                    color="primary"
                     type="button"
                     endIcon={<LaunchIcon />}
                     onClick={() => {
