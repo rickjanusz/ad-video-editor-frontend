@@ -3,7 +3,7 @@ import NProgress from 'nprogress';
 import PropTypes from 'prop-types';
 
 const DragAndDrop = (props) => {
-  const { data, dispatch, setVideo, convertVideoToMp4, setFilename } = props;
+  const { data, dispatch, setVideo, convertVideoToMP4, setFilename } = props;
   // console.log(props);
   const handleDragEnter = (e) => {
     e.preventDefault();
@@ -90,7 +90,7 @@ const DragAndDrop = (props) => {
     if (returnExtension(files[0]) !== 'mp4') {
       // console.log()
       // console.log('NAME:', checkFileName(files[0]));
-      convertVideoToMp4(files[0]);
+      convertVideoToMP4(files[0]);
     }
 
     // console.log('FILESIZE:', checkFileSize(files[0]));
