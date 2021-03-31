@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { debounce } from 'debounce';
 import styled from 'styled-components';
 import { Button, Box, makeStyles, Container } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 import LaunchIcon from '@material-ui/icons/Launch';
 import SystemUpdateAltIcon from '@material-ui/icons/SystemUpdateAlt';
 import Divider from '@material-ui/core/Divider';
@@ -53,7 +54,7 @@ export default function FFMPEG({ props }) {
     root: {
       '& > *': {
         margin: theme.spacing(1),
-        width: '25ch',
+        // width: '25ch',
       },
     },
     paper: {
@@ -64,8 +65,15 @@ export default function FFMPEG({ props }) {
       alignItems: 'center',
     },
     preview: {
-      backgroundColor: theme.palette.secondary.light,
+      background: theme.palette.primary.mainGradient,
       padding: '1em 0 8em 0',
+    },
+    previewHeader: {
+      marginTop: '30px',
+      color: theme.palette.secondary.light,
+      '&:before': {
+        content: ' // ',
+      },
     },
     time: {
       backgroundColor: theme.palette.secondary.light,
@@ -241,6 +249,7 @@ export default function FFMPEG({ props }) {
           setVideo={setVideo}
           convertVideoToMp4={convertVideoToMP4}
           setFilename={setFilename}
+          theme={theme}
         />
         <ControlPanel
           props={props}
@@ -347,10 +356,16 @@ export default function FFMPEG({ props }) {
       )}
       <Divider />
       <Container className={classes.preview} maxWidth="xl">
-        <Box style={{ textAlign: 'center' }}>
-          <h1>Preview &amp; Download</h1>
-        </Box>
-
+        <Typography
+          className={classes.previewHeader}
+          variant="h4"
+          component="h2"
+          getterTop
+          gutterBottom
+          align="center"
+        >
+          Preview &amp; Export
+        </Typography>
         <Box style={{ textAlign: 'center' }}>
           {gif && (
             <span style={{ display: 'inline-block' }}>

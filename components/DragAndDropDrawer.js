@@ -1,18 +1,52 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Drawer from '@material-ui/core/Drawer';
-import Button from '@material-ui/core/Button';
-import Box from '@material-ui/core/Box';
+import { Button, Drawer, Box, makeStyles } from '@material-ui/core';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import DragAndDrop from './DragAndDrop';
-import theme from './theme';
+// import theme from './theme';
 
 export default function DragAndDropDrawer(props) {
-  const { data, dispatch, setVideo, convertVideoToMP4, setFilename } = props;
+  const {
+    data,
+    dispatch,
+    setVideo,
+    convertVideoToMP4,
+    setFilename,
+    theme,
+  } = props;
 
   const [state, setState] = React.useState({
     top: false,
   });
+
+  const useStyles = makeStyles(() => ({
+    root: {
+      '& > *': {
+        margin: theme.spacing(1),
+        // width: '25ch',
+      },
+    },
+    upload: {
+      color: theme.palette.secondary.light,
+    },
+    preview: {
+      background: theme.palette.primary.mainGradient,
+      padding: '1em 0 8em 0',
+    },
+    previewHeader: {
+      marginTop: '30px',
+      color: theme.palette.secondary.light,
+      '&:before': {
+        content: ' // ',
+      },
+    },
+    videoPolaroid: {
+      backgroundColor: theme.palette.background.paper,
+      border: `15px solid ${theme.palette.background.paper}`,
+      marginBottom: '40px;',
+    },
+  }));
+  const classes = useStyles();
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (
@@ -28,16 +62,16 @@ export default function DragAndDropDrawer(props) {
     <Box
       display="flex"
       justifyContent="flex-end"
-      style={{ backgroundColor: theme.palette.background.paper }}
+      style={{ background: theme.palette.primary.mainGradient }}
     >
       {['top'].map((anchor) => (
         <React.Fragment key={anchor}>
           <Button
-            color="primary"
+            className={classes.upload}
             onClick={toggleDrawer(anchor, true)}
             startIcon={<CloudUploadIcon />}
           >
-            Upload Video 5mb max
+            Upload Video
           </Button>
           <Drawer
             anchor={anchor}

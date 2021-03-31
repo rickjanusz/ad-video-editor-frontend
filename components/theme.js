@@ -12,11 +12,15 @@ const theme = createMuiTheme({
       light: 'rgba(255, 161, 4, 1)',
       main: 'rgba(222, 108, 0, 1)',
       dark: 'rgba(172, 54, 0, 1)',
+      mainGradient:
+        'linear-gradient(to left, rgba(172, 54, 0, 1), rgba(255, 161, 4, 1))',
       contrastText: '#fff',
     },
     secondary: {
       light: 'rgba(225, 225, 225, 1)',
       main: 'rgba(128, 125, 123, 1)',
+      mainGradient:
+        'linear-gradient(30deg, rgba(0, 0, 0, .2) 0%, rgba(234, 234, 234, 1) 40%)',
       dark: 'rgba(87, 87, 87, 1)',
       contrastText: '#fff',
     },

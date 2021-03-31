@@ -9,7 +9,7 @@ const FooterStyles = styled.footer`
 export default function Footer() {
   function Copyright() {
     return (
-      <Typography variant="body2" color="textSecondary" align="center">
+      <Typography variant="body1" color="textSecondary" align="center">
         {'Copyright © '}
         <Link color="inherit" href="https://www.fullstackbootstrap.com">
           Fullstack Bootstrap

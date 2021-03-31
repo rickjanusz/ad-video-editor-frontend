@@ -39,12 +39,14 @@ export default function ControlPanel(props) {
     avatar: {
       margin: theme.spacing(0),
       backgroundColor: theme.palette.primary.main,
+      border: '2px solid rgba(234, 234, 234, 1)',
       height: 100,
       width: 100,
     },
     appBar: {
-      backgroundColor: theme.palette.background.paper,
-      paddingTop: theme.spacing(3),
+      background: theme.palette.secondary.mainGradient,
+      // backgroundColor: theme.palette.background.paper,
+      paddingTop: theme.spacing(8),
       paddingBottom: theme.spacing(0),
       marginBottom: theme.spacing(8),
     },
