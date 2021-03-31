@@ -95,17 +95,11 @@ export default function FFMPEG({ props }) {
       },
     },
     paper: {
-      marginTop: theme.spacing(0),
-      marginBottom: theme.spacing(3),
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2),
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-    },
-    avatar: {
-      margin: theme.spacing(0),
-      backgroundColor: theme.palette.primary.main,
-      height: 100,
-      width: 100,
     },
   }));
 
@@ -343,12 +337,19 @@ export default function FFMPEG({ props }) {
       <Box style={{ textAlign: 'center' }}>
         {gif && (
           <span style={{ display: 'inline-block' }}>
-            <Box display="flex" justifyContent="center">
+            <Box
+              boxShadow={10}
+              border={15}
+              borderColor={theme.palette.background.paper}
+              display="flex"
+              justifyContent="center"
+              className={classes.paper}
+            >
               <img className="preview gif" src={gif} alt="" />
-              <br />
               <Button
                 variant="contained"
                 // color="secondary"
+                fullWidth
                 title={`Download ${filename}`}
                 endIcon={<SystemUpdateAltIcon />}
                 download={`${filename}_${cropWidth}x${cropHeight}.gif`}
@@ -361,12 +362,20 @@ export default function FFMPEG({ props }) {
         )}
         {jpg && (
           <span style={{ display: 'inline-block' }}>
-            <Box display="flex" justifyContent="center" m={2}>
+            <Box
+              boxShadow={3}
+              border={15}
+              borderColor={theme.palette.background.paper}
+              display="flex"
+              justifyContent="center"
+              className={classes.paper}
+              m={2}
+            >
               <img className="preview jpg" src={jpg} alt="" />
-              <br />
               <Button
                 variant="contained"
                 // color="secondary"
+                fullWidth
                 title={`Download ${filename}`}
                 endIcon={<SystemUpdateAltIcon />}
                 download={`${filename}_${cropWidth}x${cropHeight}.jpg`}
@@ -379,7 +388,14 @@ export default function FFMPEG({ props }) {
         )}
         {crop && (
           <span style={{ display: 'inline-block' }}>
-            <Box display="flex" justifyContent="center">
+            <Box
+              boxShadow={7}
+              border={15}
+              borderColor={theme.palette.background.paper}
+              display="flex"
+              justifyContent="center"
+              className={classes.paper}
+            >
               <video
                 className="preview mp4"
                 controls
@@ -387,9 +403,9 @@ export default function FFMPEG({ props }) {
                 muted
                 src={crop}
               />
-              <br />
               <Button
                 variant="contained"
+                fullWidth
                 // color="secondary"
                 title={`Download ${filename}`}
                 endIcon={<SystemUpdateAltIcon />}

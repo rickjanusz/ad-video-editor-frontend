@@ -11,6 +11,7 @@ import CropOutlinedIcon from '@material-ui/icons/CropOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import Box from '@material-ui/core/Box';
 
 export default function ControlPanel(props) {
   //   console.log(props.theme);
@@ -40,6 +41,12 @@ export default function ControlPanel(props) {
       height: 100,
       width: 100,
     },
+    appBar: {
+      backgroundColor: theme.palette.background.paper,
+      paddingTop: theme.spacing(3),
+      paddingBottom: theme.spacing(1),
+      marginBottom: theme.spacing(8),
+    },
   }));
 
   const classes = useStyles();
@@ -61,7 +68,7 @@ export default function ControlPanel(props) {
   ];
 
   return (
-    <Container component="main" maxWidth="xl">
+    <Box component="main" maxWidth="xl" className={classes.appBar}>
       <form className={classes.form}>
         <Grid container spacing={3}>
           <Grid xs item>
@@ -172,7 +179,7 @@ export default function ControlPanel(props) {
           </Grid>
         </Grid>
       </form>
-    </Container>
+    </Box>
   );
 }
 
