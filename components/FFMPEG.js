@@ -16,46 +16,6 @@ import DragAndDropDrawer from './DragAndDropDrawer';
 const Wrapper = styled.div`
   width: 100%;
   margin-bottom: 60px;
-  .draggy {
-    width: 150px;
-    height: 150px;
-    resize: both;
-    overflow: auto;
-    /* background-color: rgba(255, 255, 255, 0.1); */
-    border: 3px dotted rgba(255, 255, 255, 0.5);
-    box-shadow: 0 0 0px 2000px rgba(0, 0, 0, 0.7);
-  }
-
-  .handle {
-    height: 100%;
-    /* cursor: move; */
-    pointer-events: auto;
-  }
-  .videoContainer {
-    max-width: 1920px;
-    max-height: 1080px;
-    position: relative;
-    resize: both;
-    overflow: auto;
-  }
-  video {
-    max-width: 1920px;
-    max-height: 1080px;
-  }
-  .draggable-parent {
-    /* background-color: green; */
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    position: absolute;
-    z-index: 2;
-    top: 0;
-    pointer-events: none;
-  }
-  .ex-preview {
-    display: flex;
-    flex: wrap;
-  }
 `;
 
 export default function FFMPEG({ props }) {
@@ -110,6 +70,40 @@ export default function FFMPEG({ props }) {
     time: {
       backgroundColor: theme.palette.secondary.light,
       padding: '10px',
+      borderRadius: '0 0 5px 5px',
+    },
+    videoContainer: {
+      maxWidth: '1920px',
+      maxHeight: '1080px',
+      position: 'relative',
+      resize: 'both',
+      overflow: 'auto',
+    },
+    videoPolaroid: {
+      backgroundColor: theme.palette.background.paper,
+      border: `15px solid ${theme.palette.background.paper}`,
+      marginBottom: '40px;',
+    },
+    draggableParent: {
+      width: '100%',
+      height: '100%',
+      overflow: 'hidden',
+      position: 'absolute',
+      zIndex: 2,
+      top: 0,
+      pointerEvents: 'none',
+    },
+    draggy: {
+      width: '150px',
+      height: '150px',
+      resize: 'both',
+      overflow: 'auto',
+      border: '3px dotted rgba(255, 255, 255, 0.5)',
+      boxShadow: '0 0 0px 2000px rgba(0, 0, 0, 0.7)',
+    },
+    handle: {
+      height: '100%',
+      pointerEvents: 'auto',
     },
   }));
 
@@ -220,7 +214,7 @@ export default function FFMPEG({ props }) {
       `${mylength}`,
       '-ss',
       `${time}`,
-      '-vf', // Square
+      '-vf', // Square pixels
       `scale='trunc(ih*dar/2)*2:trunc(ih/2)*2',setsar=1/1,crop=${dims.width}:${dims.height}:${dims.left}:${dims.top}:exact=1`,
       '-c:a',
       'copy',
@@ -264,41 +258,48 @@ export default function FFMPEG({ props }) {
       {video && (
         <Wrapper>
           <Box display="flex" justifyContent="center">
-            <div className="video-cropper">
-              <div className="videoContainer">
-                <video controls ref={vidRef} id="video" muted src={video} />
-                <div className="draggable-parent" ref={objParent}>
-                  <Draggable
-                    axis="both"
-                    handle=".handle"
-                    bounds="parent"
-                    defaultPosition={{ x: 0, y: 0 }}
-                    grid={[1, 1]}
-                    scale={1}
-                    // onStart={handleStart}
-                    // onDrag={handleDrag}
-                    onStop={handleStop}
-                  >
-                    <div
-                      className="draggy"
-                      ref={obj}
-                      style={{
-                        height: `${cropHeight * scale}px`,
-                        width: `${cropWidth * scale}px`,
-                      }}
+            <div className="videoCropper">
+              <Box
+                className={classes.videoPolaroid}
+                boxShadow={7}
+                border={15}
+                borderColor={theme.palette.background.paper}
+              >
+                <Box className={classes.videoContainer}>
+                  <video controls ref={vidRef} id="video" muted src={video} />
+                  <div className={classes.draggableParent} ref={objParent}>
+                    <Draggable
+                      axis="both"
+                      handle=".handle"
+                      bounds="parent"
+                      defaultPosition={{ x: 0, y: 0 }}
+                      grid={[1, 1]}
+                      scale={1}
+                      // onStart={handleStart}
+                      // onDrag={handleDrag}
+                      onStop={handleStop}
                     >
-                      <div className="handle" />
-                    </div>
-                  </Draggable>
-                </div>
-              </div>
-              <div>
+                      <div
+                        className={classes.draggy}
+                        ref={obj}
+                        style={{
+                          height: `${cropHeight * scale}px`,
+                          width: `${cropWidth * scale}px`,
+                        }}
+                      >
+                        <div className={`${classes.handle} handle`} />
+                      </div>
+                    </Draggable>
+                  </div>
+                </Box>
                 <Box className={classes.time}>
                   Current Time:{' '}
                   <span id="current" ref={timeRef}>
                     0.00
                   </span>
                 </Box>
+              </Box>
+              <div>
                 <Box display="flex" justifyContent="center">
                   <Button
                     variant="outlined"
@@ -344,14 +345,6 @@ export default function FFMPEG({ props }) {
           </Box>
         </Wrapper>
       )}
-      {/* <button
-        type="button"
-        onClick={() => {
-          convertVideoToMP4(video);
-        }}
-        >
-        Convert To MP4
-      </button> */}
       <Divider />
       <Container className={classes.preview} maxWidth="xl">
         <Box style={{ textAlign: 'center' }}>
@@ -372,7 +365,6 @@ export default function FFMPEG({ props }) {
                 <img className="preview gif" src={gif} alt="" />
                 <Button
                   variant="contained"
-                  // color="secondary"
                   fullWidth
                   title={`Download ${filename}`}
                   endIcon={<SystemUpdateAltIcon />}
@@ -398,7 +390,6 @@ export default function FFMPEG({ props }) {
                 <img className="preview jpg" src={jpg} alt="" />
                 <Button
                   variant="contained"
-                  // color="secondary"
                   fullWidth
                   title={`Download ${filename}`}
                   endIcon={<SystemUpdateAltIcon />}
@@ -430,7 +421,6 @@ export default function FFMPEG({ props }) {
                 <Button
                   variant="contained"
                   fullWidth
-                  // color="primary"
                   title={`Download ${filename}`}
                   endIcon={<SystemUpdateAltIcon />}
                   download={`${filename}_${cropWidth}x${cropHeight}.mp4`}

@@ -18,6 +18,7 @@
   border: 1px dashed white;
 }
 
-label {
-  margin: 0 !important;
+video {
+  max-width: 1920px;
+  max-height: 1080px;
 }

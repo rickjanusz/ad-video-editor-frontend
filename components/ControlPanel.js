@@ -31,7 +31,7 @@ export default function ControlPanel(props) {
   const useStyles = makeStyles(() => ({
     paper: {
       marginTop: theme.spacing(0),
-      marginBottom: theme.spacing(3),
+      marginBottom: theme.spacing(8),
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
