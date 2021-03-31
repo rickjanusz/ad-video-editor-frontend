@@ -31,8 +31,8 @@ function MyApp({ Component, pageProps, apollo }) {
   const [cropWidth, setCropWidth] = useState(336);
   const [cropHeight, setCropHeight] = useState(280);
   const [time, setTime] = useState(0);
-  const [length, setLength] = useState(3);
-  const [scale, setScale] = useState(1.3);
+  const [length, setLength] = useState(2);
+  const [scale, setScale] = useState(1.2);
 
   // console.log(fieldData);
 

@@ -10,7 +10,6 @@ import Typography from '@material-ui/core/Typography';
 import LaunchIcon from '@material-ui/icons/Launch';
 import SystemUpdateAltIcon from '@material-ui/icons/SystemUpdateAlt';
 import Divider from '@material-ui/core/Divider';
-import green from '@material-ui/core/colors';
 import ControlPanel from './ControlPanel';
 import DragAndDropDrawer from './DragAndDropDrawer';
 
