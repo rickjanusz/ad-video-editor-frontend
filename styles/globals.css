@@ -1,6 +1,8 @@
 .drag-drop-zone {
+  padding: 2rem;
   text-align: center;
-  background: black;
+  background: rgba(222, 108, 0, 1);
+  box-shadow: 5px 5px 10px #000;
 }
 .drag-drop-zone p {
   color: #fff;
@@ -8,10 +10,14 @@
 }
 
 .drag-drop-zone {
-  border: 5px dashed white;
+  border: 1px dashed rgba(222, 108, 0, 1);
 }
 
 .drag-drop-zone :hover {
   opacity: 0.7;
-  border: 5px dashed white;
+  border: 1px dashed white;
+}
+
+label {
+  margin: 0 !important;
 }

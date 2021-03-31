@@ -9,7 +9,9 @@ import { Button, Box, makeStyles } from '@material-ui/core';
 import LaunchIcon from '@material-ui/icons/Launch';
 import SystemUpdateAltIcon from '@material-ui/icons/SystemUpdateAlt';
 import Divider from '@material-ui/core/Divider';
+import green from '@material-ui/core/colors';
 import ControlPanel from './ControlPanel';
+import DragAndDropDrawer from './DragAndDropDrawer';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -224,6 +226,13 @@ export default function FFMPEG({ props }) {
   return ready ? (
     <>
       <div>
+        <DragAndDropDrawer
+          data={data}
+          dispatch={dispatch}
+          setVideo={setVideo}
+          convertVideoToMp4={convertVideoToMP4}
+          setFilename={setFilename}
+        />
         <ControlPanel
           props={props}
           cropWidth={cropWidth}
@@ -279,7 +288,7 @@ export default function FFMPEG({ props }) {
                   <Button
                     variant="outlined"
                     size="large"
-                    color="primary"
+                    color={theme.palette.success.dark}
                     type="button"
                     endIcon={<LaunchIcon />}
                     onClick={() => {
@@ -406,7 +415,7 @@ export default function FFMPEG({ props }) {
               <Button
                 variant="contained"
                 fullWidth
-                // color="secondary"
+                // color="primary"
                 title={`Download ${filename}`}
                 endIcon={<SystemUpdateAltIcon />}
                 download={`${filename}_${cropWidth}x${cropHeight}.mp4`}
