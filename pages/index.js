@@ -20,10 +20,9 @@ function Home(props) {
     <>
       <div className="App">
         <Head>
-          <title>Ad Video Editor</title>
+          <title>Video Cropper for Display Advertising</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        {/* <PersistentDrawerTop props={props} /> */}
         <FFMPEG props={props} />
       </div>
     </>

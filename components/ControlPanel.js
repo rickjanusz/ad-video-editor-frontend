@@ -9,6 +9,7 @@ import Avatar from '@material-ui/core/Avatar';
 import CropOutlinedIcon from '@material-ui/icons/CropOutlined';
 // import SettingsApplicationsOutlinedIcon from '@material-ui/icons/SettingsApplicationsOutlined';
 import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
@@ -44,7 +45,7 @@ export default function ControlPanel(props) {
     appBar: {
       backgroundColor: theme.palette.background.paper,
       paddingTop: theme.spacing(3),
-      paddingBottom: theme.spacing(1),
+      paddingBottom: theme.spacing(0),
       marginBottom: theme.spacing(8),
     },
   }));
@@ -179,6 +180,7 @@ export default function ControlPanel(props) {
           </Grid>
         </Grid>
       </form>
+      <Divider />
     </Box>
   );
 }

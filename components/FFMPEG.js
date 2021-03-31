@@ -5,7 +5,7 @@ import NProgress from 'nprogress';
 import PropTypes from 'prop-types';
 import { debounce } from 'debounce';
 import styled from 'styled-components';
-import { Button, Box, makeStyles } from '@material-ui/core';
+import { Button, Box, makeStyles, Container } from '@material-ui/core';
 import LaunchIcon from '@material-ui/icons/Launch';
 import SystemUpdateAltIcon from '@material-ui/icons/SystemUpdateAlt';
 import Divider from '@material-ui/core/Divider';
@@ -103,6 +103,14 @@ export default function FFMPEG({ props }) {
       flexDirection: 'column',
       alignItems: 'center',
     },
+    preview: {
+      backgroundColor: theme.palette.secondary.light,
+      padding: '1em 0 8em 0',
+    },
+    time: {
+      backgroundColor: theme.palette.secondary.light,
+      padding: '10px',
+    },
   }));
 
   const obj = useRef();
@@ -111,6 +119,12 @@ export default function FFMPEG({ props }) {
   const timeRef = useRef();
   const classes = useStyles();
 
+  function makeEven(num) {
+    if (num % 2 !== 0) {
+      return Math.floor(num + 1);
+    }
+    return Math.floor(num);
+  }
   // ////////////////////
   // GET POSITION OF CROPPER:
   // ////////////////////
@@ -121,9 +135,10 @@ export default function FFMPEG({ props }) {
     const childOffset = {
       top: childDims.top - parentPos.top,
       left: childDims.left - parentPos.left,
-      width: childDims.width,
-      height: childDims.height,
+      width: makeEven(childDims.width),
+      height: makeEven(childDims.height),
     };
+    console.log(childOffset);
     return childOffset;
   }
 
@@ -185,7 +200,7 @@ export default function FFMPEG({ props }) {
     // localStorage.setItem('video', data);
   };
 
-  async function exportFormat(mimType, length, stateFunc) {
+  async function exportFormat(mimType, mylength, stateFunc) {
     const ext = mimType.split('/').pop();
     ffmpeg.FS('writeFile', 'test.mp4', await fetchFile(video));
     const dims = getPosition();
@@ -202,13 +217,13 @@ export default function FFMPEG({ props }) {
       '-i',
       'test.mp4',
       '-t',
-      `${length}`,
+      `${mylength}`,
       '-ss',
       `${time}`,
-      '-filter:v',
-      // `scale={728*${scale}}:-1`,
-      // `-c:a`,
-      `crop=${dims.width}:${dims.height}:${dims.left}:${dims.top}`,
+      '-vf', // Square
+      `scale='trunc(ih*dar/2)*2:trunc(ih/2)*2',setsar=1/1,crop=${dims.width}:${dims.height}:${dims.left}:${dims.top}:exact=1`,
+      '-c:a',
+      'copy',
       `out.${ext}`
     );
 
@@ -278,12 +293,12 @@ export default function FFMPEG({ props }) {
                 </div>
               </div>
               <div>
-                <div>
+                <Box className={classes.time}>
                   Current Time:{' '}
                   <span id="current" ref={timeRef}>
                     0.00
                   </span>
-                </div>
+                </Box>
                 <Box display="flex" justifyContent="center">
                   <Button
                     variant="outlined"
@@ -337,96 +352,97 @@ export default function FFMPEG({ props }) {
         >
         Convert To MP4
       </button> */}
-      <Divider p={8} />
+      <Divider />
+      <Container className={classes.preview} maxWidth="xl">
+        <Box style={{ textAlign: 'center' }}>
+          <h1>Preview &amp; Download</h1>
+        </Box>
 
-      <Box style={{ textAlign: 'center' }}>
-        <h1>Preview &amp; Download</h1>
-      </Box>
-
-      <Box style={{ textAlign: 'center' }}>
-        {gif && (
-          <span style={{ display: 'inline-block' }}>
-            <Box
-              boxShadow={10}
-              border={15}
-              borderColor={theme.palette.background.paper}
-              display="flex"
-              justifyContent="center"
-              className={classes.paper}
-            >
-              <img className="preview gif" src={gif} alt="" />
-              <Button
-                variant="contained"
-                // color="secondary"
-                fullWidth
-                title={`Download ${filename}`}
-                endIcon={<SystemUpdateAltIcon />}
-                download={`${filename}_${cropWidth}x${cropHeight}.gif`}
-                href={gif}
+        <Box style={{ textAlign: 'center' }}>
+          {gif && (
+            <span style={{ display: 'inline-block' }}>
+              <Box
+                boxShadow={10}
+                border={15}
+                borderColor={theme.palette.background.paper}
+                display="flex"
+                justifyContent="center"
+                className={classes.paper}
               >
-                Download gif
-              </Button>
-            </Box>
-          </span>
-        )}
-        {jpg && (
-          <span style={{ display: 'inline-block' }}>
-            <Box
-              boxShadow={3}
-              border={15}
-              borderColor={theme.palette.background.paper}
-              display="flex"
-              justifyContent="center"
-              className={classes.paper}
-              m={2}
-            >
-              <img className="preview jpg" src={jpg} alt="" />
-              <Button
-                variant="contained"
-                // color="secondary"
-                fullWidth
-                title={`Download ${filename}`}
-                endIcon={<SystemUpdateAltIcon />}
-                download={`${filename}_${cropWidth}x${cropHeight}.jpg`}
-                href={jpg}
+                <img className="preview gif" src={gif} alt="" />
+                <Button
+                  variant="contained"
+                  // color="secondary"
+                  fullWidth
+                  title={`Download ${filename}`}
+                  endIcon={<SystemUpdateAltIcon />}
+                  download={`${filename}_${cropWidth}x${cropHeight}.gif`}
+                  href={gif}
+                >
+                  Download gif
+                </Button>
+              </Box>
+            </span>
+          )}
+          {jpg && (
+            <span style={{ display: 'inline-block' }}>
+              <Box
+                boxShadow={3}
+                border={15}
+                borderColor={theme.palette.background.paper}
+                display="flex"
+                justifyContent="center"
+                className={classes.paper}
+                m={2}
               >
-                Download Jpg
-              </Button>
-            </Box>
-          </span>
-        )}
-        {crop && (
-          <span style={{ display: 'inline-block' }}>
-            <Box
-              boxShadow={7}
-              border={15}
-              borderColor={theme.palette.background.paper}
-              display="flex"
-              justifyContent="center"
-              className={classes.paper}
-            >
-              <video
-                className="preview mp4"
-                controls
-                id="playerCrop"
-                muted
-                src={crop}
-              />
-              <Button
-                variant="contained"
-                fullWidth
-                // color="primary"
-                title={`Download ${filename}`}
-                endIcon={<SystemUpdateAltIcon />}
-                download={`${filename}_${cropWidth}x${cropHeight}.mp4`}
-                href={crop}
+                <img className="preview jpg" src={jpg} alt="" />
+                <Button
+                  variant="contained"
+                  // color="secondary"
+                  fullWidth
+                  title={`Download ${filename}`}
+                  endIcon={<SystemUpdateAltIcon />}
+                  download={`${filename}_${cropWidth}x${cropHeight}.jpg`}
+                  href={jpg}
+                >
+                  Download Jpg
+                </Button>
+              </Box>
+            </span>
+          )}
+          {crop && (
+            <span style={{ display: 'inline-block' }}>
+              <Box
+                boxShadow={7}
+                border={15}
+                borderColor={theme.palette.background.paper}
+                display="flex"
+                justifyContent="center"
+                className={classes.paper}
               >
-                Download MP4
-              </Button>
-            </Box>
-          </span>
-        )}
-      </Box>
+                <video
+                  className="preview mp4"
+                  controls
+                  id="playerCrop"
+                  muted
+                  src={crop}
+                />
+                <Button
+                  variant="contained"
+                  fullWidth
+                  // color="primary"
+                  title={`Download ${filename}`}
+                  endIcon={<SystemUpdateAltIcon />}
+                  download={`${filename}_${cropWidth}x${cropHeight}.mp4`}
+                  href={crop}
+                >
+                  Download MP4
+                </Button>
+              </Box>
+            </span>
+          )}
+        </Box>
+      </Container>
     </>
   ) : (
     <p>Loading...</p>
@@ -434,11 +450,10 @@ export default function FFMPEG({ props }) {
 }
 
 FFMPEG.propTypes = {
-  video: PropTypes.string,
-  props: PropTypes.any,
   data: PropTypes.any,
   dispatch: PropTypes.any,
   ready: PropTypes.any,
+  video: PropTypes.any,
   setVideo: PropTypes.any,
   crop: PropTypes.any,
   setCrop: PropTypes.any,
@@ -460,4 +475,5 @@ FFMPEG.propTypes = {
   scale: PropTypes.any,
   setScale: PropTypes.any,
   theme: PropTypes.any,
+  props: PropTypes.any,
 };

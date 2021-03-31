@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import DragAndDrop from './DragAndDrop';
+import theme from './theme';
 
 export default function DragAndDropDrawer(props) {
   const { data, dispatch, setVideo, convertVideoToMP4, setFilename } = props;
@@ -24,7 +25,11 @@ export default function DragAndDropDrawer(props) {
   };
 
   return (
-    <Box display="flex" justifyContent="flex-end">
+    <Box
+      display="flex"
+      justifyContent="flex-end"
+      style={{ backgroundColor: theme.palette.background.paper }}
+    >
       {['top'].map((anchor) => (
         <React.Fragment key={anchor}>
           <Button
