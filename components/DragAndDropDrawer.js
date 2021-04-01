@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Drawer, Box, makeStyles } from '@material-ui/core';
+import {
+  Button,
+  Drawer,
+  Box,
+  makeStyles,
+  CircularProgress,
+} from '@material-ui/core';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import DragAndDrop from './DragAndDrop';
 // import theme from './theme';
@@ -15,9 +21,11 @@ export default function DragAndDropDrawer(props) {
     theme,
   } = props;
 
-  const [state, setState] = React.useState({
+  const [drawerState, setDrawerState] = useState({
     top: false,
   });
+
+  const [loadingState, setLoadingState] = useState();
 
   const useStyles = makeStyles(() => ({
     root: {
@@ -49,13 +57,16 @@ export default function DragAndDropDrawer(props) {
   const classes = useStyles();
 
   const toggleDrawer = (anchor, open) => (event) => {
+    console.log('TOGGGLEINGFDFD');
+    console.log(anchor, open);
     if (
       event.type === 'keydown' &&
       (event.key === 'Tab' || event.key === 'Shift')
     ) {
       return;
     }
-    setState({ state, [anchor]: open });
+
+    setDrawerState({ drawerState, [anchor]: open });
   };
 
   return (
@@ -75,14 +86,19 @@ export default function DragAndDropDrawer(props) {
           </Button>
           <Drawer
             anchor={anchor}
-            open={state[anchor]}
+            open={drawerState[anchor]}
             onClose={toggleDrawer(anchor, false)}
           >
+            {/* <CircularProgress color="secondary" /> */}
+            {loadingState && <CircularProgress color="secondary" />}
             <DragAndDrop
+              drawerState={drawerState}
+              setLoadingState={setLoadingState}
+              setDrawerState={setDrawerState}
               data={data}
               dispatch={dispatch}
               setVideo={setVideo}
-              convertVideoToMp4={convertVideoToMP4}
+              convertVideoToMP4={convertVideoToMP4}
               setFilename={setFilename}
             />
           </Drawer>

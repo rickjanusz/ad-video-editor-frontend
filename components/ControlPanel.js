@@ -7,11 +7,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import CropOutlinedIcon from '@material-ui/icons/CropOutlined';
-// import SettingsApplicationsOutlinedIcon from '@material-ui/icons/SettingsApplicationsOutlined';
-import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
 
 export default function ControlPanel(props) {
@@ -42,13 +39,14 @@ export default function ControlPanel(props) {
       border: '2px solid rgba(234, 234, 234, 1)',
       height: 100,
       width: 100,
+      transform: 'rotate(90deg)',
     },
     appBar: {
       background: theme.palette.secondary.mainGradient,
       // backgroundColor: theme.palette.background.paper,
       paddingTop: theme.spacing(8),
       paddingBottom: theme.spacing(0),
-      marginBottom: theme.spacing(8),
+      marginBottom: theme.spacing(0),
     },
   }));
 

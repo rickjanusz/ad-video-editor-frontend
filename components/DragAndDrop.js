@@ -1,9 +1,19 @@
 import React from 'react';
 import NProgress from 'nprogress';
 import PropTypes from 'prop-types';
+import DialogAlert from './DialogAlert';
 
 const DragAndDrop = (props) => {
-  const { data, dispatch, setVideo, convertVideoToMP4, setFilename } = props;
+  const {
+    data,
+    dispatch,
+    setVideo,
+    convertVideoToMP4,
+    setFilename,
+    drawerState,
+    setDrawerState,
+    setLoadingState,
+  } = props;
   // console.log(props);
   const handleDragEnter = (e) => {
     e.preventDefault();
@@ -27,14 +37,23 @@ const DragAndDrop = (props) => {
     dispatch({ type: 'SET_IN_DROP_ZONE', inDropZone: true });
   };
   const handleDrop = (e) => {
+    console.log("I've set state to true");
+    setLoadingState(true);
     e.preventDefault();
-    e.stopPropagation();
+    // e.stopPropagation();
 
     let files = [...e.dataTransfer.files];
     const reader = new FileReader();
 
     reader.addEventListener('loadstart', () => {
       NProgress.start();
+    });
+    reader.addEventListener('progress', (e) => {
+      if (e.lengthComputable) {
+        const percentage = Math.round((e.loaded * 100) / e.total);
+
+        NProgress.set(percentage);
+      }
     });
     reader.addEventListener('loadend', () => {
       NProgress.done();
@@ -56,26 +75,34 @@ const DragAndDrop = (props) => {
       // TODO: need to implement a DB
       localStorage.setItem('video', result);
     });
+    function checkFileSize(file) {
+      let filesize;
+      let sizeWt;
+      if (file.size < 1000000) {
+        filesize = file.size / 1000;
+        sizeWt = `${filesize.toFixed(0)}kb`;
+      } else {
+        filesize = file.size / 1000000;
+        sizeWt = `${filesize.toFixed(1)}mb`;
+      }
+      return sizeWt;
+    }
 
+    if (files[0].size > 5000000) {
+      // console.log('CHECHECHECHECHECKIIIIIINGGGG:');
+      setDrawerState({ drawerState, top: false });
+      // <DialogAlert />;
+      return;
+    }
+    console.log(checkFileSize(files[0]));
     reader.readAsDataURL(files[0]);
     renameFile(files[0]);
+
+    setDrawerState({ drawerState, top: false });
 
     // ::::::::::::::::::::::::::::::::::::::::::::::::::: //
     // :::::::::::::::::::: BEGIN Custom Helper Functions  //
     // ::::::::::::::::::::::::::::::::::::::::::::::::::: //
-
-    // function checkFileSize(file) {
-    //   let filesize;
-    //   let sizeWt;
-    //   if (file.size < 1000000) {
-    //     filesize = file.size / 1000;
-    //     sizeWt = `${filesize.toFixed(0)}kb`;
-    //   } else {
-    //     filesize = file.size / 1000000;
-    //     sizeWt = `${filesize.toFixed(1)}mb`;
-    //   }
-    //   return sizeWt;
-    // }
 
     function checkFileName(file) {
       return file.name;
@@ -100,6 +127,8 @@ const DragAndDrop = (props) => {
     // ::::::::::::::::::::::::::::::::::::::::::::::::: //
 
     if (files && files.length > 0) {
+      console.log("I've set state to false");
+      setLoadingState(false);
       const existingFiles = data.fileList.map((f) => f.name);
       files = files.filter((f) => !existingFiles.includes(f.name));
 

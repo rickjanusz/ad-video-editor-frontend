@@ -20,7 +20,7 @@ const theme = createMuiTheme({
       light: 'rgba(225, 225, 225, 1)',
       main: 'rgba(128, 125, 123, 1)',
       mainGradient:
-        'linear-gradient(30deg, rgba(0, 0, 0, .2) 0%, rgba(234, 234, 234, 1) 40%)',
+        'linear-gradient(30deg, rgba(0, 0, 0, .1) 0%, rgba(234, 234, 234, 1) 40%)',
       dark: 'rgba(87, 87, 87, 1)',
       contrastText: '#fff',
     },

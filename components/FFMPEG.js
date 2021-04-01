@@ -13,11 +13,6 @@ import Divider from '@material-ui/core/Divider';
 import ControlPanel from './ControlPanel';
 import DragAndDropDrawer from './DragAndDropDrawer';
 
-const Wrapper = styled.div`
-  width: 100%;
-  margin-bottom: 60px;
-`;
-
 export default function FFMPEG({ props }) {
   const {
     // Drag&Drop state
@@ -70,9 +65,9 @@ export default function FFMPEG({ props }) {
     previewHeader: {
       marginTop: '30px',
       color: theme.palette.secondary.light,
-      '&:before': {
-        content: ' // ',
-      },
+      // '&:before': {
+      //   // content: ' // ',
+      // },
     },
     time: {
       backgroundColor: theme.palette.secondary.light,
@@ -111,6 +106,34 @@ export default function FFMPEG({ props }) {
     handle: {
       height: '100%',
       pointerEvents: 'auto',
+    },
+    clip: {
+      backgroundColor: theme.palette.secondary.light,
+      opacity: '.6',
+      position: 'absolute',
+      top: 0,
+      zIndex: -1,
+      left: '0',
+      width: '100%',
+      height: '100%',
+      clipPath: 'polygon(0 0, 70% 0%, 100% 100%, 30% 100%)',
+    },
+    clip2: {
+      backgroundColor: theme.palette.secondary.light,
+      opacity: '1',
+      position: 'absolute',
+      top: 0,
+      zIndex: -1,
+      left: '0',
+      left: 1020,
+      width: '100%',
+      height: '100%',
+      clipPath: 'polygon(0 0, 70% 0%, 100% 100%, 30% 100%)',
+    },
+    wrapper: {
+      position: 'relative',
+      padding: theme.spacing(8),
+      overflow: 'hidden',
     },
   }));
 
@@ -246,7 +269,7 @@ export default function FFMPEG({ props }) {
           data={data}
           dispatch={dispatch}
           setVideo={setVideo}
-          convertVideoToMp4={convertVideoToMP4}
+          convertVideoToMP4={convertVideoToMP4}
           setFilename={setFilename}
           theme={theme}
         />
@@ -264,7 +287,9 @@ export default function FFMPEG({ props }) {
         />
       </div>
       {video && (
-        <Wrapper>
+        <Box className={classes.wrapper}>
+          <Box className={classes.clip} />
+          <Box className={classes.clip2} />
           <Box display="flex" justifyContent="center">
             <div className="videoCropper">
               <Box
@@ -351,15 +376,15 @@ export default function FFMPEG({ props }) {
               </div>
             </div>
           </Box>
-        </Wrapper>
+        </Box>
       )}
       <Divider />
+
       <Container className={classes.preview} maxWidth="xl">
         <Typography
           className={classes.previewHeader}
           variant="h4"
           component="h2"
-          getterTop
           gutterBottom
           align="center"
         >
@@ -452,32 +477,3 @@ export default function FFMPEG({ props }) {
     <p>Loading...</p>
   );
 }
-
-FFMPEG.propTypes = {
-  data: PropTypes.any,
-  dispatch: PropTypes.any,
-  ready: PropTypes.any,
-  video: PropTypes.any,
-  setVideo: PropTypes.any,
-  crop: PropTypes.any,
-  setCrop: PropTypes.any,
-  gif: PropTypes.any,
-  setGif: PropTypes.any,
-  jpg: PropTypes.any,
-  setJpg: PropTypes.any,
-  time: PropTypes.any,
-  setTime: PropTypes.any,
-  ffmpeg: PropTypes.any,
-  filename: PropTypes.any,
-  setFilename: PropTypes.any,
-  cropHeight: PropTypes.any,
-  setCropHeight: PropTypes.any,
-  cropWidth: PropTypes.any,
-  setCropWidth: PropTypes.any,
-  length: PropTypes.any,
-  setLength: PropTypes.any,
-  scale: PropTypes.any,
-  setScale: PropTypes.any,
-  theme: PropTypes.any,
-  props: PropTypes.any,
-};
