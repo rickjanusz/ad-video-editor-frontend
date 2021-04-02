@@ -1,33 +1,33 @@
 import Box from '@material-ui/core/Box';
 import { makeStyles, Typography } from '@material-ui/core';
+import PropTypes from 'prop-types';
 import GetStarted from './GetStarted';
 
-export default function Footer(theme) {
-  // console.log('Theme', theme);
+export default function Footer({ theme }) {
+  console.log('Theme', theme);
   const useStyles = makeStyles(() => ({
     root: {},
     clip: {
-      backgroundColor: '#e5e5e5',
-      opacity: '.6',
-      position: 'absolute',
-      top: 0,
-      zIndex: -1,
-      left: '0',
-      width: '100%',
-      height: '100%',
-      clipPath: 'polygon(0 0, 70% 0%, 100% 100%, 30% 100%)',
-    },
-    clip2: {
-      backgroundColor: '#DDD',
+      backgroundColor: theme.palette.secondary.light,
       opacity: '1',
       position: 'absolute',
       top: 0,
       zIndex: -1,
       left: '0',
-      left: 1020,
-      width: '100%',
-      height: '100%',
-      clipPath: 'polygon(0 0, 70% 0%, 100% 100%, 30% 100%)',
+      width: '2000px',
+      height: '2000px',
+      clipPath: 'polygon(0 0, 0% 30%,100% 0%, 30% 100%)',
+    },
+    clip2: {
+      backgroundColor: theme.palette.secondary.dark,
+      opacity: '.3',
+      position: 'absolute',
+      top: 0,
+      zIndex: -1,
+      left: 10,
+      width: '2000px',
+      height: '2000px',
+      clipPath: 'polygon(0 0, 0% 100%,100% 100%, 0% 30%)',
     },
     wrapper: {
       position: 'relative',
@@ -59,3 +59,7 @@ export default function Footer(theme) {
     </Box>
   );
 }
+
+Footer.propTypes = {
+  theme: PropTypes.any,
+};

@@ -16,8 +16,8 @@ import LaunchIcon from '@material-ui/icons/Launch';
 import Divider from '@material-ui/core/Divider';
 import ControlPanel from './ControlPanel';
 import DragAndDropDrawer from './DragAndDropDrawer';
-import GetStarted from './GetStarted';
 import CropPreview from './CropPreview';
+import Preview from './Preview';
 
 export default function FFMPEG({ props }) {
   const {
@@ -115,25 +115,25 @@ export default function FFMPEG({ props }) {
     },
     clip: {
       backgroundColor: theme.palette.secondary.light,
-      opacity: '.6',
+      opacity: '.5',
       position: 'absolute',
       top: 0,
       zIndex: -1,
       left: '0',
-      width: '100%',
-      height: '100%',
-      clipPath: 'polygon(0 0, 70% 0%, 100% 100%, 30% 100%)',
+      width: '2000px',
+      height: '2000px',
+      clipPath: 'polygon(21% 0%, 100% 10%,10% 100%, 0% 15%)',
     },
     clip2: {
-      backgroundColor: theme.palette.secondary.light,
-      opacity: '1',
+      backgroundColor: theme.palette.secondary.dark,
+      opacity: '.1',
       position: 'absolute',
       top: 0,
       zIndex: -1,
-      left: 1020,
-      width: '100%',
-      height: '100%',
-      clipPath: 'polygon(0 0, 70% 0%, 100% 100%, 30% 100%)',
+      left: 0,
+      width: '2000px',
+      height: '2000px',
+      clipPath: 'polygon(0% 0%, 0% 10%,100% 30%, 50% 100%)',
     },
     wrapper: {
       position: 'relative',
@@ -291,143 +291,102 @@ export default function FFMPEG({ props }) {
           theme={theme}
         />
       </div>
-
-      <Box className={classes.wrapper}>
-        <Box className={classes.clip} />
-        <Box className={classes.clip2} />
-        <Box display="flex" justifyContent="center">
-          <div className="videoCropper">
-            <Box
-              className={classes.videoPolaroid}
-              boxShadow={7}
-              border={15}
-              borderColor={theme.palette.background.paper}
-            >
-              <Box className={classes.videoContainer}>
-                <video controls ref={vidRef} id="video" muted src={video} />
-                <div className={classes.draggableParent} ref={objParent}>
-                  <Draggable
-                    axis="both"
-                    handle=".handle"
-                    bounds="parent"
-                    defaultPosition={{ x: 0, y: 0 }}
-                    grid={[1, 1]}
-                    scale={1}
-                    // onStart={handleStart}
-                    // onDrag={handleDrag}
-                    onStop={handleStop}
-                  >
-                    <div
-                      className={classes.draggy}
-                      ref={obj}
-                      style={{
-                        height: `${cropHeight * scale}px`,
-                        width: `${cropWidth * scale}px`,
-                      }}
+      {video && (
+        <Box className={classes.wrapper}>
+          <Box className={classes.clip} />
+          <Box className={classes.clip2} />
+          <Box display="flex" justifyContent="center">
+            <div className="videoCropper">
+              <Box
+                className={classes.videoPolaroid}
+                boxShadow={7}
+                border={15}
+                borderColor={theme.palette.background.paper}
+              >
+                <Box className={classes.videoContainer}>
+                  <video controls ref={vidRef} id="video" muted src={video} />
+                  <div className={classes.draggableParent} ref={objParent}>
+                    <Draggable
+                      axis="both"
+                      handle=".handle"
+                      bounds="parent"
+                      defaultPosition={{ x: 0, y: 0 }}
+                      grid={[1, 1]}
+                      scale={1}
+                      // onStart={handleStart}
+                      // onDrag={handleDrag}
+                      onStop={handleStop}
                     >
-                      <div className={`${classes.handle} handle`} />
-                    </div>
-                  </Draggable>
-                </div>
+                      <div
+                        className={classes.draggy}
+                        ref={obj}
+                        style={{
+                          height: `${cropHeight * scale}px`,
+                          width: `${cropWidth * scale}px`,
+                        }}
+                      >
+                        <div className={`${classes.handle} handle`} />
+                      </div>
+                    </Draggable>
+                  </div>
+                </Box>
+                <Box className={classes.time}>
+                  Current Time:{' '}
+                  <span id="current" ref={timeRef}>
+                    0.00
+                  </span>
+                </Box>
               </Box>
-              <Box className={classes.time}>
-                Current Time:{' '}
-                <span id="current" ref={timeRef}>
-                  0.00
-                </span>
-              </Box>
-            </Box>
-            <div>
-              <Box display="flex" justifyContent="center">
-                <Button
-                  variant="outlined"
-                  size="large"
-                  color="primary"
-                  type="button"
-                  endIcon={<LaunchIcon />}
-                  onClick={() => {
-                    exportFormat('image/gif', length, setGif, 'gif');
-                  }}
-                >
-                  Export GIF
-                </Button>
+              <div>
+                <Box display="flex" justifyContent="center">
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    color="primary"
+                    type="button"
+                    endIcon={<LaunchIcon />}
+                    onClick={() => {
+                      exportFormat('image/gif', length, setGif, 'gif');
+                    }}
+                  >
+                    Export GIF
+                  </Button>
 
-                <Button
-                  variant="outlined"
-                  size="large"
-                  color="primary"
-                  type="button"
-                  style={{ margin: '0 10px' }}
-                  endIcon={<LaunchIcon />}
-                  onClick={() => {
-                    exportFormat('image/jpg', length, setJpg, 'jpg');
-                  }}
-                >
-                  Export Jpg
-                </Button>
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    color="primary"
+                    type="button"
+                    style={{ margin: '0 10px' }}
+                    endIcon={<LaunchIcon />}
+                    onClick={() => {
+                      exportFormat('image/jpg', length, setJpg, 'jpg');
+                    }}
+                  >
+                    Export Jpg
+                  </Button>
 
-                <Button
-                  variant="outlined"
-                  size="large"
-                  color="primary"
-                  type="button"
-                  endIcon={<LaunchIcon />}
-                  onClick={() => {
-                    exportFormat('video/mp4', length, setCrop, 'crop');
-                  }}
-                >
-                  Export MP4
-                </Button>
-              </Box>
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    color="primary"
+                    type="button"
+                    endIcon={<LaunchIcon />}
+                    onClick={() => {
+                      exportFormat('video/mp4', length, setCrop, 'crop');
+                    }}
+                  >
+                    Export MP4
+                  </Button>
+                </Box>
+              </div>
             </div>
-          </div>
+          </Box>
         </Box>
-      </Box>
+      )}
 
       <Divider />
-      <Box className={classes.preview}>
-        <Typography
-          className={classes.previewHeader}
-          variant="h4"
-          component="h2"
-          gutterBottom
-          align="center"
-        >
-          Preview &amp; Export
-        </Typography>
-        <Box display="flex" justifyContent="center">
-          {gif && (
-            <CropPreview
-              type="gif"
-              fileUrl={gif}
-              theme={theme}
-              filename={filename}
-              cropWidth={cropWidth}
-              cropHeight={cropHeight}
-            />
-          )}
-          {jpg && (
-            <CropPreview
-              type="jpg"
-              fileUrl={jpg}
-              theme={theme}
-              filename={filename}
-              cropWidth={cropWidth}
-              cropHeight={cropHeight}
-            />
-          )}
-          {crop && (
-            <CropPreview
-              type="mp4"
-              fileUrl={crop}
-              theme={theme}
-              filename={filename}
-              cropWidth={cropWidth}
-              cropHeight={cropHeight}
-            />
-          )}
-        </Box>
-      </Box>
+      <Preview {...props} />
     </>
   ) : (
     <p>Loading...</p>

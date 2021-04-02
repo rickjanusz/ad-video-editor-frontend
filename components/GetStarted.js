@@ -1,26 +1,20 @@
 import {
   Box,
-  Button,
   Card,
   CardActionArea,
-  CardActions,
   CardContent,
   CardMedia,
   makeStyles,
   Typography,
 } from '@material-ui/core';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import TuneIcon from '@material-ui/icons/Tune';
-import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
-
-import Alert from '@material-ui/lab/Alert';
+import PropTypes from 'prop-types';
 
 const GetStarted = ({ theme }) => {
-  // console.log('Theme', theme);
   const useStyles = makeStyles(() => ({
     root: {},
     clip: {
-      // backgroundColor: theme.palette.secondary.light,
+      backgroundColor: theme.palette.secondary.light,
       opacity: '.6',
       position: 'absolute',
       top: 0,
@@ -31,12 +25,11 @@ const GetStarted = ({ theme }) => {
       clipPath: 'polygon(0 0, 70% 0%, 100% 100%, 30% 100%)',
     },
     clip2: {
-      // backgroundColor: theme.palette.secondary.light,
+      backgroundColor: theme.palette.secondary.light,
       opacity: '1',
       position: 'absolute',
       top: 0,
       zIndex: -1,
-      left: '0',
       left: 1020,
       width: '100%',
       height: '100%',
@@ -49,6 +42,7 @@ const GetStarted = ({ theme }) => {
     },
     card: {
       margin: '0 10px',
+      minWidth: '400px',
     },
   }));
 
@@ -69,32 +63,21 @@ const GetStarted = ({ theme }) => {
               Upload Your Video
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-              Click on <br />
-              <Button
-                className={classes.upload}
-                startIcon={<CloudUploadIcon />}
-              >
-                Upload Video
-              </Button>
-              in the upper right corner then drag and drop your media onto the
-              dropzone. Videos must be under 5mb
+              Click on <CloudUploadIcon /> Upload Video in the upper right
+              corner then drag and drop your media onto the dropzone. Videos
+              must be under 5mb
             </Typography>
           </CardContent>
         </CardActionArea>
-        <CardActions>
-          <Button size="small" color="primary">
-            Learn More
-          </Button>
-        </CardActions>
       </Card>
       <Card className={classes.card}>
         <CardActionArea>
           <CardMedia
             component="img"
-            alt="Contemplative Reptile"
+            alt="Configure"
             height="400"
             image="/static/images/configure.jpg"
-            title="Contemplative Reptile"
+            title="Configure"
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
@@ -106,20 +89,15 @@ const GetStarted = ({ theme }) => {
             </Typography>
           </CardContent>
         </CardActionArea>
-        <CardActions>
-          <Button size="small" color="primary">
-            Learn More
-          </Button>
-        </CardActions>
       </Card>
       <Card className={classes.card}>
         <CardActionArea>
           <CardMedia
             component="img"
-            alt="Contemplative Reptile"
+            alt="Download"
             height="400"
             image="/static/images/download.jpg"
-            title="Contemplative Reptile"
+            title="Download"
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
@@ -132,13 +110,12 @@ const GetStarted = ({ theme }) => {
             </Typography>
           </CardContent>
         </CardActionArea>
-        <CardActions>
-          <Button size="small" color="primary">
-            Learn More
-          </Button>
-        </CardActions>
       </Card>
     </Box>
   );
 };
 export default GetStarted;
+
+GetStarted.propTypes = {
+  theme: PropTypes.any,
+};

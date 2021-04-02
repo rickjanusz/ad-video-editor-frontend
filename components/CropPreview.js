@@ -22,7 +22,7 @@ const CropPreview = (props) => {
 
   const classes = useStyles();
 
-  const DeployMedia = (deployProps) => {
+  const AddMediaToStage = (deployProps) => {
     const { ft } = deployProps;
     if (ft === 'mp4') {
       return <video controls id="playerCrop" muted src={fileUrl} />;
@@ -41,7 +41,7 @@ const CropPreview = (props) => {
         justifyContent="center"
         className={classes.paper}
       >
-        <DeployMedia ft={type} />
+        <AddMediaToStage ft={type} />
         <Button
           variant="contained"
           fullWidth

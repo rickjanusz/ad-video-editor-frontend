@@ -48,9 +48,9 @@ const DragAndDrop = (props) => {
     reader.addEventListener('loadstart', () => {
       NProgress.start();
     });
-    reader.addEventListener('progress', (e) => {
-      if (e.lengthComputable) {
-        const percentage = Math.round((e.loaded * 100) / e.total);
+    reader.addEventListener('progress', (evt) => {
+      if (evt.lengthComputable) {
+        const percentage = Math.round((evt.loaded * 100) / evt.total);
 
         NProgress.set(percentage);
       }
@@ -172,4 +172,7 @@ DragAndDrop.propTypes = {
   dispatch: PropTypes.any,
   convertVideoToMP4: PropTypes.any,
   setFilename: PropTypes.any,
+  drawerState: PropTypes.any,
+  setDrawerState: PropTypes.any,
+  setLoadingState: PropTypes.any,
 };
