@@ -1,9 +1,8 @@
 .drag-drop-zone {
   padding: 2rem;
   text-align: center;
-  height: 100vh;
-  background: rgba(222, 108, 0, 0.1);
-  box-shadow: 5px 5px 10px #000;
+  height: 100%;
+  background: rgba(222, 108, 0, 0.4);
 }
 .drag-drop-zone p {
   color: rgba(234, 234, 234, 1);

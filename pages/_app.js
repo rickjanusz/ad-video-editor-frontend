@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ApolloProvider } from '@apollo/client';
 import NProgress from 'nprogress';
 import Router from 'next/router';
+import PropTypes from 'prop-types';
 import { createFFmpeg } from '@ffmpeg/ffmpeg';
 import { ThemeProvider } from '@material-ui/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -21,7 +22,7 @@ Router.events.on('routeChangeError', () => NProgress.done());
 const ffmpeg = createFFmpeg({ log: true });
 const fieldData = getFieldData();
 
-function MyApp({ Component, pageProps, apollo }) {
+function MyApp({ Component, apollo }) {
   const [ready, setReady] = useState('false');
   const [video, setVideo] = useState();
   const [crop, setCrop] = useState();
@@ -49,9 +50,7 @@ function MyApp({ Component, pageProps, apollo }) {
       // ['jpg', setJpg],
     ];
 
-    load();
-
-    localStorageItems.map((item) => {
+    localStorageItems.forEach((item) => {
       const ref = item[0];
       const func = item[1];
       const temp = localStorage.getItem(ref);
@@ -72,6 +71,8 @@ function MyApp({ Component, pageProps, apollo }) {
     setReady(true);
   };
 
+  load();
+
   const reducer = (state, action) => {
     switch (action.type) {
       case 'SET_DROP_DEPTH':
@@ -90,17 +91,25 @@ function MyApp({ Component, pageProps, apollo }) {
     fileList: [],
   });
 
-  return (
+  return ready ? (
     <ApolloProvider client={apollo}>
       <Layout>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <Header />
+          <Header
+            cropWidth={cropWidth}
+            setCropWidth={setCropWidth}
+            cropHeight={cropHeight}
+            setCropHeight={setCropHeight}
+            length={length}
+            setLength={setLength}
+            scale={scale}
+            setScale={setScale}
+            theme={theme}
+          />
           <Component
             data={data}
             dispatch={dispatch}
-            ready={ready}
-            setReady={setReady}
             video={video}
             setVideo={setVideo}
             crop={crop}
@@ -116,21 +125,23 @@ function MyApp({ Component, pageProps, apollo }) {
             setFilename={setFilename}
             fieldData={fieldData}
             cropWidth={cropWidth}
-            setCropWidth={setCropWidth}
             cropHeight={cropHeight}
-            setCropHeight={setCropHeight}
             length={length}
-            setLength={setLength}
             scale={scale}
-            setScale={setScale}
             theme={theme}
-            {...pageProps}
           />
           <Footer theme={theme} />
         </ThemeProvider>
       </Layout>
     </ApolloProvider>
+  ) : (
+    <p>Loading...</p>
   );
 }
 
 export default withData(MyApp);
+
+MyApp.propTypes = {
+  Component: PropTypes.any,
+  apollo: PropTypes.any,
+};

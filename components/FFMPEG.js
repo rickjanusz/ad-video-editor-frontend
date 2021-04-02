@@ -19,7 +19,6 @@ export default function FFMPEG({ props }) {
     data,
     dispatch,
     // FFMPEG state
-    ready,
     video,
     setVideo,
     crop,
@@ -34,13 +33,9 @@ export default function FFMPEG({ props }) {
     filename,
     setFilename,
     cropHeight,
-    setCropHeight,
     cropWidth,
-    setCropWidth,
     length,
-    setLength,
     scale,
-    setScale,
     theme,
   } = props;
 
@@ -270,22 +265,8 @@ export default function FFMPEG({ props }) {
     stateFunc(url);
   }
 
-  return ready ? (
+  return (
     <>
-      <div>
-        <ControlPanel
-          // props={props}
-          cropWidth={cropWidth}
-          setCropWidth={setCropWidth}
-          cropHeight={cropHeight}
-          setCropHeight={setCropHeight}
-          length={length}
-          setLength={setLength}
-          scale={scale}
-          setScale={setScale}
-          theme={theme}
-        />
-      </div>
       <Box className={classes.wrapper}>
         {video && (
           <Box
@@ -414,15 +395,12 @@ export default function FFMPEG({ props }) {
       />
       <GetStarted video={video} theme={theme} />
     </>
-  ) : (
-    <p>Loading...</p>
   );
 }
 
 FFMPEG.propTypes = {
   data: PropTypes.any,
   dispatch: PropTypes.any,
-  ready: PropTypes.any,
   video: PropTypes.any,
   setVideo: PropTypes.any,
   crop: PropTypes.any,
@@ -437,13 +415,9 @@ FFMPEG.propTypes = {
   filename: PropTypes.any,
   setFilename: PropTypes.any,
   cropHeight: PropTypes.any,
-  setCropHeight: PropTypes.any,
   cropWidth: PropTypes.any,
-  setCropWidth: PropTypes.any,
   length: PropTypes.any,
-  setLength: PropTypes.any,
   scale: PropTypes.any,
-  setScale: PropTypes.any,
   theme: PropTypes.any,
   props: PropTypes.any,
 };
