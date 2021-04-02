@@ -1,19 +1,9 @@
 import React from 'react';
 import NProgress from 'nprogress';
 import PropTypes from 'prop-types';
-import DialogAlert from './DialogAlert';
 
 const DragAndDrop = (props) => {
-  const {
-    data,
-    dispatch,
-    setVideo,
-    convertVideoToMP4,
-    setFilename,
-    drawerState,
-    setDrawerState,
-    setLoadingState,
-  } = props;
+  const { data, dispatch, setVideo, convertVideoToMP4, setFilename } = props;
   // console.log(props);
   const handleDragEnter = (e) => {
     e.preventDefault();
@@ -38,7 +28,7 @@ const DragAndDrop = (props) => {
   };
   const handleDrop = (e) => {
     console.log("I've set state to true");
-    setLoadingState(true);
+    // setLoadingState(true);
     e.preventDefault();
     // e.stopPropagation();
 
@@ -90,7 +80,7 @@ const DragAndDrop = (props) => {
 
     if (files[0].size > 5000000) {
       // console.log('CHECHECHECHECHECKIIIIIINGGGG:');
-      setDrawerState({ drawerState, top: false });
+      // setDrawerState({ drawerState, top: false });
       // <DialogAlert />;
       return;
     }
@@ -98,7 +88,7 @@ const DragAndDrop = (props) => {
     reader.readAsDataURL(files[0]);
     renameFile(files[0]);
 
-    setDrawerState({ drawerState, top: false });
+    // setDrawerState({ drawerState, top: false });
 
     // ::::::::::::::::::::::::::::::::::::::::::::::::::: //
     // :::::::::::::::::::: BEGIN Custom Helper Functions  //
@@ -127,8 +117,8 @@ const DragAndDrop = (props) => {
     // ::::::::::::::::::::::::::::::::::::::::::::::::: //
 
     if (files && files.length > 0) {
-      console.log("I've set state to false");
-      setLoadingState(false);
+      // console.log("I've set state to false");
+      // setLoadingState(false);
       const existingFiles = data.fileList.map((f) => f.name);
       files = files.filter((f) => !existingFiles.includes(f.name));
 
@@ -149,18 +139,7 @@ const DragAndDrop = (props) => {
       onDragLeave={(e) => handleDragLeave(e)}
       id="uploader"
     >
-      <p>
-        Drag files here to upload.
-        <br />
-        <span style={{ fontSize: '30px' }}>
-          {' '}
-          Press{' '}
-          <span style={{ border: '1px solid white', padding: '3px' }}>
-            ESC
-          </span>{' '}
-          on your keyboard to close.
-        </span>
-      </p>
+      <p>Drag and Drop video here to to get started!</p>
     </div>
   );
 };
@@ -172,7 +151,4 @@ DragAndDrop.propTypes = {
   dispatch: PropTypes.any,
   convertVideoToMP4: PropTypes.any,
   setFilename: PropTypes.any,
-  drawerState: PropTypes.any,
-  setDrawerState: PropTypes.any,
-  setLoadingState: PropTypes.any,
 };

@@ -2,13 +2,16 @@
   padding: 2rem;
   text-align: center;
   height: 100vh;
-  background: rgba(222, 108, 0, 1);
+  background: rgba(222, 108, 0, 0.1);
   box-shadow: 5px 5px 10px #000;
 }
 .drag-drop-zone p {
   color: rgba(234, 234, 234, 1);
   font-size: 44px;
-  padding: 20rem 0;
+  padding: 3rem 0;
+  position: absolute;
+  text-align: center;
+  width: 100vw;
 }
 
 .drag-drop-zone {
@@ -26,6 +29,6 @@ video {
 }
 
 /* This is the Drawer // Used for testing the NProgress loading state */
-.MuiPaper-root.MuiDrawer-paper.MuiDrawer-paperAnchorTop.MuiPaper-elevation16 {
+/* .MuiPaper-root.MuiDrawer-paper.MuiDrawer-paperAnchorTop.MuiPaper-elevation16 {
   opacity: 0.6;
-}
+} */

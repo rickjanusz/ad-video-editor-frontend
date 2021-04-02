@@ -28,7 +28,7 @@ export default function ControlPanel(props) {
   const useStyles = makeStyles(() => ({
     paper: {
       marginTop: theme.spacing(0),
-      marginBottom: theme.spacing(8),
+      marginBottom: theme.spacing(3),
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -37,16 +37,19 @@ export default function ControlPanel(props) {
       margin: theme.spacing(0),
       backgroundColor: theme.palette.primary.main,
       border: '2px solid rgba(234, 234, 234, 1)',
-      height: 100,
-      width: 100,
+      height: 70,
+      width: 70,
       transform: 'rotate(90deg)',
     },
     appBar: {
       background: theme.palette.secondary.mainGradient,
       // backgroundColor: theme.palette.background.paper,
-      paddingTop: theme.spacing(8),
+      paddingTop: theme.spacing(2),
       paddingBottom: theme.spacing(0),
       marginBottom: theme.spacing(0),
+      position: 'fixed',
+      zIndex: 3,
+      width: '100vw',
     },
   }));
 
@@ -79,7 +82,7 @@ export default function ControlPanel(props) {
           <Grid xs item>
             <div className={classes.paper}>
               <Avatar className={classes.avatar}>
-                <CropOutlinedIcon style={{ height: 50, width: 50 }} />
+                <CropOutlinedIcon style={{ height: 32, width: 32 }} />
               </Avatar>
             </div>
           </Grid>
@@ -136,6 +139,7 @@ export default function ControlPanel(props) {
             <TextField
               id="standard-number"
               margin="normal"
+              step=".1"
               label="Scale"
               fullWidth
               type="number"

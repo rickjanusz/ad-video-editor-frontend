@@ -51,7 +51,7 @@ export default function Preview({
         >
           Preview &amp; Export
         </Typography>
-        <Box display="flex" justifyContent="center">
+        <Box display="flex" justifyContent="center" flexWrap="wrap">
           {gif && (
             <span style={{ display: 'inline-block' }}>
               <Box
@@ -120,10 +120,10 @@ export default function Preview({
                   fullWidth
                   title={`Download ${filename}`}
                   endIcon={<SystemUpdateAltIcon />}
-                  download={`${filename}_${cropWidth}x${cropHeight}.${gif}`}
-                  href={gif}
+                  download={`${filename}_${cropWidth}x${cropHeight}.mp4`}
+                  href={crop}
                 >
-                  Download GIF
+                  Download Mp4
                 </Button>
               </Box>
             </span>

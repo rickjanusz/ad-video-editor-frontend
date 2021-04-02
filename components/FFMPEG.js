@@ -9,7 +9,7 @@ import { Button, Box, makeStyles } from '@material-ui/core';
 import LaunchIcon from '@material-ui/icons/Launch';
 import Divider from '@material-ui/core/Divider';
 import ControlPanel from './ControlPanel';
-import DragAndDropDrawer from './DragAndDropDrawer';
+import DragAndDrop from './DragAndDrop';
 import Preview from './Preview';
 import GetStarted from './GetStarted';
 
@@ -58,17 +58,6 @@ export default function FFMPEG({ props }) {
       flexDirection: 'column',
       alignItems: 'center',
     },
-    preview: {
-      background: theme.palette.primary.mainGradient,
-      padding: '1em 0 8em 0',
-    },
-    previewHeader: {
-      marginTop: '30px',
-      color: theme.palette.secondary.light,
-      // '&:before': {
-      //   // content: ' // ',
-      // },
-    },
     time: {
       backgroundColor: theme.palette.secondary.light,
       padding: '10px',
@@ -112,27 +101,44 @@ export default function FFMPEG({ props }) {
       opacity: '.5',
       position: 'absolute',
       top: 0,
-      zIndex: -1,
+      zIndex: -2,
       left: '0',
       width: '2000px',
       height: '2000px',
       clipPath: 'polygon(21% 0%, 100% 10%,10% 100%, 0% 15%)',
+      pointerEvents: 'none',
     },
     clip2: {
       backgroundColor: theme.palette.secondary.dark,
       opacity: '.1',
       position: 'absolute',
       top: 0,
-      zIndex: -1,
+      zIndex: -2,
       left: 0,
       width: '2000px',
       height: '2000px',
       clipPath: 'polygon(0% 0%, 0% 10%,100% 30%, 50% 100%)',
+      pointerEvents: 'none',
     },
     wrapper: {
       position: 'relative',
-      padding: theme.spacing(8),
+      padding: theme.spacing(25),
       overflow: 'hidden',
+      minHeight: '800px',
+    },
+    dropHere: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      zIndex: 1,
+      height: '100%',
+      width: '100%',
+      pointerEvents: 'auto',
+    },
+    videoBox: {
+      position: 'relative',
+      zIndex: 2,
+      pointerEvents: 'none',
     },
   }));
 
@@ -144,8 +150,10 @@ export default function FFMPEG({ props }) {
 
   function makeEven(num) {
     if (num % 2 !== 0) {
+      console.log('NOT EVEN', num);
       return Math.floor(num + 1);
     }
+    console.log('EVEN', num);
     return Math.floor(num);
   }
   // ////////////////////
@@ -158,8 +166,8 @@ export default function FFMPEG({ props }) {
     const childOffset = {
       top: childDims.top - parentPos.top,
       left: childDims.left - parentPos.left,
-      width: makeEven(childDims.width),
-      height: makeEven(childDims.height),
+      width: makeEven(parseInt(childDims.width)),
+      height: makeEven(parseInt(childDims.height)),
     };
     console.log(childOffset);
     return childOffset;
@@ -235,6 +243,7 @@ export default function FFMPEG({ props }) {
       }
     });
 
+    console.log(`DIMSSSSS: ${dims.width}:${dims.height}`);
     // Run the FFMpeg command
     await ffmpeg.run(
       '-i',
@@ -264,16 +273,8 @@ export default function FFMPEG({ props }) {
   return ready ? (
     <>
       <div>
-        <DragAndDropDrawer
-          data={data}
-          dispatch={dispatch}
-          setVideo={setVideo}
-          convertVideoToMP4={convertVideoToMP4}
-          setFilename={setFilename}
-          theme={theme}
-        />
         <ControlPanel
-          props={props}
+          // props={props}
           cropWidth={cropWidth}
           setCropWidth={setCropWidth}
           cropHeight={cropHeight}
@@ -285,11 +286,13 @@ export default function FFMPEG({ props }) {
           theme={theme}
         />
       </div>
-      {video && (
-        <Box className={classes.wrapper}>
-          <Box className={classes.clip} />
-          <Box className={classes.clip2} />
-          <Box display="flex" justifyContent="center">
+      <Box className={classes.wrapper}>
+        {video && (
+          <Box
+            display="flex"
+            justifyContent="center"
+            className={classes.videoBox}
+          >
             <div className="videoCropper">
               <Box
                 className={classes.videoPolaroid}
@@ -298,7 +301,14 @@ export default function FFMPEG({ props }) {
                 borderColor={theme.palette.background.paper}
               >
                 <Box className={classes.videoContainer}>
-                  <video controls ref={vidRef} id="video" muted src={video} />
+                  <video
+                    controls
+                    ref={vidRef}
+                    id="video"
+                    muted
+                    src={video}
+                    style={{ pointerEvents: 'auto' }}
+                  />
                   <div className={classes.draggableParent} ref={objParent}>
                     <Draggable
                       axis="both"
@@ -315,8 +325,8 @@ export default function FFMPEG({ props }) {
                         className={classes.draggy}
                         ref={obj}
                         style={{
-                          height: `${cropHeight * scale}px`,
-                          width: `${cropWidth * scale}px`,
+                          height: `${Math.floor(cropHeight * scale)}px`,
+                          width: `${Math.floor(cropWidth * scale)}px`,
                         }}
                       >
                         <div className={`${classes.handle} handle`} />
@@ -342,6 +352,7 @@ export default function FFMPEG({ props }) {
                     onClick={() => {
                       exportFormat('image/gif', length, setGif, 'gif');
                     }}
+                    style={{ pointerEvents: 'auto' }}
                   >
                     Export GIF
                   </Button>
@@ -351,11 +362,11 @@ export default function FFMPEG({ props }) {
                     size="large"
                     color="primary"
                     type="button"
-                    style={{ margin: '0 10px' }}
                     endIcon={<LaunchIcon />}
                     onClick={() => {
                       exportFormat('image/jpg', length, setJpg, 'jpg');
                     }}
+                    style={{ margin: '0 10px', pointerEvents: 'auto' }}
                   >
                     Export Jpg
                   </Button>
@@ -369,6 +380,7 @@ export default function FFMPEG({ props }) {
                     onClick={() => {
                       exportFormat('video/mp4', length, setCrop, 'crop');
                     }}
+                    style={{ pointerEvents: 'auto' }}
                   >
                     Export MP4
                   </Button>
@@ -376,8 +388,19 @@ export default function FFMPEG({ props }) {
               </div>
             </div>
           </Box>
+        )}
+        <Box className={classes.dropHere}>
+          <DragAndDrop
+            data={data}
+            dispatch={dispatch}
+            setVideo={setVideo}
+            convertVideoToMP4={convertVideoToMP4}
+            setFilename={setFilename}
+          />
         </Box>
-      )}
+        <Box className={classes.clip} />
+        <Box className={classes.clip2} />
+      </Box>
 
       <Divider />
       <Preview
