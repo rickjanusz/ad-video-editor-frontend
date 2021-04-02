@@ -3,10 +3,3 @@
   [headers.values]
     Cross-Origin-Embedder-Policy= "require-corp"
     Cross-Origin-Opener-Policy= "same-origin"
-
-    [[plugins]]
-package = "netlify-plugin-cache-nextjs"
-    # These options will cache the build directory at `${NETLIFY_BASE}/frontend/.next-build`
-    [plugins.inputs]
-    # The path to the build directory
-    build_dir_path = "/out"
