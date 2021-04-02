@@ -126,7 +126,7 @@ function MyApp({ Component, pageProps, apollo }) {
             theme={theme}
             {...pageProps}
           />
-          <Footer />
+          <Footer theme={theme} />
         </ThemeProvider>
       </Layout>
     </ApolloProvider>

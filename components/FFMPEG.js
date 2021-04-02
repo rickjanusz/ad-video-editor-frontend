@@ -4,14 +4,20 @@ import Draggable from 'react-draggable';
 import NProgress from 'nprogress';
 import PropTypes from 'prop-types';
 import { debounce } from 'debounce';
-import styled from 'styled-components';
-import { Button, Box, makeStyles, Container } from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
+import {
+  Button,
+  Box,
+  makeStyles,
+  Container,
+  Typography,
+} from '@material-ui/core';
+
 import LaunchIcon from '@material-ui/icons/Launch';
-import SystemUpdateAltIcon from '@material-ui/icons/SystemUpdateAlt';
 import Divider from '@material-ui/core/Divider';
 import ControlPanel from './ControlPanel';
 import DragAndDropDrawer from './DragAndDropDrawer';
+import GetStarted from './GetStarted';
+import CropPreview from './CropPreview';
 
 export default function FFMPEG({ props }) {
   const {
@@ -124,7 +130,6 @@ export default function FFMPEG({ props }) {
       position: 'absolute',
       top: 0,
       zIndex: -1,
-      left: '0',
       left: 1020,
       width: '100%',
       height: '100%',
@@ -286,101 +291,101 @@ export default function FFMPEG({ props }) {
           theme={theme}
         />
       </div>
-      {video && (
-        <Box className={classes.wrapper}>
-          <Box className={classes.clip} />
-          <Box className={classes.clip2} />
-          <Box display="flex" justifyContent="center">
-            <div className="videoCropper">
-              <Box
-                className={classes.videoPolaroid}
-                boxShadow={7}
-                border={15}
-                borderColor={theme.palette.background.paper}
-              >
-                <Box className={classes.videoContainer}>
-                  <video controls ref={vidRef} id="video" muted src={video} />
-                  <div className={classes.draggableParent} ref={objParent}>
-                    <Draggable
-                      axis="both"
-                      handle=".handle"
-                      bounds="parent"
-                      defaultPosition={{ x: 0, y: 0 }}
-                      grid={[1, 1]}
-                      scale={1}
-                      // onStart={handleStart}
-                      // onDrag={handleDrag}
-                      onStop={handleStop}
-                    >
-                      <div
-                        className={classes.draggy}
-                        ref={obj}
-                        style={{
-                          height: `${cropHeight * scale}px`,
-                          width: `${cropWidth * scale}px`,
-                        }}
-                      >
-                        <div className={`${classes.handle} handle`} />
-                      </div>
-                    </Draggable>
-                  </div>
-                </Box>
-                <Box className={classes.time}>
-                  Current Time:{' '}
-                  <span id="current" ref={timeRef}>
-                    0.00
-                  </span>
-                </Box>
-              </Box>
-              <div>
-                <Box display="flex" justifyContent="center">
-                  <Button
-                    variant="outlined"
-                    size="large"
-                    color="primary"
-                    type="button"
-                    endIcon={<LaunchIcon />}
-                    onClick={() => {
-                      exportFormat('image/gif', length, setGif, 'gif');
-                    }}
-                  >
-                    Export GIF
-                  </Button>
-                  &nbsp;
-                  <Button
-                    variant="outlined"
-                    size="large"
-                    color="primary"
-                    type="button"
-                    endIcon={<LaunchIcon />}
-                    onClick={() => {
-                      exportFormat('image/jpg', length, setJpg, 'jpg');
-                    }}
-                  >
-                    Export Jpg
-                  </Button>
-                  &nbsp;
-                  <Button
-                    variant="outlined"
-                    size="large"
-                    color="primary"
-                    type="button"
-                    endIcon={<LaunchIcon />}
-                    onClick={() => {
-                      exportFormat('video/mp4', length, setCrop, 'crop');
-                    }}
-                  >
-                    Export MP4
-                  </Button>
-                </Box>
-              </div>
-            </div>
-          </Box>
-        </Box>
-      )}
-      <Divider />
 
-      <Container className={classes.preview} maxWidth="xl">
+      <Box className={classes.wrapper}>
+        <Box className={classes.clip} />
+        <Box className={classes.clip2} />
+        <Box display="flex" justifyContent="center">
+          <div className="videoCropper">
+            <Box
+              className={classes.videoPolaroid}
+              boxShadow={7}
+              border={15}
+              borderColor={theme.palette.background.paper}
+            >
+              <Box className={classes.videoContainer}>
+                <video controls ref={vidRef} id="video" muted src={video} />
+                <div className={classes.draggableParent} ref={objParent}>
+                  <Draggable
+                    axis="both"
+                    handle=".handle"
+                    bounds="parent"
+                    defaultPosition={{ x: 0, y: 0 }}
+                    grid={[1, 1]}
+                    scale={1}
+                    // onStart={handleStart}
+                    // onDrag={handleDrag}
+                    onStop={handleStop}
+                  >
+                    <div
+                      className={classes.draggy}
+                      ref={obj}
+                      style={{
+                        height: `${cropHeight * scale}px`,
+                        width: `${cropWidth * scale}px`,
+                      }}
+                    >
+                      <div className={`${classes.handle} handle`} />
+                    </div>
+                  </Draggable>
+                </div>
+              </Box>
+              <Box className={classes.time}>
+                Current Time:{' '}
+                <span id="current" ref={timeRef}>
+                  0.00
+                </span>
+              </Box>
+            </Box>
+            <div>
+              <Box display="flex" justifyContent="center">
+                <Button
+                  variant="outlined"
+                  size="large"
+                  color="primary"
+                  type="button"
+                  endIcon={<LaunchIcon />}
+                  onClick={() => {
+                    exportFormat('image/gif', length, setGif, 'gif');
+                  }}
+                >
+                  Export GIF
+                </Button>
+
+                <Button
+                  variant="outlined"
+                  size="large"
+                  color="primary"
+                  type="button"
+                  style={{ margin: '0 10px' }}
+                  endIcon={<LaunchIcon />}
+                  onClick={() => {
+                    exportFormat('image/jpg', length, setJpg, 'jpg');
+                  }}
+                >
+                  Export Jpg
+                </Button>
+
+                <Button
+                  variant="outlined"
+                  size="large"
+                  color="primary"
+                  type="button"
+                  endIcon={<LaunchIcon />}
+                  onClick={() => {
+                    exportFormat('video/mp4', length, setCrop, 'crop');
+                  }}
+                >
+                  Export MP4
+                </Button>
+              </Box>
+            </div>
+          </div>
+        </Box>
+      </Box>
+
+      <Divider />
+      <Box className={classes.preview}>
         <Typography
           className={classes.previewHeader}
           variant="h4"
@@ -390,90 +395,70 @@ export default function FFMPEG({ props }) {
         >
           Preview &amp; Export
         </Typography>
-        <Box style={{ textAlign: 'center' }}>
+        <Box display="flex" justifyContent="center">
           {gif && (
-            <span style={{ display: 'inline-block' }}>
-              <Box
-                boxShadow={10}
-                border={15}
-                borderColor={theme.palette.background.paper}
-                display="flex"
-                justifyContent="center"
-                className={classes.paper}
-              >
-                <img className="preview gif" src={gif} alt="" />
-                <Button
-                  variant="contained"
-                  fullWidth
-                  title={`Download ${filename}`}
-                  endIcon={<SystemUpdateAltIcon />}
-                  download={`${filename}_${cropWidth}x${cropHeight}.gif`}
-                  href={gif}
-                >
-                  Download gif
-                </Button>
-              </Box>
-            </span>
+            <CropPreview
+              type="gif"
+              fileUrl={gif}
+              theme={theme}
+              filename={filename}
+              cropWidth={cropWidth}
+              cropHeight={cropHeight}
+            />
           )}
           {jpg && (
-            <span style={{ display: 'inline-block' }}>
-              <Box
-                boxShadow={3}
-                border={15}
-                borderColor={theme.palette.background.paper}
-                display="flex"
-                justifyContent="center"
-                className={classes.paper}
-                m={2}
-              >
-                <img className="preview jpg" src={jpg} alt="" />
-                <Button
-                  variant="contained"
-                  fullWidth
-                  title={`Download ${filename}`}
-                  endIcon={<SystemUpdateAltIcon />}
-                  download={`${filename}_${cropWidth}x${cropHeight}.jpg`}
-                  href={jpg}
-                >
-                  Download Jpg
-                </Button>
-              </Box>
-            </span>
+            <CropPreview
+              type="jpg"
+              fileUrl={jpg}
+              theme={theme}
+              filename={filename}
+              cropWidth={cropWidth}
+              cropHeight={cropHeight}
+            />
           )}
           {crop && (
-            <span style={{ display: 'inline-block' }}>
-              <Box
-                boxShadow={7}
-                border={15}
-                borderColor={theme.palette.background.paper}
-                display="flex"
-                justifyContent="center"
-                className={classes.paper}
-              >
-                <video
-                  className="preview mp4"
-                  controls
-                  id="playerCrop"
-                  muted
-                  src={crop}
-                />
-                <Button
-                  variant="contained"
-                  fullWidth
-                  title={`Download ${filename}`}
-                  endIcon={<SystemUpdateAltIcon />}
-                  download={`${filename}_${cropWidth}x${cropHeight}.mp4`}
-                  href={crop}
-                >
-                  Download MP4
-                </Button>
-              </Box>
-            </span>
+            <CropPreview
+              type="mp4"
+              fileUrl={crop}
+              theme={theme}
+              filename={filename}
+              cropWidth={cropWidth}
+              cropHeight={cropHeight}
+            />
           )}
         </Box>
-      </Container>
+      </Box>
     </>
   ) : (
     <p>Loading...</p>
   );
 }
+
+FFMPEG.propTypes = {
+  data: PropTypes.any,
+  dispatch: PropTypes.any,
+  ready: PropTypes.any,
+  video: PropTypes.any,
+  setVideo: PropTypes.any,
+  crop: PropTypes.any,
+  setCrop: PropTypes.any,
+  gif: PropTypes.any,
+  setGif: PropTypes.any,
+  jpg: PropTypes.any,
+  setJpg: PropTypes.any,
+  time: PropTypes.any,
+  setTime: PropTypes.any,
+  ffmpeg: PropTypes.any,
+  filename: PropTypes.any,
+  setFilename: PropTypes.any,
+  cropHeight: PropTypes.any,
+  setCropHeight: PropTypes.any,
+  cropWidth: PropTypes.any,
+  setCropWidth: PropTypes.any,
+  length: PropTypes.any,
+  setLength: PropTypes.any,
+  scale: PropTypes.any,
+  setScale: PropTypes.any,
+  theme: PropTypes.any,
+  props: PropTypes.any,
+};

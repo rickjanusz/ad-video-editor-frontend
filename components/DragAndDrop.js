@@ -149,7 +149,18 @@ const DragAndDrop = (props) => {
       onDragLeave={(e) => handleDragLeave(e)}
       id="uploader"
     >
-      <p>Drag files here to upload</p>
+      <p>
+        Drag files here to upload.
+        <br />
+        <span style={{ fontSize: '30px' }}>
+          {' '}
+          Press{' '}
+          <span style={{ border: '1px solid white', padding: '3px' }}>
+            ESC
+          </span>{' '}
+          on your keyboard to close.
+        </span>
+      </p>
     </div>
   );
 };
