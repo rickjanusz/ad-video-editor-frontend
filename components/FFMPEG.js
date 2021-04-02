@@ -8,16 +8,12 @@ import { Button, Box, makeStyles } from '@material-ui/core';
 
 import LaunchIcon from '@material-ui/icons/Launch';
 import Divider from '@material-ui/core/Divider';
-import ControlPanel from './ControlPanel';
 import DragAndDrop from './DragAndDrop';
 import Preview from './Preview';
 import GetStarted from './GetStarted';
 
 export default function FFMPEG({ props }) {
   const {
-    // Drag&Drop state
-    data,
-    dispatch,
     // FFMPEG state
     video,
     setVideo,
@@ -38,6 +34,25 @@ export default function FFMPEG({ props }) {
     scale,
     theme,
   } = props;
+
+  const reducer = (state, action) => {
+    switch (action.type) {
+      case 'SET_DROP_DEPTH':
+        return { ...state, dropDepth: action.dropDepth };
+      case 'SET_IN_DROP_ZONE':
+        return { ...state, inDropZone: action.inDropZone };
+      case 'ADD_FILE_TO_LIST':
+        return { ...state, fileList: state.fileList.concat(action.files) };
+      default:
+        return state;
+    }
+  };
+
+  const [data, dispatch] = React.useReducer(reducer, {
+    dropDepth: 0,
+    inDropZone: false,
+    fileList: [],
+  });
 
   const useStyles = makeStyles(() => ({
     root: {
@@ -399,8 +414,6 @@ export default function FFMPEG({ props }) {
 }
 
 FFMPEG.propTypes = {
-  data: PropTypes.any,
-  dispatch: PropTypes.any,
   video: PropTypes.any,
   setVideo: PropTypes.any,
   crop: PropTypes.any,

@@ -58,6 +58,12 @@ function MyApp({ Component, apollo }) {
         func(temp);
       }
     });
+    const load = async () => {
+      await ffmpeg?.load();
+      setReady(true);
+    };
+
+    load();
 
     // Remove the server-side injected CSS.
     const jssStyles = document.querySelector('#jss-server-side');
@@ -65,31 +71,6 @@ function MyApp({ Component, apollo }) {
       jssStyles.parentElement.removeChild(jssStyles);
     }
   }, []);
-
-  const load = async () => {
-    await ffmpeg?.load();
-    setReady(true);
-  };
-
-  load();
-
-  const reducer = (state, action) => {
-    switch (action.type) {
-      case 'SET_DROP_DEPTH':
-        return { ...state, dropDepth: action.dropDepth };
-      case 'SET_IN_DROP_ZONE':
-        return { ...state, inDropZone: action.inDropZone };
-      case 'ADD_FILE_TO_LIST':
-        return { ...state, fileList: state.fileList.concat(action.files) };
-      default:
-        return state;
-    }
-  };
-  const [data, dispatch] = React.useReducer(reducer, {
-    dropDepth: 0,
-    inDropZone: false,
-    fileList: [],
-  });
 
   return ready ? (
     <ApolloProvider client={apollo}>
@@ -108,8 +89,8 @@ function MyApp({ Component, apollo }) {
             theme={theme}
           />
           <Component
-            data={data}
-            dispatch={dispatch}
+            ready={ready}
+            setReady={setReady}
             video={video}
             setVideo={setVideo}
             crop={crop}
@@ -135,7 +116,7 @@ function MyApp({ Component, apollo }) {
       </Layout>
     </ApolloProvider>
   ) : (
-    <p>Loading...</p>
+    <p>Loading....</p>
   );
 }
 
