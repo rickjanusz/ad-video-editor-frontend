@@ -4,20 +4,14 @@ import Draggable from 'react-draggable';
 import NProgress from 'nprogress';
 import PropTypes from 'prop-types';
 import { debounce } from 'debounce';
-import {
-  Button,
-  Box,
-  makeStyles,
-  Container,
-  Typography,
-} from '@material-ui/core';
+import { Button, Box, makeStyles } from '@material-ui/core';
 
 import LaunchIcon from '@material-ui/icons/Launch';
 import Divider from '@material-ui/core/Divider';
 import ControlPanel from './ControlPanel';
 import DragAndDropDrawer from './DragAndDropDrawer';
-import CropPreview from './CropPreview';
 import Preview from './Preview';
+import GetStarted from './GetStarted';
 
 export default function FFMPEG({ props }) {
   const {
@@ -171,11 +165,11 @@ export default function FFMPEG({ props }) {
     return childOffset;
   }
 
-  function getVideoSize() {
-    const dims = vidRef.current.getBoundingClientRect();
-    console.log(dims.height);
-    vidRef.current.style.height = `${dims.height * scale}px`;
-  }
+  // function getVideoSize() {
+  //   const dims = vidRef.current.getBoundingClientRect();
+  //   console.log(dims.height);
+  //   vidRef.current.style.height = `${dims.height * scale}px`;
+  // }
 
   // Drag & Drop callback
   function handleStop() {
@@ -386,7 +380,16 @@ export default function FFMPEG({ props }) {
       )}
 
       <Divider />
-      <Preview {...props} />
+      <Preview
+        crop={crop}
+        gif={gif}
+        jpg={jpg}
+        filename={filename}
+        cropHeight={cropHeight}
+        cropWidth={cropWidth}
+        theme={theme}
+      />
+      <GetStarted video={video} theme={theme} />
     </>
   ) : (
     <p>Loading...</p>

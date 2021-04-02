@@ -1,8 +1,4 @@
-import styled from 'styled-components';
-
-import Nav from './Nav';
-
-export default function Header({ theme }) {
+export default function Header() {
   return (
     <div>
       {/* <Avatar className={classes.avatar}>

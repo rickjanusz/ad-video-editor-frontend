@@ -3,8 +3,9 @@ import { makeStyles, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import GetStarted from './GetStarted';
 
-export default function Footer({ theme }) {
-  console.log('Theme', theme);
+export default function Footer(props) {
+  const { theme, video } = props;
+  // console.log('Theme', video);
   const useStyles = makeStyles(() => ({
     root: {},
     clip: {
@@ -40,26 +41,32 @@ export default function Footer({ theme }) {
   }));
 
   const classes = useStyles();
-  return (
-    <Box className={classes.wrapper}>
-      <Box className={classes.clip} />
-      <Box className={classes.clip2} />
-      <Box m={1} p={20}>
-        <Typography
-          // className={classes.previewHeader}
-          variant="h4"
-          component="h2"
-          gutterBottom
-          align="center"
-        >
-          Getting Started
-        </Typography>
-        <GetStarted theme={theme} />
+
+  const CheckVideo = () => {
+    if (video) {
+      return <></>;
+    }
+    return (
+      <Box className={classes.wrapper}>
+        <Box className={classes.clip} />
+        <Box className={classes.clip2} />
+        <Box m={1} p={20}>
+          <Typography variant="h4" component="h2" gutterBottom align="center">
+            Getting Started
+          </Typography>
+          <GetStarted theme={theme} />
+        </Box>
       </Box>
+    );
+  };
+  return (
+    <Box display="flex" justifyContent="center" m={6}>
+      <p>Footer Content Here</p>
     </Box>
   );
 }
 
 Footer.propTypes = {
   theme: PropTypes.any,
+  video: PropTypes.any,
 };
