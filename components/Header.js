@@ -11,7 +11,6 @@ export default function Header(props) {
     setLength,
     scale,
     setScale,
-    theme,
   } = props;
   return (
     <div>
@@ -25,7 +24,6 @@ export default function Header(props) {
         setLength={setLength}
         scale={scale}
         setScale={setScale}
-        theme={theme}
       />
     </div>
   );
@@ -40,5 +38,4 @@ Header.propTypes = {
   setLength: PropTypes.any,
   scale: PropTypes.any,
   setScale: PropTypes.any,
-  theme: PropTypes.any,
 };

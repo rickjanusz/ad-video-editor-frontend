@@ -2,6 +2,7 @@ import { Box, makeStyles, Typography, Button } from '@material-ui/core';
 import React from 'react';
 import SystemUpdateAltIcon from '@material-ui/icons/SystemUpdateAlt';
 import PropTypes from 'prop-types';
+import { useTheme } from '@material-ui/core/styles';
 
 export default function Preview({
   crop,
@@ -10,8 +11,8 @@ export default function Preview({
   filename,
   cropHeight,
   cropWidth,
-  theme,
 }) {
+  const theme = useTheme();
   const useStyles = makeStyles(() => ({
     preview: {
       background: theme.palette.primary.mainGradient,
@@ -142,5 +143,4 @@ Preview.propTypes = {
   filename: PropTypes.any,
   cropHeight: PropTypes.any,
   cropWidth: PropTypes.any,
-  theme: PropTypes.any,
 };

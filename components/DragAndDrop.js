@@ -139,7 +139,7 @@ const DragAndDrop = (props) => {
       onDragLeave={(e) => handleDragLeave(e)}
       id="uploader"
     >
-      <p>Drag and Drop video here to to get started!</p>
+      <p>Drag and Drop video here to get started!</p>
     </div>
   );
 };

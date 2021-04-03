@@ -1,15 +1,18 @@
 import PropTypes from 'prop-types';
-import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import Grid from '@material-ui/core/Grid';
-import Avatar from '@material-ui/core/Avatar';
+import {
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Grid,
+  Avatar,
+  Divider,
+  Box,
+  makeStyles,
+  useTheme,
+} from '@material-ui/core/';
 import CropOutlinedIcon from '@material-ui/icons/CropOutlined';
-import Divider from '@material-ui/core/Divider';
-import { makeStyles } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
 
 export default function ControlPanel(props) {
   //   console.log(props.theme);
@@ -22,9 +25,9 @@ export default function ControlPanel(props) {
     setLength,
     scale,
     setScale,
-    theme,
   } = props;
 
+  const theme = useTheme();
   const useStyles = makeStyles(() => ({
     paper: {
       marginTop: theme.spacing(0),
@@ -50,6 +53,10 @@ export default function ControlPanel(props) {
       position: 'fixed',
       zIndex: 3,
       width: '100vw',
+    },
+    headerIcon: {
+      width: 32,
+      height: 32,
     },
   }));
 
@@ -82,7 +89,7 @@ export default function ControlPanel(props) {
           <Grid xs item>
             <div className={classes.paper}>
               <Avatar className={classes.avatar}>
-                <CropOutlinedIcon style={{ height: 32, width: 32 }} />
+                <CropOutlinedIcon className={classes.headerIcon} />
               </Avatar>
             </div>
           </Grid>
@@ -198,5 +205,4 @@ ControlPanel.propTypes = {
   setLength: PropTypes.any,
   scale: PropTypes.any,
   setScale: PropTypes.any,
-  theme: PropTypes.any,
 };

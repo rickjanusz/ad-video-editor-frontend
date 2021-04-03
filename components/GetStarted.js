@@ -1,16 +1,18 @@
+import PropTypes from 'prop-types';
 import {
   Box,
   Card,
   CardActionArea,
   CardContent,
   CardMedia,
-  makeStyles,
   Typography,
+  makeStyles,
+  useTheme,
 } from '@material-ui/core';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import PropTypes from 'prop-types';
 
-const GetStarted = ({ video, theme }) => {
+const GetStarted = ({ video }) => {
+  const theme = useTheme();
   const useStyles = makeStyles(() => ({
     root: {},
     clip: {
@@ -146,6 +148,5 @@ const GetStarted = ({ video, theme }) => {
 export default GetStarted;
 
 GetStarted.propTypes = {
-  theme: PropTypes.any,
   video: PropTypes.any,
 };

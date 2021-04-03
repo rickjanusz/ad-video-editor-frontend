@@ -1,11 +1,12 @@
 import Box from '@material-ui/core/Box';
 import { makeStyles, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import { useTheme } from '@material-ui/core/styles';
 import GetStarted from './GetStarted';
 
-export default function Footer(props) {
-  const { theme, video } = props;
+export default function Footer({ video }) {
   // console.log('Theme', video);
+  const theme = useTheme();
   const useStyles = makeStyles(() => ({
     root: {},
     clip: {
@@ -67,6 +68,5 @@ export default function Footer(props) {
 }
 
 Footer.propTypes = {
-  theme: PropTypes.any,
   video: PropTypes.any,
 };

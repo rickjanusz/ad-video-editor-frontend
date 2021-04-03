@@ -4,10 +4,9 @@ import Draggable from 'react-draggable';
 import NProgress from 'nprogress';
 import PropTypes from 'prop-types';
 import { debounce } from 'debounce';
-import { Button, Box, makeStyles } from '@material-ui/core';
-
+import { Button, Box, makeStyles, useTheme, Divider } from '@material-ui/core';
 import LaunchIcon from '@material-ui/icons/Launch';
-import Divider from '@material-ui/core/Divider';
+
 import DragAndDrop from './DragAndDrop';
 import Preview from './Preview';
 import GetStarted from './GetStarted';
@@ -32,7 +31,6 @@ export default function FFMPEG({ props }) {
     cropWidth,
     length,
     scale,
-    theme,
   } = props;
 
   const reducer = (state, action) => {
@@ -54,6 +52,7 @@ export default function FFMPEG({ props }) {
     fileList: [],
   });
 
+  const theme = useTheme();
   const useStyles = makeStyles(() => ({
     root: {
       '& > *': {
@@ -107,8 +106,8 @@ export default function FFMPEG({ props }) {
       pointerEvents: 'auto',
     },
     clip: {
-      backgroundColor: theme.palette.secondary.light,
-      opacity: '.5',
+      backgroundColor: theme.palette.secondary.dark,
+      opacity: '.1',
       position: 'absolute',
       top: 0,
       zIndex: -2,
@@ -120,7 +119,7 @@ export default function FFMPEG({ props }) {
     },
     clip2: {
       backgroundColor: theme.palette.secondary.dark,
-      opacity: '.1',
+      opacity: '.5',
       position: 'absolute',
       top: 0,
       zIndex: -2,
@@ -150,6 +149,11 @@ export default function FFMPEG({ props }) {
       zIndex: 2,
       pointerEvents: 'none',
     },
+    buttonStyle: {
+      pointerEvents: 'auto',
+      color: theme.palette.common.white,
+      borderColor: theme.palette.common.white,
+    },
   }));
 
   const obj = useRef();
@@ -160,7 +164,7 @@ export default function FFMPEG({ props }) {
 
   function makeEven(num) {
     if (num % 2 !== 0) {
-      console.log('NOT EVEN', num);
+      console.log('NOT EVEN', num, Math.floor(num + 1));
       return Math.floor(num + 1);
     }
     console.log('EVEN', num);
@@ -170,20 +174,24 @@ export default function FFMPEG({ props }) {
   // GET POSITION OF CROPPER:
   // ////////////////////
 
+  // function getVideoSize() {
   function getPosition() {
     const childDims = obj.current.getBoundingClientRect();
     const parentPos = objParent.current.getBoundingClientRect();
+    const vidPos = vidRef.current.getBoundingClientRect();
+    console.log(vidPos);
     const childOffset = {
-      top: childDims.top - parentPos.top,
-      left: childDims.left - parentPos.left,
-      width: makeEven(parseInt(childDims.width)),
-      height: makeEven(parseInt(childDims.height)),
+      top: parseInt((childDims.top - parentPos.top) / scale),
+      left: parseInt((childDims.left - parentPos.left) / scale),
+      width: makeEven(parseInt(childDims.width / scale)),
+      height: makeEven(parseInt(childDims.height / scale)),
+      vidWidth: makeEven(parseInt(vidPos.width / scale)),
+      vidHeight: makeEven(parseInt(vidPos.height / scale)),
     };
-    console.log(childOffset);
+
+    console.log('OFFSET', childOffset);
     return childOffset;
   }
-
-  // function getVideoSize() {
   //   const dims = vidRef.current.getBoundingClientRect();
   //   console.log(dims.height);
   //   vidRef.current.style.height = `${dims.height * scale}px`;
@@ -254,7 +262,12 @@ export default function FFMPEG({ props }) {
     });
 
     console.log(`DIMSSSSS: ${dims.width}:${dims.height}`);
+
+    const vH = makeEven(parseInt(dims.vidHeight / scale));
+    const vW = makeEven(parseInt(dims.vidWidth / scale));
+    console.log('VHHHHH: ', vH, vW);
     // Run the FFMpeg command
+
     await ffmpeg.run(
       '-i',
       'test.mp4',
@@ -262,8 +275,8 @@ export default function FFMPEG({ props }) {
       `${mylength}`,
       '-ss',
       `${time}`,
-      '-vf', // Square pixels
-      `scale='trunc(ih*dar/2)*2:trunc(ih/2)*2',setsar=1/1,crop=${dims.width}:${dims.height}:${dims.left}:${dims.top}:exact=1`,
+      '-vf',
+      `scale='trunc((ih/${scale})*dar/2)*2:trunc((ih/${scale})/2)*2',setsar=1/1,crop='${dims.width}:${dims.height}:${dims.left}:${dims.top}':exact=1`,
       '-c:a',
       'copy',
       `out.${ext}`
@@ -340,43 +353,40 @@ export default function FFMPEG({ props }) {
               <div>
                 <Box display="flex" justifyContent="center">
                   <Button
+                    className={classes.buttonStyle}
                     variant="outlined"
                     size="large"
-                    color="primary"
                     type="button"
                     endIcon={<LaunchIcon />}
                     onClick={() => {
                       exportFormat('image/gif', length, setGif, 'gif');
                     }}
-                    style={{ pointerEvents: 'auto' }}
                   >
                     Export GIF
                   </Button>
 
                   <Button
+                    className={classes.buttonStyle}
                     variant="outlined"
                     size="large"
-                    color="primary"
                     type="button"
                     endIcon={<LaunchIcon />}
                     onClick={() => {
                       exportFormat('image/jpg', length, setJpg, 'jpg');
                     }}
-                    style={{ margin: '0 10px', pointerEvents: 'auto' }}
                   >
                     Export Jpg
                   </Button>
 
                   <Button
+                    className={classes.buttonStyle}
                     variant="outlined"
                     size="large"
-                    color="primary"
                     type="button"
                     endIcon={<LaunchIcon />}
                     onClick={() => {
                       exportFormat('video/mp4', length, setCrop, 'crop');
                     }}
-                    style={{ pointerEvents: 'auto' }}
                   >
                     Export MP4
                   </Button>
@@ -406,31 +416,8 @@ export default function FFMPEG({ props }) {
         filename={filename}
         cropHeight={cropHeight}
         cropWidth={cropWidth}
-        theme={theme}
       />
-      <GetStarted video={video} theme={theme} />
+      <GetStarted video={video} />
     </>
   );
 }
-
-FFMPEG.propTypes = {
-  video: PropTypes.any,
-  setVideo: PropTypes.any,
-  crop: PropTypes.any,
-  setCrop: PropTypes.any,
-  gif: PropTypes.any,
-  setGif: PropTypes.any,
-  jpg: PropTypes.any,
-  setJpg: PropTypes.any,
-  time: PropTypes.any,
-  setTime: PropTypes.any,
-  ffmpeg: PropTypes.any,
-  filename: PropTypes.any,
-  setFilename: PropTypes.any,
-  cropHeight: PropTypes.any,
-  cropWidth: PropTypes.any,
-  length: PropTypes.any,
-  scale: PropTypes.any,
-  theme: PropTypes.any,
-  props: PropTypes.any,
-};

@@ -86,7 +86,6 @@ function MyApp({ Component, apollo }) {
             setLength={setLength}
             scale={scale}
             setScale={setScale}
-            theme={theme}
           />
           <Component
             ready={ready}
@@ -109,9 +108,8 @@ function MyApp({ Component, apollo }) {
             cropHeight={cropHeight}
             length={length}
             scale={scale}
-            theme={theme}
           />
-          <Footer theme={theme} />
+          <Footer />
         </ThemeProvider>
       </Layout>
     </ApolloProvider>
