@@ -22,6 +22,8 @@ export default function FFMPEG({ props }) {
     setGif,
     jpg,
     setJpg,
+    // png,
+    // setPng,
     time,
     setTime,
     ffmpeg,
@@ -31,6 +33,8 @@ export default function FFMPEG({ props }) {
     cropWidth,
     length,
     scale,
+    json,
+    setJson,
   } = props;
 
   const reducer = (state, action) => {
@@ -153,6 +157,7 @@ export default function FFMPEG({ props }) {
       pointerEvents: 'auto',
       color: theme.palette.common.white,
       borderColor: theme.palette.common.white,
+      margin: 5,
     },
   }));
 
@@ -378,6 +383,19 @@ export default function FFMPEG({ props }) {
                     Export Jpg
                   </Button>
 
+                  {/* <Button
+                    className={classes.buttonStyle}
+                    variant="outlined"
+                    size="large"
+                    type="button"
+                    endIcon={<LaunchIcon />}
+                    onClick={() => {
+                      exportFormat('image/png', length, setPng, 'png');
+                    }}
+                  >
+                    Export Png
+                  </Button> */}
+
                   <Button
                     className={classes.buttonStyle}
                     variant="outlined"
@@ -402,6 +420,8 @@ export default function FFMPEG({ props }) {
             setVideo={setVideo}
             convertVideoToMP4={convertVideoToMP4}
             setFilename={setFilename}
+            json={json}
+            setJson={setJson}
           />
         </Box>
         <Box className={classes.clip} />
@@ -413,6 +433,7 @@ export default function FFMPEG({ props }) {
         crop={crop}
         gif={gif}
         jpg={jpg}
+        // png={png}
         filename={filename}
         cropHeight={cropHeight}
         cropWidth={cropWidth}
@@ -421,3 +442,26 @@ export default function FFMPEG({ props }) {
     </>
   );
 }
+
+FFMPEG.propTypes = {
+  props: PropTypes.any,
+  video: PropTypes.any,
+  setVideo: PropTypes.any,
+  crop: PropTypes.any,
+  setCrop: PropTypes.any,
+  gif: PropTypes.any,
+  setGif: PropTypes.any,
+  jpg: PropTypes.any,
+  setJpg: PropTypes.any,
+  time: PropTypes.any,
+  setTime: PropTypes.any,
+  ffmpeg: PropTypes.any,
+  filename: PropTypes.any,
+  setFilename: PropTypes.any,
+  cropHeight: PropTypes.any,
+  cropWidth: PropTypes.any,
+  length: PropTypes.any,
+  scale: PropTypes.any,
+  json: PropTypes.any,
+  setJson: PropTypes.any,
+};

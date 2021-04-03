@@ -3,8 +3,14 @@ import NProgress from 'nprogress';
 import PropTypes from 'prop-types';
 
 const DragAndDrop = (props) => {
-  const { data, dispatch, setVideo, convertVideoToMP4, setFilename } = props;
-  // console.log(props);
+  const {
+    data,
+    dispatch,
+    setVideo,
+    convertVideoToMP4,
+    setFilename,
+    setJson,
+  } = props;
   const handleDragEnter = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -27,10 +33,8 @@ const DragAndDrop = (props) => {
     dispatch({ type: 'SET_IN_DROP_ZONE', inDropZone: true });
   };
   const handleDrop = (e) => {
-    console.log("I've set state to true");
-    // setLoadingState(true);
     e.preventDefault();
-    // e.stopPropagation();
+    e.stopPropagation();
 
     let files = [...e.dataTransfer.files];
     const reader = new FileReader();
@@ -52,19 +56,9 @@ const DragAndDrop = (props) => {
     function renameFile(file) {
       const fn = file.name.split('.');
       const name = fn[0];
-      // console.log({ outName });
       setFilename(name);
       localStorage.setItem('filename', name);
     }
-
-    reader.addEventListener('load', (event) => {
-      const { result } = event.target;
-      // console.log('event');
-      setVideo(result);
-      // TODO: MOV throws filesize error...
-      // TODO: need to implement a DB
-      localStorage.setItem('video', result);
-    });
     function checkFileSize(file) {
       let filesize;
       let sizeWt;
@@ -77,23 +71,6 @@ const DragAndDrop = (props) => {
       }
       return sizeWt;
     }
-
-    if (files[0].size > 5000000) {
-      // console.log('CHECHECHECHECHECKIIIIIINGGGG:');
-      // setDrawerState({ drawerState, top: false });
-      // <DialogAlert />;
-      return;
-    }
-    console.log(checkFileSize(files[0]));
-    reader.readAsDataURL(files[0]);
-    renameFile(files[0]);
-
-    // setDrawerState({ drawerState, top: false });
-
-    // ::::::::::::::::::::::::::::::::::::::::::::::::::: //
-    // :::::::::::::::::::: BEGIN Custom Helper Functions  //
-    // ::::::::::::::::::::::::::::::::::::::::::::::::::: //
-
     function checkFileName(file) {
       return file.name;
     }
@@ -104,11 +81,87 @@ const DragAndDrop = (props) => {
       return ext[1];
     }
 
-    if (returnExtension(files[0]) !== 'mp4') {
-      // console.log()
-      // console.log('NAME:', checkFileName(files[0]));
+    if (files[0].size > 5000000) {
+      // console.log('CHECHECHECHECHECKIIIIIINGGGG:');
+      return;
+    }
+
+    const fileType = returnExtension(files[0]);
+    reader.addEventListener('load', (event) => {
+      const { result } = event.target;
+      // NEW ::::::::::::::::::::::::::::::::::::::::::::::::::::
+      // NEW ::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+      if (fileType === 'json') {
+        const res = JSON.parse(result);
+        setJson(res);
+        // console.log(res);
+      } else {
+        setVideo(result);
+        localStorage.setItem('video', result);
+      }
+      // NEW ::::::::::::::::::::::::::::::::::::::::::::::::::::
+      // NEW ::::::::::::::::::::::::::::::::::::::::::::::::::::
+      // console.log(result);
+      // TODO ::::::::::::::::::::::::::::::::::::::::::::::::::::
+      // TODO ::::::::::::::::::::::::::::::::::::::::::::::::::::
+      // TODO UNCOMMENT THIS AFTER TESTING NEW FUNC
+      // setVideo(result);
+      // localStorage.setItem('video', result);
+      // TODO ::::::::::::::::::::::::::::::::::::::::::::::::::::
+      // TODO ::::::::::::::::::::::::::::::::::::::::::::::::::::
+      // TODO: MOV throws filesize error...
+      // TODO: need to implement a DB
+    });
+
+    // TODO ::::::::::::::::::::::::::::::::::::::::::::::::::::
+    // TODO ::::::::::::::::::::::::::::::::::::::::::::::::::::
+    // TODO UNCOMMENT THIS - AFTER TESTING NEW FUNC
+    // TODO ::::::::::::::::::::::::::::::::::::::::::::::::::::
+    // TODO ::::::::::::::::::::::::::::::::::::::::::::::::::::
+    // reader.readAsDataURL(files[0]);
+    // renameFile(files[0]);
+    // TODO ::::::::::::::::::::::::::::::::::::::::::::::::::::
+    // TODO ::::::::::::::::::::::::::::::::::::::::::::::::::::
+    // TODO UNCOMMENT THIS - AFTER TESTING NEW FUNC
+    // TODO ::::::::::::::::::::::::::::::::::::::::::::::::::::
+    // TODO ::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+    // ::::::::::::::::::::::::::::::::::::::::::::::::::: //
+    // :::::::::::::::::::: BEGIN Custom Helper Functions  //
+    // ::::::::::::::::::::::::::::::::::::::::::::::::::: //
+
+    console.log('FILETPYE: ', fileType);
+
+    if (fileType === 'mp4') {
+      // console.log('ITS NOT MP4', files[0]);
+      reader.readAsDataURL(files[0]);
+      renameFile(files[0]);
+      // NEW ::::::::::::::::::::::::::::::::::::::::::::::::::::
+      // NEW ::::::::::::::::::::::::::::::::::::::::::::::::::::
+    } else if (fileType === 'json') {
+      // console.log('ITS JSON FILETPYE: ', fileType);
+      reader.readAsText(files[0]);
+    } else {
+      //   // TODO MAY WANT TO MAKE A SWITCH/CASE
+      reader.readAsDataURL(files[0]);
+      renameFile(files[0]);
       convertVideoToMP4(files[0]);
     }
+
+    // NEW ::::::::::::::::::::::::::::::::::::::::::::::::::::
+    // NEW ::::::::::::::::::::::::::::::::::::::::::::::::::::
+    // TODO ::::::::::::::::::::::::::::::::::::::::::::::::::::
+    // TODO ::::::::::::::::::::::::::::::::::::::::::::::::::::
+    // TODO UNCOMMENT THIS - AFTER TESTING NEW FUNC
+    // TODO ::::::::::::::::::::::::::::::::::::::::::::::::::::
+    // TODO ::::::::::::::::::::::::::::::::::::::::::::::::::::
+    // convertVideoToMP4(files[0]);
+    // TODO ::::::::::::::::::::::::::::::::::::::::::::::::::::
+    // TODO ::::::::::::::::::::::::::::::::::::::::::::::::::::
+    // TODO UNCOMMENT THIS - AFTER TESTING NEW FUNC
+    // TODO ::::::::::::::::::::::::::::::::::::::::::::::::::::
+    // TODO ::::::::::::::::::::::::::::::::::::::::::::::::::::
 
     // console.log('FILESIZE:', checkFileSize(files[0]));
 
@@ -117,8 +170,6 @@ const DragAndDrop = (props) => {
     // ::::::::::::::::::::::::::::::::::::::::::::::::: //
 
     if (files && files.length > 0) {
-      // console.log("I've set state to false");
-      // setLoadingState(false);
       const existingFiles = data.fileList.map((f) => f.name);
       files = files.filter((f) => !existingFiles.includes(f.name));
 
@@ -151,4 +202,5 @@ DragAndDrop.propTypes = {
   dispatch: PropTypes.any,
   convertVideoToMP4: PropTypes.any,
   setFilename: PropTypes.any,
+  setJson: PropTypes.any,
 };

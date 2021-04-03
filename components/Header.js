@@ -11,6 +11,7 @@ export default function Header(props) {
     setLength,
     scale,
     setScale,
+    json,
   } = props;
   return (
     <div>
@@ -24,6 +25,7 @@ export default function Header(props) {
         setLength={setLength}
         scale={scale}
         setScale={setScale}
+        json={json}
       />
     </div>
   );
@@ -38,4 +40,5 @@ Header.propTypes = {
   setLength: PropTypes.any,
   scale: PropTypes.any,
   setScale: PropTypes.any,
+  json: PropTypes.any,
 };

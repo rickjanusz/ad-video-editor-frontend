@@ -13,6 +13,7 @@ import {
   useTheme,
 } from '@material-ui/core/';
 import CropOutlinedIcon from '@material-ui/icons/CropOutlined';
+import { getFieldData } from '../utils/processData';
 
 export default function ControlPanel(props) {
   //   console.log(props.theme);
@@ -25,6 +26,7 @@ export default function ControlPanel(props) {
     setLength,
     scale,
     setScale,
+    json,
   } = props;
 
   const theme = useTheme();
@@ -62,21 +64,36 @@ export default function ControlPanel(props) {
 
   const classes = useStyles();
 
-  const options = [
-    '300x1050',
-    '300x250',
-    '300x600',
-    '320x480',
-    '320x50',
-    '320x100',
-    '468x60',
-    '728x90',
-    '970x90',
-    '970x250',
-    '800x250',
-    '336x280',
-    '180x150',
-  ];
+  let options = [];
+  if (json) {
+    console.log(getFieldData(json[0]));
+    const adData = getFieldData(json[0]);
+    // console.clear();
+    // console.log(d.);
+    adData.map((res) => {
+      if (res.ad.lifestyle.dims !== undefined) {
+        const w = res.ad.lifestyle.dims?.width;
+        const h = res.ad.lifestyle.dims?.height;
+        options.push(`${w}x${h} x ${res.ad.size}`);
+      }
+    });
+  } else {
+    options = [
+      '300x1050',
+      '300x250',
+      '300x600',
+      '320x480',
+      '320x50',
+      '320x100',
+      '468x60',
+      '728x90',
+      '970x90',
+      '970x250',
+      '800x250',
+      '336x280',
+      '180x150',
+    ];
+  }
 
   return (
     <Box component="main" maxWidth="xl" className={classes.appBar}>
@@ -195,14 +212,3 @@ export default function ControlPanel(props) {
     </Box>
   );
 }
-
-ControlPanel.propTypes = {
-  cropHeight: PropTypes.any,
-  setCropHeight: PropTypes.any,
-  cropWidth: PropTypes.any,
-  setCropWidth: PropTypes.any,
-  length: PropTypes.any,
-  setLength: PropTypes.any,
-  scale: PropTypes.any,
-  setScale: PropTypes.any,
-};

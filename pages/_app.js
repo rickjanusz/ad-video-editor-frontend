@@ -4,13 +4,12 @@ import NProgress from 'nprogress';
 import Router from 'next/router';
 import PropTypes from 'prop-types';
 import { createFFmpeg } from '@ffmpeg/ffmpeg';
-import { ThemeProvider } from '@material-ui/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider } from '@material-ui/styles';
 import Layout from '../components/layout';
 import withData from '../lib/withData';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { getFieldData } from '../utils/processData';
 import '../styles/nprogress.css';
 import '../styles/globals.css';
 import theme from '../components/theme';
@@ -19,8 +18,7 @@ Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
 
-const ffmpeg = createFFmpeg({ log: true });
-const fieldData = getFieldData();
+const ffmpeg = createFFmpeg({ log: false });
 
 function MyApp({ Component, apollo }) {
   const [ready, setReady] = useState('false');
@@ -28,6 +26,8 @@ function MyApp({ Component, apollo }) {
   const [crop, setCrop] = useState();
   const [gif, setGif] = useState();
   const [jpg, setJpg] = useState();
+  const [json, setJson] = useState();
+  // const [png, setPng] = useState();
   const [filename, setFilename] = useState();
   const [cropWidth, setCropWidth] = useState(336);
   const [cropHeight, setCropHeight] = useState(280);
@@ -86,6 +86,7 @@ function MyApp({ Component, apollo }) {
             setLength={setLength}
             scale={scale}
             setScale={setScale}
+            json={json}
           />
           <Component
             ready={ready}
@@ -98,16 +99,19 @@ function MyApp({ Component, apollo }) {
             setGif={setGif}
             jpg={jpg}
             setJpg={setJpg}
+            // png={png}
+            // setPng={setPng}
             time={time}
             setTime={setTime}
             ffmpeg={ffmpeg}
             filename={filename}
             setFilename={setFilename}
-            fieldData={fieldData}
             cropWidth={cropWidth}
             cropHeight={cropHeight}
             length={length}
             scale={scale}
+            json={json}
+            setJson={setJson}
           />
           <Footer />
         </ThemeProvider>

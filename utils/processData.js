@@ -1,31 +1,30 @@
 import getAdSizes from './getAdSizes';
 import getDimensions from './getDimensions';
-import tmData from '../data/treatmentData_sonic';
+// import tmData from '../data/treatmentData_sonic';
 
-const sizeData = getAdSizes(tmData[0]);
-
-export function getFieldData() {
+export function getFieldData(data) {
+  const sizeData = getAdSizes(data);
   const adData = [];
-  const lsImg = getDimensions('lifestyle_img', tmData[0]);
-  const shTxt = getDimensions('subhead_text', tmData[0]);
-  const hlTxt = getDimensions('headline_text', tmData[0]);
+  const lsImg = getDimensions('lifestyle_img', data);
+  const shTxt = getDimensions('subhead_text', data);
+  const hlTxt = getDimensions('headline_text', data);
 
-  sizeData.map((size, i) => {
+  sizeData.forEach((size) => {
     let tempLs = {};
     let tempSh = {};
     let tempHl = {};
     // console.log(size);
-    lsImg.map((img) => {
+    lsImg.forEach((img) => {
       if (size.size === img.size) {
         tempLs = img;
       }
     });
-    shTxt.map((sh) => {
+    shTxt.forEach((sh) => {
       if (size.size === sh.size) {
         tempSh = sh;
       }
     });
-    hlTxt.map((hl) => {
+    hlTxt.forEach((hl) => {
       if (size.size === hl.size) {
         tempHl = hl;
       }

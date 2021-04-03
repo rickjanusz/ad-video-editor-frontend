@@ -8,6 +8,7 @@ export default function Preview({
   crop,
   gif,
   jpg,
+  // png,
   filename,
   cropHeight,
   cropWidth,
@@ -38,7 +39,7 @@ export default function Preview({
   const classes = useStyles();
 
   const DisplayPreview = () => {
-    if (!jpg && !gif && !crop) {
+    if (!jpg && !gif && !crop /* && !png */) {
       return <></>;
     }
     return (
@@ -103,6 +104,31 @@ export default function Preview({
               </Box>
             </span>
           )}
+          {/* {png && (
+            <span style={{ display: 'inline-block' }}>
+              <Box
+                boxShadow={2}
+                border={15}
+                m={1}
+                borderColor={theme.palette.background.paper}
+                display="flex"
+                justifyContent="center"
+                className={classes.paper}
+              >
+                <img src={png} alt={`cropped_png_${cropWidth}x${cropHeight}`} />
+                <Button
+                  variant="contained"
+                  fullWidth
+                  title={`Download ${filename}`}
+                  endIcon={<SystemUpdateAltIcon />}
+                  download={`${filename}_${cropWidth}x${cropHeight}.png`}
+                  href={png}
+                >
+                  Download PNG
+                </Button>
+              </Box>
+            </span>
+          )} */}
           {crop && (
             <span style={{ display: 'inline-block' }}>
               <Box

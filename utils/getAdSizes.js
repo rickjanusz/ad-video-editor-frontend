@@ -1,6 +1,6 @@
 const getAdSizes = (dataObj) => {
   const sizes = [];
-  dataObj.map((data) => {
+  dataObj.forEach((data) => {
     if (data.name === 'logo_img') {
       sizes.push({
         size: `${data.sizeX}x${data.sizeY}`,
