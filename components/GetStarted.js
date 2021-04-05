@@ -44,7 +44,7 @@ const GetStarted = ({ video }) => {
     },
     card: {
       margin: '0 10px',
-      minWidth: '400px',
+      minWidth: '350px',
     },
   }));
 

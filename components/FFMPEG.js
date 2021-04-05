@@ -7,9 +7,14 @@ import { debounce } from 'debounce';
 import { Button, Box, makeStyles, useTheme, Divider } from '@material-ui/core';
 import LaunchIcon from '@material-ui/icons/Launch';
 
+import { gsap } from 'gsap';
 import DragAndDrop from './DragAndDrop';
 import Preview from './Preview';
 import GetStarted from './GetStarted';
+
+// import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+// gsap.registerPlugin(ScrollTrigger)
 
 export default function FFMPEG({ props }) {
   const {
@@ -141,10 +146,10 @@ export default function FFMPEG({ props }) {
     },
     dropHere: {
       position: 'absolute',
-      top: 0,
+      top: 125,
       left: 0,
       zIndex: 1,
-      height: '100%',
+      height: 'calc(100% - 125px)',
       width: '100%',
       pointerEvents: 'auto',
     },

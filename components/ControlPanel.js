@@ -70,11 +70,11 @@ export default function ControlPanel(props) {
     const adData = getFieldData(json[0]);
     // console.clear();
     // console.log(d.);
-    adData.map((res) => {
+    adData.forEach((res) => {
       if (res.ad.lifestyle.dims !== undefined) {
         const w = res.ad.lifestyle.dims?.width;
         const h = res.ad.lifestyle.dims?.height;
-        options.push(`${w}x${h} x ${res.ad.size}`);
+        options.push(`${w}x${h} (${res.ad.size})`);
       }
     });
   } else {
@@ -186,11 +186,21 @@ export default function ControlPanel(props) {
                 name="selectASize"
                 value={`${cropWidth}x${cropHeight}`}
                 onChange={(e) => {
+                  function hasWhiteSpace(s) {
+                    return s.indexOf(' ') >= 0;
+                  }
                   const a = e.target.value;
                   const b = a.split('x');
-                  setCropWidth(b[0]);
-                  setCropHeight(b[1]);
-                  console.log(e.target.value);
+                  if (hasWhiteSpace(a)) {
+                    const c = b[1].split(' ');
+                    setCropWidth(b[0]);
+                    setCropHeight(c[0]);
+                  } else {
+                    setCropWidth(b[0]);
+                    setCropHeight(b[1]);
+                  }
+
+                  // console.log(e.target.value);
                   // localStorage.setItem('scale', e.target.value);
                 }}
               >
@@ -212,3 +222,15 @@ export default function ControlPanel(props) {
     </Box>
   );
 }
+
+ControlPanel.propTypes = {
+  cropHeight: PropTypes.any,
+  setCropHeight: PropTypes.any,
+  cropWidth: PropTypes.any,
+  setCropWidth: PropTypes.any,
+  length: PropTypes.any,
+  setLength: PropTypes.any,
+  scale: PropTypes.any,
+  setScale: PropTypes.any,
+  json: PropTypes.any,
+};

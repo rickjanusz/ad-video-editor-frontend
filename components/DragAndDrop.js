@@ -1,6 +1,15 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import NProgress from 'nprogress';
 import PropTypes from 'prop-types';
+import {
+  Box,
+  CircularProgress,
+  makeStyles,
+  Typography,
+  useTheme,
+} from '@material-ui/core';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import GetStarted from './GetStarted';
 
 const DragAndDrop = (props) => {
   const {
@@ -11,6 +20,24 @@ const DragAndDrop = (props) => {
     setFilename,
     setJson,
   } = props;
+
+  const loadRef = useRef();
+  const dropZoneRef = useRef();
+  const theme = useTheme();
+  const useStyles = makeStyles(() => ({
+    getStarted: {
+      fontSize: 40,
+      textAlign: 'center',
+      width: '350px',
+    },
+    loader: {
+      display: 'none',
+    },
+  }));
+
+  const classes = useStyles();
+  useEffect(() => {}, []);
+
   const handleDragEnter = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -35,8 +62,18 @@ const DragAndDrop = (props) => {
   const handleDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
-
     let files = [...e.dataTransfer.files];
+    if (files && files.length > 0) {
+      const existingFiles = data.fileList.map((f) => f.name);
+      files = files.filter((f) => !existingFiles.includes(f.name));
+
+      dispatch({ type: 'ADD_FILE_TO_LIST', files });
+      e.dataTransfer.clearData();
+      dispatch({ type: 'SET_DROP_DEPTH', dropDepth: 0 });
+      dispatch({ type: 'SET_IN_DROP_ZONE', inDropZone: false });
+    }
+
+    loadRef.current.style.display = 'block';
     const reader = new FileReader();
 
     reader.addEventListener('loadstart', () => {
@@ -51,6 +88,7 @@ const DragAndDrop = (props) => {
     });
     reader.addEventListener('loadend', () => {
       NProgress.done();
+      loadRef.current.style.display = 'none';
     });
 
     function renameFile(file) {
@@ -98,6 +136,7 @@ const DragAndDrop = (props) => {
         // console.log(res);
       } else {
         setVideo(result);
+        localStorage.setItem('video', result);
         localStorage.setItem('video', result);
       }
       // NEW ::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -168,19 +207,10 @@ const DragAndDrop = (props) => {
     // ::::::::::::::::::::::::::::::::::::::::::::::::: //
     // :::::::::::::::::::: END Custom Helper Functions  //
     // ::::::::::::::::::::::::::::::::::::::::::::::::: //
-
-    if (files && files.length > 0) {
-      const existingFiles = data.fileList.map((f) => f.name);
-      files = files.filter((f) => !existingFiles.includes(f.name));
-
-      dispatch({ type: 'ADD_FILE_TO_LIST', files });
-      e.dataTransfer.clearData();
-      dispatch({ type: 'SET_DROP_DEPTH', dropDepth: 0 });
-      dispatch({ type: 'SET_IN_DROP_ZONE', inDropZone: false });
-    }
   };
   return (
     <div
+      ref={dropZoneRef}
       className={
         data.inDropZone ? 'drag-drop-zone inside-drag-area' : 'drag-drop-zone'
       }
@@ -190,7 +220,27 @@ const DragAndDrop = (props) => {
       onDragLeave={(e) => handleDragLeave(e)}
       id="uploader"
     >
-      <p>Drag and Drop video here to get started!</p>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        flexWrap="wrap"
+        height="100%"
+      >
+        <Box>
+          {/* <GetStarted /> */}
+          <Typography className={classes.getStarted} component="p">
+            Drag &amp; drop files here to get started
+            <CloudUploadIcon style={{ width: '100px', height: '100px' }} />
+          </Typography>
+        </Box>
+        <CircularProgress
+          ref={loadRef}
+          size={100}
+          thickness={5}
+          className={classes.loader}
+        />
+      </Box>
     </div>
   );
 };
