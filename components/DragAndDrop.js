@@ -32,6 +32,11 @@ const DragAndDrop = (props) => {
     },
     loader: {
       display: 'none',
+      position: 'absolute',
+      zIndex: '20000',
+      top: 0,
+      left: 0,
+      opacity: 1,
     },
   }));
 
@@ -73,12 +78,11 @@ const DragAndDrop = (props) => {
       dispatch({ type: 'SET_IN_DROP_ZONE', inDropZone: false });
     }
 
+    NProgress.start();
     loadRef.current.style.display = 'block';
     const reader = new FileReader();
 
-    reader.addEventListener('loadstart', () => {
-      NProgress.start();
-    });
+    reader.addEventListener('loadstart', () => {});
     reader.addEventListener('progress', (evt) => {
       if (evt.lengthComputable) {
         const percentage = Math.round((evt.loaded * 100) / evt.total);
@@ -119,12 +123,13 @@ const DragAndDrop = (props) => {
       return ext[1];
     }
 
+    const fileType = returnExtension(files[0]);
+
     if (files[0].size > 5000000) {
-      // console.log('CHECHECHECHECHECKIIIIIINGGGG:');
-      return;
+      console.log('CHECHECHECHECHECKIIIIIINGGGG:');
+      // return;
     }
 
-    const fileType = returnExtension(files[0]);
     reader.addEventListener('load', (event) => {
       const { result } = event.target;
       // NEW ::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -133,12 +138,13 @@ const DragAndDrop = (props) => {
       if (fileType === 'json') {
         const res = JSON.parse(result);
         setJson(res);
+        localStorage.setItem('json', result);
         // console.log(res);
       } else {
         setVideo(result);
-        localStorage.setItem('video', result);
-        localStorage.setItem('video', result);
+        // localStorage.setItem('video', result);
       }
+
       // NEW ::::::::::::::::::::::::::::::::::::::::::::::::::::
       // NEW ::::::::::::::::::::::::::::::::::::::::::::::::::::
       // console.log(result);

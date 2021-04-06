@@ -43,8 +43,9 @@ const GetStarted = ({ video }) => {
       overflow: 'hidden',
     },
     card: {
-      margin: '0 10px',
+      margin: '0 10px 20px',
       minWidth: '350px',
+      maxWidth: '450px',
     },
   }));
 
@@ -53,14 +54,19 @@ const GetStarted = ({ video }) => {
   const DisplayGetStarted = () => {
     if (!video) {
       return (
-        <Box className={classes.wrapper}>
+        <Box
+          className={classes.wrapper}
+          display="flex"
+          justifyContent="center"
+          flexWrap="wrap"
+        >
           <Box className={classes.clip} />
           <Box className={classes.clip2} />
           <Box m={1} p={20}>
             <Typography variant="h4" component="h2" gutterBottom align="center">
               Getting Started
             </Typography>
-            <Box display="flex" justifyContent="center">
+            <Box display="flex" justifyContent="center" flexWrap="wrap">
               <Card className={classes.card}>
                 <CardActionArea>
                   <CardMedia
@@ -79,9 +85,9 @@ const GetStarted = ({ video }) => {
                       color="textSecondary"
                       component="p"
                     >
-                      Click on <CloudUploadIcon /> Upload Video in the upper
-                      right corner then drag and drop your media onto the
-                      dropzone. Videos must be under 5mb
+                      Drag and drop your video onto the dropzone, then drag your
+                      treatmentData.json onto the dropzone. You're ready to
+                      crop.
                     </Typography>
                   </CardContent>
                 </CardActionArea>
@@ -104,8 +110,9 @@ const GetStarted = ({ video }) => {
                       color="textSecondary"
                       component="p"
                     >
-                      Use the inputs at the top of the page to scale your crop
-                      area. Once you're satisfied, start exporting!
+                      Use the inputs at the top of the page to scale, set the
+                      length and crop area. Once you're satisfied, start
+                      exporting!
                     </Typography>
                   </CardContent>
                 </CardActionArea>
@@ -130,7 +137,7 @@ const GetStarted = ({ video }) => {
                     >
                       Export video, gif or jpgs by simply pressing the desired
                       export buttons. Exporting to GIF is a great preview for
-                      the video, and it will loop! How easy is that?
+                      the video! Bonus: it loops!
                     </Typography>
                   </CardContent>
                 </CardActionArea>

@@ -51,7 +51,7 @@ export default function Preview({
           gutterBottom
           align="center"
         >
-          Preview &amp; Export
+          Preview &amp; Download
         </Typography>
         <Box display="flex" justifyContent="center" flexWrap="wrap">
           {gif && (

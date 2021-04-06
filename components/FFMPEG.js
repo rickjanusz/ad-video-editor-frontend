@@ -160,8 +160,8 @@ export default function FFMPEG({ props }) {
     },
     buttonStyle: {
       pointerEvents: 'auto',
-      color: theme.palette.common.white,
-      borderColor: theme.palette.common.white,
+      // color: theme.palette.common.white,
+      // borderColor: theme.palette.common.white,
       margin: 5,
     },
   }));
@@ -211,7 +211,6 @@ export default function FFMPEG({ props }) {
   function handleStop() {
     getPosition();
   }
-
   function saveFrame() {
     vidRef.current.addEventListener('seeked', (event) => {
       const num = event.srcElement.currentTime;
@@ -364,7 +363,8 @@ export default function FFMPEG({ props }) {
                 <Box display="flex" justifyContent="center">
                   <Button
                     className={classes.buttonStyle}
-                    variant="outlined"
+                    color="primary"
+                    variant="contained"
                     size="large"
                     type="button"
                     endIcon={<LaunchIcon />}
@@ -377,7 +377,8 @@ export default function FFMPEG({ props }) {
 
                   <Button
                     className={classes.buttonStyle}
-                    variant="outlined"
+                    color="primary"
+                    variant="contained"
                     size="large"
                     type="button"
                     endIcon={<LaunchIcon />}
@@ -403,7 +404,8 @@ export default function FFMPEG({ props }) {
 
                   <Button
                     className={classes.buttonStyle}
-                    variant="outlined"
+                    color="primary"
+                    variant="contained"
                     size="large"
                     type="button"
                     endIcon={<LaunchIcon />}

@@ -2,6 +2,7 @@ import Box from '@material-ui/core/Box';
 import { makeStyles, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { useTheme } from '@material-ui/core/styles';
+import { PlayCircleFilledWhite } from '@material-ui/icons';
 import GetStarted from './GetStarted';
 
 export default function Footer({ video }) {
@@ -33,8 +34,11 @@ export default function Footer({ video }) {
     },
     wrapper: {
       position: 'relative',
-      // padding: theme.spacing(8),
       overflow: 'hidden',
+    },
+    footer: {
+      backgroundColor: theme.palette.primary.main,
+      color: 'white',
     },
     card: {
       margin: '0 20px',
@@ -61,7 +65,12 @@ export default function Footer({ video }) {
     );
   };
   return (
-    <Box display="flex" justifyContent="center" m={6}>
+    <Box
+      display="flex"
+      justifyContent="center"
+      p={6}
+      className={classes.footer}
+    >
       <p>Footer Content Here</p>
     </Box>
   );
