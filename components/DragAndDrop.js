@@ -126,7 +126,7 @@ const DragAndDrop = (props) => {
     const fileType = returnExtension(files[0]);
 
     if (files[0].size > 5000000) {
-      console.log('CHECHECHECHECHECKIIIIIINGGGG:');
+      // console.log('CHECHECHECHECHECKIIIIIINGGGG:');
       // return;
     }
 
@@ -176,7 +176,7 @@ const DragAndDrop = (props) => {
     // :::::::::::::::::::: BEGIN Custom Helper Functions  //
     // ::::::::::::::::::::::::::::::::::::::::::::::::::: //
 
-    console.log('FILETPYE: ', fileType);
+    // console.log('FILETPYE: ', fileType);
 
     if (fileType === 'mp4') {
       // console.log('ITS NOT MP4', files[0]);

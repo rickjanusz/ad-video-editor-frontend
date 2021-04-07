@@ -48,8 +48,8 @@ export default function ControlPanel(props) {
       transform: 'rotate(90deg)',
     },
     appBar: {
-      background: theme.palette.secondary.mainGradient,
-      // backgroundColor: theme.palette.background.paper,
+      // background: theme.palette.secondary.mainGradient,
+      backgroundColor: theme.palette.background.paper,
       paddingTop: theme.spacing(2),
       paddingBottom: theme.spacing(0),
       marginBottom: theme.spacing(0),
@@ -221,7 +221,6 @@ export default function ControlPanel(props) {
           </Grid>
         </Grid>
       </form>
-      <Divider />
     </Box>
   );
 }

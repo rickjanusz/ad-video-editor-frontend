@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'; // import React, { useState, imagetgif from "react";
+import React, { useEffect, useRef, useState } from 'react'; // import React, { useState, imagetgif from "react";
 import { fetchFile } from '@ffmpeg/ffmpeg';
 import Draggable from 'react-draggable';
 import NProgress from 'nprogress';
@@ -8,13 +8,10 @@ import { Button, Box, makeStyles, useTheme, Divider } from '@material-ui/core';
 import LaunchIcon from '@material-ui/icons/Launch';
 
 import { gsap } from 'gsap';
+
 import DragAndDrop from './DragAndDrop';
 import Preview from './Preview';
 import GetStarted from './GetStarted';
-
-// import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-// gsap.registerPlugin(ScrollTrigger)
 
 export default function FFMPEG({ props }) {
   const {
@@ -146,7 +143,7 @@ export default function FFMPEG({ props }) {
     },
     dropHere: {
       position: 'absolute',
-      top: 125,
+      top: 150,
       left: 0,
       zIndex: 1,
       height: 'calc(100% - 125px)',
@@ -156,6 +153,7 @@ export default function FFMPEG({ props }) {
     videoBox: {
       position: 'relative',
       zIndex: 2,
+      top: '100px',
       pointerEvents: 'none',
     },
     buttonStyle: {
@@ -163,6 +161,16 @@ export default function FFMPEG({ props }) {
       // color: theme.palette.common.white,
       // borderColor: theme.palette.common.white,
       margin: 5,
+    },
+    buttonGroup: {
+      position: 'fixed',
+      top: 110,
+      left: 0,
+      zIndex: 1000,
+      padding: '10px 0',
+      backgroundColor: theme.palette.background.paper,
+      // background: theme.palette.secondary.mainGradient,
+      width: '100%',
     },
   }));
 
@@ -174,10 +182,10 @@ export default function FFMPEG({ props }) {
 
   function makeEven(num) {
     if (num % 2 !== 0) {
-      console.log('NOT EVEN', num, Math.floor(num + 1));
+      // console.log('NOT EVEN', num, Math.floor(num + 1));
       return Math.floor(num + 1);
     }
-    console.log('EVEN', num);
+    // console.log('EVEN', num);
     return Math.floor(num);
   }
   // ////////////////////
@@ -189,7 +197,7 @@ export default function FFMPEG({ props }) {
     const childDims = obj.current.getBoundingClientRect();
     const parentPos = objParent.current.getBoundingClientRect();
     const vidPos = vidRef.current.getBoundingClientRect();
-    console.log(vidPos);
+    // console.log(vidPos);
     const childOffset = {
       top: parseInt((childDims.top - parentPos.top) / scale),
       left: parseInt((childDims.left - parentPos.left) / scale),
@@ -199,7 +207,7 @@ export default function FFMPEG({ props }) {
       vidHeight: makeEven(parseInt(vidPos.height / scale)),
     };
 
-    console.log('OFFSET', childOffset);
+    // console.log('OFFSET', childOffset);
     return childOffset;
   }
   //   const dims = vidRef.current.getBoundingClientRect();
@@ -219,12 +227,26 @@ export default function FFMPEG({ props }) {
     });
   }
 
+  const buttonGroup = useRef();
+  const triggerRef = useRef();
+
+  function handleScroll(e) {
+    const element = e.target;
+    console.log(element);
+  }
+
   useEffect(() => {
     if (video) {
       // getVideoSize();
       // videoLoaded();
       saveFrame();
     }
+
+    // gsap.to(triggeredRef.current, {
+    //   duration: 1,
+    //   width: 100,
+    //   backgroundColor: 'green',
+    // });
   });
 
   const convertVideoToMP4 = async (vid, ext) => {
@@ -270,11 +292,11 @@ export default function FFMPEG({ props }) {
       }
     });
 
-    console.log(`DIMSSSSS: ${dims.width}:${dims.height}`);
+    // console.log(`DIMSSSSS: ${dims.width}:${dims.height}`);
 
-    const vH = makeEven(parseInt(dims.vidHeight / scale));
-    const vW = makeEven(parseInt(dims.vidWidth / scale));
-    console.log('VHHHHH: ', vH, vW);
+    // const vH = makeEven(parseInt(dims.vidHeight / scale));
+    // const vW = makeEven(parseInt(dims.vidWidth / scale));
+    // console.log('VHHHHH: ', vH, vW);
     // Run the FFMpeg command
 
     await ffmpeg.run(
@@ -305,6 +327,8 @@ export default function FFMPEG({ props }) {
   return (
     <>
       <Box className={classes.wrapper}>
+        <Box className={classes.triggerRef} ref={triggerRef} />
+
         {video && (
           <Box
             display="flex"
@@ -359,7 +383,7 @@ export default function FFMPEG({ props }) {
                   </span>
                 </Box>
               </Box>
-              <div>
+              <div className={classes.buttonGroup} ref={buttonGroup}>
                 <Box display="flex" justifyContent="center">
                   <Button
                     className={classes.buttonStyle}
