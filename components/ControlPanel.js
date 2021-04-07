@@ -13,6 +13,7 @@ import {
   useTheme,
 } from '@material-ui/core/';
 import CropOutlinedIcon from '@material-ui/icons/CropOutlined';
+import { useState } from 'react';
 import { getFieldData } from '../utils/processData';
 
 export default function ControlPanel(props) {
@@ -95,6 +96,7 @@ export default function ControlPanel(props) {
     ];
   }
 
+  const [size, setSize] = useState();
   return (
     <Box component="main" maxWidth="xl" className={classes.appBar}>
       <form className={classes.form}>
@@ -184,7 +186,6 @@ export default function ControlPanel(props) {
               <InputLabel id="standard">Select A Size</InputLabel>
               <Select
                 name="selectASize"
-                value={`${cropWidth}x${cropHeight}`}
                 onChange={(e) => {
                   function hasWhiteSpace(s) {
                     return s.indexOf(' ') >= 0;
@@ -199,12 +200,14 @@ export default function ControlPanel(props) {
                     setCropWidth(b[0]);
                     setCropHeight(b[1]);
                   }
-
+                  setSize(e.target.value);
                   // console.log(e.target.value);
                   // localStorage.setItem('scale', e.target.value);
                 }}
+                value={size}
               >
                 {options.map((option) => (
+                  // console.log(option);
                   <MenuItem value={`${option}`} key={option}>
                     {option}
                   </MenuItem>
