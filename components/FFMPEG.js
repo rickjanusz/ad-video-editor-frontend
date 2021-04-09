@@ -3,41 +3,37 @@ import { fetchFile } from '@ffmpeg/ffmpeg';
 import Draggable from 'react-draggable';
 import NProgress from 'nprogress';
 import PropTypes from 'prop-types';
-import { debounce } from 'debounce';
-import { Button, Box, makeStyles, useTheme, Divider } from '@material-ui/core';
+import { Button, Box, useTheme, Divider } from '@material-ui/core';
 import LaunchIcon from '@material-ui/icons/Launch';
-
-import { gsap } from 'gsap';
+import { debounce } from 'debounce';
 
 import DragAndDrop from './DragAndDrop';
 import Preview from './Preview';
 import GetStarted from './GetStarted';
+import useFFMPEGStyles from './styles/useFFMPEGStyles';
 
+// import { gsap } from 'gsap';
 export default function FFMPEG({ props }) {
   const {
-    // FFMPEG state
-    video,
-    setVideo,
-    crop,
-    setCrop,
-    gif,
-    setGif,
-    jpg,
-    setJpg,
-    // png,
-    // setPng,
-    time,
-    setTime,
     ffmpeg,
-    filename,
-    setFilename,
+    // setCropHeight,
     cropHeight,
+    // setCropWidth,
     cropWidth,
     length,
     scale,
     json,
     setJson,
+    video,
+    setVideo,
+    filename,
+    setFilename,
   } = props;
+
+  const [crop, setCrop] = useState();
+  const [gif, setGif] = useState();
+  const [jpg, setJpg] = useState();
+  const [time, setTime] = useState(0);
 
   const reducer = (state, action) => {
     switch (action.type) {
@@ -59,145 +55,30 @@ export default function FFMPEG({ props }) {
   });
 
   const theme = useTheme();
-  const useStyles = makeStyles(() => ({
-    root: {
-      '& > *': {
-        margin: theme.spacing(1),
-        // width: '25ch',
-      },
-    },
-    paper: {
-      marginTop: theme.spacing(2),
-      marginBottom: theme.spacing(2),
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    },
-    time: {
-      backgroundColor: theme.palette.secondary.light,
-      padding: '10px',
-      borderRadius: '0 0 5px 5px',
-    },
-    videoContainer: {
-      maxWidth: '1920px',
-      maxHeight: '1080px',
-      position: 'relative',
-      resize: 'both',
-      overflow: 'auto',
-    },
-    videoPolaroid: {
-      backgroundColor: theme.palette.background.paper,
-      border: `15px solid ${theme.palette.background.paper}`,
-      marginBottom: '40px;',
-    },
-    draggableParent: {
-      width: '100%',
-      height: '100%',
-      overflow: 'hidden',
-      position: 'absolute',
-      zIndex: 2,
-      top: 0,
-      pointerEvents: 'none',
-    },
-    draggy: {
-      width: '150px',
-      height: '150px',
-      resize: 'both',
-      overflow: 'auto',
-      border: '3px dotted rgba(255, 255, 255, 0.5)',
-      boxShadow: '0 0 0px 2000px rgba(0, 0, 0, 0.7)',
-    },
-    handle: {
-      height: '100%',
-      pointerEvents: 'auto',
-    },
-    clip: {
-      backgroundColor: theme.palette.secondary.dark,
-      opacity: '.1',
-      position: 'absolute',
-      top: 0,
-      zIndex: -2,
-      left: '0',
-      width: '2000px',
-      height: '2000px',
-      clipPath: 'polygon(21% 0%, 100% 10%,10% 100%, 0% 15%)',
-      pointerEvents: 'none',
-    },
-    clip2: {
-      backgroundColor: theme.palette.secondary.dark,
-      opacity: '.5',
-      position: 'absolute',
-      top: 0,
-      zIndex: -2,
-      left: 0,
-      width: '2000px',
-      height: '2000px',
-      clipPath: 'polygon(0% 0%, 0% 10%,100% 30%, 50% 100%)',
-      pointerEvents: 'none',
-    },
-    wrapper: {
-      position: 'relative',
-      padding: theme.spacing(25),
-      overflow: 'hidden',
-      minHeight: '800px',
-    },
-    dropHere: {
-      position: 'absolute',
-      top: 150,
-      left: 0,
-      zIndex: 1,
-      height: 'calc(100% - 125px)',
-      width: '100%',
-      pointerEvents: 'auto',
-    },
-    videoBox: {
-      position: 'relative',
-      zIndex: 2,
-      top: '100px',
-      pointerEvents: 'none',
-    },
-    buttonStyle: {
-      pointerEvents: 'auto',
-      // color: theme.palette.common.white,
-      // borderColor: theme.palette.common.white,
-      margin: 5,
-    },
-    buttonGroup: {
-      position: 'fixed',
-      top: 110,
-      left: 0,
-      zIndex: 1000,
-      padding: '10px 0',
-      backgroundColor: theme.palette.background.paper,
-      // background: theme.palette.secondary.mainGradient,
-      width: '100%',
-    },
-  }));
+  useFFMPEGStyles(theme);
 
-  const obj = useRef();
-  const objParent = useRef();
+  const dragRef = useRef();
+  const dragParent = useRef();
   const vidRef = useRef();
   const timeRef = useRef();
-  const classes = useStyles();
+  const widthRef = useRef();
+  const heightRef = useRef();
+  const classes = useFFMPEGStyles();
 
   function makeEven(num) {
     if (num % 2 !== 0) {
-      // console.log('NOT EVEN', num, Math.floor(num + 1));
       return Math.floor(num + 1);
     }
-    // console.log('EVEN', num);
     return Math.floor(num);
   }
   // ////////////////////
   // GET POSITION OF CROPPER:
   // ////////////////////
 
-  // function getVideoSize() {
   function getPosition() {
-    const childDims = obj.current.getBoundingClientRect();
-    const parentPos = objParent.current.getBoundingClientRect();
+    const childDims = dragRef.current.getBoundingClientRect();
+    const parentPos = dragParent.current.getBoundingClientRect();
     const vidPos = vidRef.current.getBoundingClientRect();
-    // console.log(vidPos);
     const childOffset = {
       top: parseInt((childDims.top - parentPos.top) / scale),
       left: parseInt((childDims.left - parentPos.left) / scale),
@@ -206,19 +87,15 @@ export default function FFMPEG({ props }) {
       vidWidth: makeEven(parseInt(vidPos.width / scale)),
       vidHeight: makeEven(parseInt(vidPos.height / scale)),
     };
-
-    // console.log('OFFSET', childOffset);
+    console.log(childDims);
     return childOffset;
   }
-  //   const dims = vidRef.current.getBoundingClientRect();
-  //   console.log(dims.height);
-  //   vidRef.current.style.height = `${dims.height * scale}px`;
-  // }
 
   // Drag & Drop callback
   function handleStop() {
     getPosition();
   }
+
   function saveFrame() {
     vidRef.current.addEventListener('seeked', (event) => {
       const num = event.srcElement.currentTime;
@@ -227,27 +104,20 @@ export default function FFMPEG({ props }) {
     });
   }
 
-  const buttonGroup = useRef();
-  const triggerRef = useRef();
-
-  function handleScroll(e) {
-    const element = e.target;
-    console.log(element);
-  }
-
   useEffect(() => {
     if (video) {
-      // getVideoSize();
-      // videoLoaded();
       saveFrame();
-    }
 
-    // gsap.to(triggeredRef.current, {
-    //   duration: 1,
-    //   width: 100,
-    //   backgroundColor: 'green',
-    // });
-  });
+      const ro = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          widthRef.current.innerHTML = entry.borderBoxSize[0].inlineSize;
+          heightRef.current.innerHTML = entry.borderBoxSize[0].blockSize;
+        }
+      });
+
+      ro.observe(dragRef.current);
+    }
+  }, [video]);
 
   const convertVideoToMP4 = async (vid, ext) => {
     ffmpeg.FS('writeFile', `input.${ext}`, await fetchFile(vid));
@@ -259,17 +129,7 @@ export default function FFMPEG({ props }) {
       }
     });
     // Video
-    await ffmpeg.run(
-      '-i',
-      `input.${ext}`,
-      // TODO: Figure out 265 codec...
-      // TODO: for enhanced optimization
-      // "-vcodec",
-      // "libx265",
-      // "-crf",
-      // "28",
-      'output.mp4'
-    );
+    await ffmpeg.run('-i', `input.${ext}`, 'output.mp4');
     const fileBlob = ffmpeg.FS('readFile', 'output.mp4');
     const url = URL.createObjectURL(
       new Blob([fileBlob.buffer], {
@@ -292,13 +152,6 @@ export default function FFMPEG({ props }) {
       }
     });
 
-    // console.log(`DIMSSSSS: ${dims.width}:${dims.height}`);
-
-    // const vH = makeEven(parseInt(dims.vidHeight / scale));
-    // const vW = makeEven(parseInt(dims.vidWidth / scale));
-    // console.log('VHHHHH: ', vH, vW);
-    // Run the FFMpeg command
-
     await ffmpeg.run(
       '-i',
       'test.mp4',
@@ -320,15 +173,12 @@ export default function FFMPEG({ props }) {
       new Blob([fileBlob.buffer], { type: `${mimType}`, autoRevoke: false })
     );
 
-    // localStorage.setItem(ext, url);
     stateFunc(url);
   }
 
   return (
     <>
       <Box className={classes.wrapper}>
-        <Box className={classes.triggerRef} ref={triggerRef} />
-
         {video && (
           <Box
             display="flex"
@@ -351,7 +201,7 @@ export default function FFMPEG({ props }) {
                     src={video}
                     style={{ pointerEvents: 'auto' }}
                   />
-                  <div className={classes.draggableParent} ref={objParent}>
+                  <div className={classes.draggableParent} ref={dragParent}>
                     <Draggable
                       axis="both"
                       handle=".handle"
@@ -365,7 +215,7 @@ export default function FFMPEG({ props }) {
                     >
                       <div
                         className={classes.draggy}
-                        ref={obj}
+                        ref={dragRef}
                         style={{
                           height: `${Math.floor(cropHeight * scale)}px`,
                           width: `${Math.floor(cropWidth * scale)}px`,
@@ -381,9 +231,13 @@ export default function FFMPEG({ props }) {
                   <span id="current" ref={timeRef}>
                     0.00
                   </span>
+                  <span id="currentSize">
+                    Width: <span ref={widthRef}>300</span>
+                    Height: <span ref={heightRef}>600</span>
+                  </span>
                 </Box>
               </Box>
-              <div className={classes.buttonGroup} ref={buttonGroup}>
+              <div className={classes.buttonGroup}>
                 <Box display="flex" justifyContent="center">
                   <Button
                     className={classes.buttonStyle}
@@ -412,19 +266,6 @@ export default function FFMPEG({ props }) {
                   >
                     Export Jpg
                   </Button>
-
-                  {/* <Button
-                    className={classes.buttonStyle}
-                    variant="outlined"
-                    size="large"
-                    type="button"
-                    endIcon={<LaunchIcon />}
-                    onClick={() => {
-                      exportFormat('image/png', length, setPng, 'png');
-                    }}
-                  >
-                    Export Png
-                  </Button> */}
 
                   <Button
                     className={classes.buttonStyle}
@@ -464,7 +305,6 @@ export default function FFMPEG({ props }) {
         crop={crop}
         gif={gif}
         jpg={jpg}
-        // png={png}
         filename={filename}
         cropHeight={cropHeight}
         cropWidth={cropWidth}
@@ -476,23 +316,15 @@ export default function FFMPEG({ props }) {
 
 FFMPEG.propTypes = {
   props: PropTypes.any,
-  video: PropTypes.any,
-  setVideo: PropTypes.any,
-  crop: PropTypes.any,
-  setCrop: PropTypes.any,
-  gif: PropTypes.any,
-  setGif: PropTypes.any,
-  jpg: PropTypes.any,
-  setJpg: PropTypes.any,
-  time: PropTypes.any,
-  setTime: PropTypes.any,
   ffmpeg: PropTypes.any,
-  filename: PropTypes.any,
-  setFilename: PropTypes.any,
   cropHeight: PropTypes.any,
   cropWidth: PropTypes.any,
   length: PropTypes.any,
   scale: PropTypes.any,
   json: PropTypes.any,
   setJson: PropTypes.any,
+  video: PropTypes.any,
+  setVideo: PropTypes.any,
+  filename: PropTypes.any,
+  setFilename: PropTypes.any,
 };

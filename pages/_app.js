@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { createFFmpeg } from '@ffmpeg/ffmpeg';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/styles';
+import { SettingsInputComponentSharp } from '@material-ui/icons';
 import Layout from '../components/layout';
 import withData from '../lib/withData';
 import Header from '../components/Header';
@@ -21,21 +22,16 @@ Router.events.on('routeChangeError', () => NProgress.done());
 const ffmpeg = createFFmpeg({ log: false });
 
 function MyApp({ Component, apollo }) {
+  console.log('I render 😁');
   const [ready, setReady] = useState('false');
-  const [video, setVideo] = useState();
-  const [crop, setCrop] = useState();
-  const [gif, setGif] = useState();
-  const [jpg, setJpg] = useState();
-  const [json, setJson] = useState();
-  // const [png, setPng] = useState();
-  const [filename, setFilename] = useState();
-  const [cropWidth, setCropWidth] = useState(336);
-  const [cropHeight, setCropHeight] = useState(280);
-  const [time, setTime] = useState(0);
-  const [length, setLength] = useState(2);
-  const [scale, setScale] = useState(1.2);
 
-  // console.log(fieldData);
+  const [video, setVideo] = useState();
+  const [filename, setFilename] = useState();
+  const [cropWidth, setCropWidth] = useState(300);
+  const [cropHeight, setCropHeight] = useState(250);
+  const [length, setLength] = useState(1);
+  const [scale, setScale] = useState(1);
+  const [json, setJson] = useState();
 
   useEffect(() => {
     const localStorageItems = [
@@ -45,9 +41,6 @@ function MyApp({ Component, apollo }) {
       ['cropHeight', setCropHeight],
       ['length', setLength],
       ['scale', setScale],
-      // ["crop", setCrop],
-      // ['gif', setGif],
-      // ['jpg', setJpg],
     ];
 
     localStorageItems.forEach((item) => {
@@ -89,29 +82,19 @@ function MyApp({ Component, apollo }) {
             json={json}
           />
           <Component
-            ready={ready}
-            setReady={setReady}
-            video={video}
-            setVideo={setVideo}
-            crop={crop}
-            setCrop={setCrop}
-            gif={gif}
-            setGif={setGif}
-            jpg={jpg}
-            setJpg={setJpg}
-            // png={png}
-            // setPng={setPng}
-            time={time}
-            setTime={setTime}
-            ffmpeg={ffmpeg}
             filename={filename}
             setFilename={setFilename}
+            ffmpeg={ffmpeg}
+            setCropWidth={setCropWidth}
             cropWidth={cropWidth}
+            setCropHeight={setCropHeight}
             cropHeight={cropHeight}
             length={length}
             scale={scale}
             json={json}
             setJson={setJson}
+            video={video}
+            setVideo={setVideo}
           />
           <Footer />
         </ThemeProvider>

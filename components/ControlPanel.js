@@ -7,13 +7,12 @@ import {
   MenuItem,
   Grid,
   Avatar,
-  Divider,
   Box,
   makeStyles,
   useTheme,
 } from '@material-ui/core/';
 import CropOutlinedIcon from '@material-ui/icons/CropOutlined';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { getFieldData } from '../utils/processData';
 
 export default function ControlPanel(props) {
@@ -97,6 +96,7 @@ export default function ControlPanel(props) {
   }
 
   const [size, setSize] = useState();
+
   return (
     <Box component="main" maxWidth="xl" className={classes.appBar}>
       <form className={classes.form}>
