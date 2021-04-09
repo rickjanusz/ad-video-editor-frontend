@@ -109,6 +109,12 @@ const useFFMPEGStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     width: '100%',
   },
+  dimensions: {
+    float: 'right',
+  },
+  widthDim: {
+    marginRight: '10px',
+  },
 }));
 
 export default useFFMPEGStyles;

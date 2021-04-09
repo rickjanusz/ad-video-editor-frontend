@@ -63,13 +63,16 @@ const DragAndDrop = (props) => {
     NProgress.start();
     const reader = new FileReader();
 
-    reader.addEventListener('loadstart', () => {});
-    reader.addEventListener('progress', (data) => {
-      if (data.lengthComputable) {
-        const percentage = Math.round((data.loaded * 100) / data.total);
+    function getProgress(theData) {
+      if (theData.lengthComputable) {
+        const percentage = Math.round((theData.loaded * 100) / theData.total);
 
         NProgress.set(percentage);
       }
+    }
+    reader.addEventListener('loadstart', () => {});
+    reader.addEventListener('progress', () => {
+      getProgress(data);
     });
     reader.addEventListener('loadend', () => {
       NProgress.done();

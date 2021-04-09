@@ -162,6 +162,7 @@ export default function FFMPEG({ props }) {
       `scale='trunc((ih/${scale})*dar/2)*2:trunc((ih/${scale})/2)*2',setsar=1/1,crop='${dims.width}:${dims.height}:${dims.left}:${dims.top}':exact=1`,
       '-c:a',
       'copy',
+      '-an',
       `out.${ext}`
     );
 
@@ -230,8 +231,11 @@ export default function FFMPEG({ props }) {
                   <span id="current" ref={timeRef}>
                     0.00
                   </span>
-                  <span id="currentSize">
-                    Width: <span ref={widthRef}>300</span>
+                  <span id="currentSize" className={classes.dimensions}>
+                    Width:{' '}
+                    <span className={classes.widthDim} ref={widthRef}>
+                      300
+                    </span>
                     Height: <span ref={heightRef}>600</span>
                   </span>
                 </Box>

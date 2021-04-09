@@ -88,6 +88,8 @@ export default function ControlPanel(props) {
               label="Crop Width"
               name="cropWidth"
               fullWidth
+              error={cropWidth <= 40}
+              helperText="Minimum value: 40"
               autoComplete="off"
               type="number"
               value={cropWidth}
@@ -105,6 +107,8 @@ export default function ControlPanel(props) {
               name="cropHeight"
               fullWidth
               type="number"
+              error={cropHeight <= 40}
+              helperText="Minimum value: 40"
               autoComplete="off"
               value={cropHeight}
               onChange={(e) => {
@@ -123,6 +127,8 @@ export default function ControlPanel(props) {
               fullWidth
               type="number"
               autoComplete="off"
+              error={length < 1}
+              helperText="Minimum value: 1"
               value={length}
               onChange={(e) => {
                 setLength(e.target.value);
@@ -139,6 +145,8 @@ export default function ControlPanel(props) {
               fullWidth
               type="number"
               autoComplete="off"
+              error={scale < 0.1}
+              helperText="Minimum value: .1"
               value={scale}
               onChange={(e) => {
                 setScale(e.target.value);
