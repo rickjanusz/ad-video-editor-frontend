@@ -2,7 +2,6 @@ import Box from '@material-ui/core/Box';
 import { makeStyles, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { useTheme } from '@material-ui/core/styles';
-import { PlayCircleFilledWhite } from '@material-ui/icons';
 import GetStarted from './GetStarted';
 
 export default function Footer({ video }) {

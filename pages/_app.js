@@ -22,7 +22,7 @@ Router.events.on('routeChangeError', () => NProgress.done());
 const ffmpeg = createFFmpeg({ log: false });
 
 function MyApp({ Component, apollo }) {
-  console.log('I render 😁');
+  // console.log('I render 😁');
   const [ready, setReady] = useState('false');
 
   const [video, setVideo] = useState();

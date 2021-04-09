@@ -55,7 +55,7 @@ export default function FFMPEG({ props }) {
   });
 
   const theme = useTheme();
-  useFFMPEGStyles(theme);
+  const classes = useFFMPEGStyles(theme);
 
   const dragRef = useRef();
   const dragParent = useRef();
@@ -63,7 +63,6 @@ export default function FFMPEG({ props }) {
   const timeRef = useRef();
   const widthRef = useRef();
   const heightRef = useRef();
-  const classes = useFFMPEGStyles();
 
   function makeEven(num) {
     if (num % 2 !== 0) {
@@ -87,7 +86,7 @@ export default function FFMPEG({ props }) {
       vidWidth: makeEven(parseInt(vidPos.width / scale)),
       vidHeight: makeEven(parseInt(vidPos.height / scale)),
     };
-    console.log(childDims);
+    // console.log(childDims);
     return childOffset;
   }
 

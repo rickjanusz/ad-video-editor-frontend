@@ -8,12 +8,13 @@ import {
   Grid,
   Avatar,
   Box,
-  makeStyles,
+  useStyles,
   useTheme,
 } from '@material-ui/core/';
 import CropOutlinedIcon from '@material-ui/icons/CropOutlined';
 import React, { useState } from 'react';
 import { getFieldData } from '../utils/processData';
+import useControlPanelStyles from './styles/useControlPanelStyles';
 
 export default function ControlPanel(props) {
   //   console.log(props.theme);
@@ -30,39 +31,7 @@ export default function ControlPanel(props) {
   } = props;
 
   const theme = useTheme();
-  const useStyles = makeStyles(() => ({
-    paper: {
-      marginTop: theme.spacing(0),
-      marginBottom: theme.spacing(3),
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    },
-    avatar: {
-      margin: theme.spacing(0),
-      backgroundColor: theme.palette.primary.main,
-      border: '2px solid rgba(234, 234, 234, 1)',
-      height: 70,
-      width: 70,
-      transform: 'rotate(90deg)',
-    },
-    appBar: {
-      // background: theme.palette.secondary.mainGradient,
-      backgroundColor: theme.palette.background.paper,
-      paddingTop: theme.spacing(2),
-      paddingBottom: theme.spacing(0),
-      marginBottom: theme.spacing(0),
-      position: 'fixed',
-      zIndex: 3,
-      width: '100vw',
-    },
-    headerIcon: {
-      width: 32,
-      height: 32,
-    },
-  }));
-
-  const classes = useStyles();
+  const classes = useControlPanelStyles(theme);
 
   let options = [];
   if (json) {
