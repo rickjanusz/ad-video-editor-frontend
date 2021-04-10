@@ -1,4 +1,4 @@
-import { Box, makeStyles, Typography, Button } from '@material-ui/core';
+import { Box, Typography, Button } from '@material-ui/core';
 import React from 'react';
 import SystemUpdateAltIcon from '@material-ui/icons/SystemUpdateAlt';
 import PropTypes from 'prop-types';

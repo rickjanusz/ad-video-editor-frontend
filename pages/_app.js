@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import { createFFmpeg } from '@ffmpeg/ffmpeg';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/styles';
-import { SettingsInputComponentSharp } from '@material-ui/icons';
 import Layout from '../components/layout';
 import withData from '../lib/withData';
 import Header from '../components/Header';
@@ -22,7 +21,6 @@ Router.events.on('routeChangeError', () => NProgress.done());
 const ffmpeg = createFFmpeg({ log: false });
 
 function MyApp({ Component, apollo }) {
-  // console.log('I render 😁');
   const [ready, setReady] = useState('false');
 
   const [video, setVideo] = useState();

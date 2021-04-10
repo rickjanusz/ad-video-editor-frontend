@@ -52,6 +52,7 @@ const DragAndDrop = (props) => {
     let files = [...e.dataTransfer.files];
     if (files && files.length > 0) {
       const existingFiles = data.fileList.map((f) => f.name);
+      console.log(existingFiles);
       files = files.filter((f) => !existingFiles.includes(f.name));
 
       dispatch({ type: 'ADD_FILE_TO_LIST', files });
@@ -78,6 +79,10 @@ const DragAndDrop = (props) => {
       NProgress.done();
     });
 
+    reader.addEventListener('error', (err) => {
+      console.log('ERROR: ', err);
+    });
+
     function renameFile(file) {
       const fn = file.name.split('.');
       const name = fn[0];
@@ -97,6 +102,7 @@ const DragAndDrop = (props) => {
     //   return sizeWt;
     // }
     function checkFileName(file) {
+      // console.log(files);
       return file.name;
     }
 
@@ -115,6 +121,8 @@ const DragAndDrop = (props) => {
 
     reader.addEventListener('load', (event) => {
       const { result } = event.target;
+      console.log(event);
+
       if (fileType === 'json') {
         const res = JSON.parse(result);
         setJson(res);
@@ -125,6 +133,24 @@ const DragAndDrop = (props) => {
         // localStorage.setItem('video', result);
       }
     });
+
+    // async function readToArrayBuffer(file) {
+    //   const temporaryFileReader = new FileReader();
+
+    //   return new Promise((resolve, reject) => {
+    //     temporaryFileReader.onerror = () => {
+    //       temporaryFileReader.abort();
+    //       reject(new DOMException('Problem parsing input file.'));
+    //     };
+
+    //     temporaryFileReader.onload = () => {
+    //       resolve(temporaryFileReader.result);
+    //     };
+    //     temporaryFileReader.readAsArrayBuffer(file);
+    //   });
+    // }
+
+    // readToArrayBuffer(files[0]).then((res) => console.log(res));
 
     if (fileType === 'mp4') {
       // console.log('ITS NOT MP4', files[0]);

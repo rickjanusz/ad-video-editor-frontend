@@ -16,9 +16,7 @@ import useFFMPEGStyles from './styles/useFFMPEGStyles';
 export default function FFMPEG({ props }) {
   const {
     ffmpeg,
-    // setCropHeight,
     cropHeight,
-    // setCropWidth,
     cropWidth,
     length,
     scale,
@@ -109,8 +107,12 @@ export default function FFMPEG({ props }) {
 
       const ro = new ResizeObserver((entries) => {
         for (const entry of entries) {
-          widthRef.current.innerHTML = entry.borderBoxSize[0].inlineSize;
-          heightRef.current.innerHTML = entry.borderBoxSize[0].blockSize;
+          widthRef.current.innerHTML = Math.round(
+            entry.borderBoxSize[0].inlineSize
+          );
+          heightRef.current.innerHTML = Math.round(
+            entry.borderBoxSize[0].blockSize
+          );
         }
       });
 
@@ -253,7 +255,7 @@ export default function FFMPEG({ props }) {
                       exportFormat('image/gif', length, setGif, 'gif');
                     }}
                   >
-                    Export GIF
+                    Crop GIF
                   </Button>
 
                   <Button
@@ -267,7 +269,7 @@ export default function FFMPEG({ props }) {
                       exportFormat('image/jpg', length, setJpg, 'jpg');
                     }}
                   >
-                    Export Jpg
+                    Crop Jpg
                   </Button>
 
                   <Button
@@ -281,7 +283,7 @@ export default function FFMPEG({ props }) {
                       exportFormat('video/mp4', length, setCrop, 'crop');
                     }}
                   >
-                    Export MP4
+                    Crop MP4
                   </Button>
                 </Box>
               </div>
