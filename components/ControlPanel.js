@@ -2,15 +2,19 @@ import PropTypes from 'prop-types';
 import {
   TextField,
   FormControl,
+  FormControlLabel,
+  Switch,
   InputLabel,
   Select,
   MenuItem,
+  Slider,
   Grid,
   useTheme,
 } from '@material-ui/core/';
 import React, { useState } from 'react';
 import { getFieldData } from '../utils/processData';
 import useControlPanelStyles from './styles/useControlPanelStyles';
+import { getFieldsForSize } from '../utils/getFieldsForSize';
 
 export default function ControlPanel(props) {
   //   console.log(props.theme);
@@ -24,6 +28,9 @@ export default function ControlPanel(props) {
     scale,
     setScale,
     json,
+    shrink,
+    setShrink,
+    setFieldData,
   } = props;
 
   const theme = useTheme();
@@ -56,8 +63,45 @@ export default function ControlPanel(props) {
       '180x150',
     ];
   }
+  const [size, setSize] = useState('300x250');
 
-  const [size, setSize] = useState();
+  function handleSelectChange(e) {
+    function hasWhiteSpace(s) {
+      return s.indexOf(' ') >= 0;
+    }
+    const a = e.target.value;
+
+    const b = a.split('x');
+    if (hasWhiteSpace(a)) {
+      // Lifestyle crop
+      const c = b[1].split(' ');
+      setCropWidth(b[0]);
+      setCropHeight(c[0]);
+
+      // use regex to get the original ad size which is in parens of the select
+      // we are displaying the "lifestyle crop wxh (ad size wxh)"
+      // so we have to get it out of the parens
+      const regExp = /\(([^)]+)\)/;
+      const adSizeToMatch = regExp.exec(a);
+      // get adSize from select when its treatment data
+      // use this as the match for which fieldData to get
+      setFieldData(getFieldsForSize(json[0], adSizeToMatch[1]));
+    } else {
+      // Full frame crop
+      setCropWidth(b[0]);
+      setCropHeight(b[1]);
+      //  console.log(`${b[0]}x${b[1]}`);
+    }
+    setSize(e.target.value);
+  }
+
+  const handleShrink = (event) => {
+    setShrink(event.target.checked);
+  };
+
+  function valuetext(value) {
+    return `${value}°C`;
+  }
 
   return (
     <form className={classes.form}>
@@ -145,20 +189,7 @@ export default function ControlPanel(props) {
             <Select
               name="selectASize"
               onChange={(e) => {
-                function hasWhiteSpace(s) {
-                  return s.indexOf(' ') >= 0;
-                }
-                const a = e.target.value;
-                const b = a.split('x');
-                if (hasWhiteSpace(a)) {
-                  const c = b[1].split(' ');
-                  setCropWidth(b[0]);
-                  setCropHeight(c[0]);
-                } else {
-                  setCropWidth(b[0]);
-                  setCropHeight(b[1]);
-                }
-                setSize(e.target.value);
+                handleSelectChange(e);
                 // localStorage.setItem('scale', e.target.value);
               }}
               value={size}
@@ -170,6 +201,32 @@ export default function ControlPanel(props) {
               ))}
             </Select>
           </FormControl>
+        </Grid>
+        <Grid xs item>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={shrink}
+                onChange={handleShrink}
+                name="shrink"
+                color="primary"
+              />
+            }
+            label="Shrink Me"
+          />
+        </Grid>
+        <Grid xs item>
+          <Slider
+            defaultValue={1}
+            getAriaValueText={valuetext}
+            aria-labelledby="discrete-slider"
+            valueLabelDisplay="auto"
+            step={0.1}
+            marks
+            min={0.4}
+            max={1}
+            style={{ marginTop: '10px' }}
+          />
         </Grid>
       </Grid>
     </form>
@@ -186,4 +243,7 @@ ControlPanel.propTypes = {
   scale: PropTypes.any,
   setScale: PropTypes.any,
   json: PropTypes.any,
+  shrink: PropTypes.any,
+  setShrink: PropTypes.any,
+  setFieldData: PropTypes.any,
 };

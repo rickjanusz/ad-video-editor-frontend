@@ -17,6 +17,9 @@ export default function Header(props) {
     scale,
     setScale,
     json,
+    shrink,
+    setShrink,
+    setFieldData,
   } = props;
 
   const theme = useTheme();
@@ -46,6 +49,9 @@ export default function Header(props) {
             scale={scale}
             setScale={setScale}
             json={json}
+            shrink={shrink}
+            setShrink={setShrink}
+            setFieldData={setFieldData}
           />
         </Grid>
         <Grid xs item>
@@ -66,4 +72,7 @@ Header.propTypes = {
   scale: PropTypes.any,
   setScale: PropTypes.any,
   json: PropTypes.any,
+  shrink: PropTypes.any,
+  setShrink: PropTypes.any,
+  setFieldData: PropTypes.any,
 };

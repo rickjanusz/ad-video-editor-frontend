@@ -11,6 +11,7 @@ import DragAndDrop from './DragAndDrop';
 import Preview from './Preview';
 import GetStarted from './GetStarted';
 import useFFMPEGStyles from './styles/useFFMPEGStyles';
+import TreatmentGhost from './TreatmentGhost';
 
 // import { gsap } from 'gsap';
 export default function FFMPEG({ props }) {
@@ -26,6 +27,8 @@ export default function FFMPEG({ props }) {
     setVideo,
     filename,
     setFilename,
+    shrink,
+    fieldData,
   } = props;
 
   const [crop, setCrop] = useState();
@@ -58,9 +61,14 @@ export default function FFMPEG({ props }) {
   const dragRef = useRef();
   const dragParent = useRef();
   const vidRef = useRef();
+  const videoShrink = useRef();
   const timeRef = useRef();
   const widthRef = useRef();
   const heightRef = useRef();
+
+  // ////////////////////
+  // GET POSITION OF CROPPER:
+  // ////////////////////
 
   function makeEven(num) {
     if (num % 2 !== 0) {
@@ -68,21 +76,25 @@ export default function FFMPEG({ props }) {
     }
     return Math.floor(num);
   }
-  // ////////////////////
-  // GET POSITION OF CROPPER:
-  // ////////////////////
 
   function getPosition() {
+    let shrinkVal = 1;
+    if (shrink) {
+      shrinkVal = 0.4;
+    } else {
+      shrinkVal = 1;
+    }
+
     const childDims = dragRef.current.getBoundingClientRect();
     const parentPos = dragParent.current.getBoundingClientRect();
     const vidPos = vidRef.current.getBoundingClientRect();
     const childOffset = {
-      top: parseInt((childDims.top - parentPos.top) / scale),
-      left: parseInt((childDims.left - parentPos.left) / scale),
-      width: makeEven(parseInt(childDims.width / scale)),
-      height: makeEven(parseInt(childDims.height / scale)),
-      vidWidth: makeEven(parseInt(vidPos.width / scale)),
-      vidHeight: makeEven(parseInt(vidPos.height / scale)),
+      top: parseInt((childDims.top - parentPos.top) / scale / shrinkVal),
+      left: parseInt((childDims.left - parentPos.left) / scale / shrinkVal),
+      width: makeEven(parseInt(childDims.width / scale) / shrinkVal),
+      height: makeEven(parseInt(childDims.height / scale) / shrinkVal),
+      vidWidth: makeEven(parseInt(vidPos.width / scale) / shrinkVal),
+      vidHeight: makeEven(parseInt(vidPos.height / scale) / shrinkVal),
     };
     // console.log(childDims);
     return childOffset;
@@ -102,7 +114,14 @@ export default function FFMPEG({ props }) {
   }
 
   useEffect(() => {
+    if (fieldData) {
+      console.log({ fieldData });
+    }
     if (video) {
+      // eslint-disable-next-line no-unused-expressions
+      shrink
+        ? (videoShrink.current.style.scale = 0.4)
+        : (videoShrink.current.style.scale = 1);
       saveFrame();
 
       const ro = new ResizeObserver((entries) => {
@@ -118,7 +137,7 @@ export default function FFMPEG({ props }) {
 
       ro.observe(dragRef.current);
     }
-  }, [video]);
+  }, [video, shrink, fieldData]);
 
   const convertVideoToMP4 = async (vid, ext) => {
     ffmpeg.FS('writeFile', `input.${ext}`, await fetchFile(vid));
@@ -189,7 +208,8 @@ export default function FFMPEG({ props }) {
           >
             <div className="videoCropper">
               <Box
-                className={classes.videoPolaroid}
+                className={classes.videoPolaroid + (shrink ? ' shrink' : '')}
+                ref={videoShrink}
                 boxShadow={7}
                 border={15}
                 borderColor={theme.palette.background.paper}
@@ -223,6 +243,7 @@ export default function FFMPEG({ props }) {
                           width: `${Math.floor(cropWidth * scale)}px`,
                         }}
                       >
+                        {fieldData && <TreatmentGhost fieldData={fieldData} />}
                         <div className={`${classes.handle} handle`} />
                       </div>
                     </Draggable>
@@ -332,4 +353,6 @@ FFMPEG.propTypes = {
   setVideo: PropTypes.any,
   filename: PropTypes.any,
   setFilename: PropTypes.any,
+  shrink: PropTypes.any,
+  fieldData: PropTypes.any,
 };

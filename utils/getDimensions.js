@@ -1,6 +1,6 @@
 const getDimensions = (field, data) => {
   const fieldData = [];
-  data.map((dataBits) => {
+  data.forEach((dataBits) => {
     if (dataBits.name === field) {
       fieldData.push({
         field,

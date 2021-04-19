@@ -30,6 +30,8 @@ function MyApp({ Component, apollo }) {
   const [length, setLength] = useState(1);
   const [scale, setScale] = useState(1);
   const [json, setJson] = useState();
+  const [shrink, setShrink] = useState(false);
+  const [fieldData, setFieldData] = useState(false);
 
   useEffect(() => {
     const localStorageItems = [
@@ -78,6 +80,9 @@ function MyApp({ Component, apollo }) {
             scale={scale}
             setScale={setScale}
             json={json}
+            shrink={shrink}
+            setShrink={setShrink}
+            setFieldData={setFieldData}
           />
           <Component
             filename={filename}
@@ -93,6 +98,8 @@ function MyApp({ Component, apollo }) {
             setJson={setJson}
             video={video}
             setVideo={setVideo}
+            shrink={shrink}
+            fieldData={fieldData}
           />
           <Footer />
         </ThemeProvider>
