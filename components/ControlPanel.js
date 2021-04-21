@@ -10,11 +10,13 @@ import {
   Slider,
   Grid,
   useTheme,
+  Checkbox,
 } from '@material-ui/core/';
 import React, { useState } from 'react';
-import { getFieldData } from '../utils/processData';
 import useControlPanelStyles from './styles/useControlPanelStyles';
+import { getFieldData } from '../utils/processData';
 import { getFieldsForSize } from '../utils/getFieldsForSize';
+import TreatmentGhost from './TreatmentGhost';
 
 export default function ControlPanel(props) {
   //   console.log(props.theme);
@@ -31,6 +33,7 @@ export default function ControlPanel(props) {
     shrink,
     setShrink,
     setFieldData,
+    fieldData,
   } = props;
 
   const theme = useTheme();
@@ -101,6 +104,13 @@ export default function ControlPanel(props) {
 
   function valuetext(value) {
     return `${value}°C`;
+  }
+
+  const [checked, setChecked] = useState(true);
+
+  function handleChecked(event) {
+    setChecked(event.target.checked);
+    return <TreatmentGhost fieldData={fieldData} />;
   }
 
   return (
@@ -202,6 +212,14 @@ export default function ControlPanel(props) {
             </Select>
           </FormControl>
         </Grid>
+
+        <Grid xs item>
+          <Checkbox
+            checked={checked}
+            onChange={handleChecked}
+            inputProps={{ 'aria-label': 'primary checkbox' }}
+          />
+        </Grid>
         <Grid xs item>
           <FormControlLabel
             control={
@@ -246,4 +264,5 @@ ControlPanel.propTypes = {
   shrink: PropTypes.any,
   setShrink: PropTypes.any,
   setFieldData: PropTypes.any,
+  fieldData: PropTypes.any,
 };

@@ -116,6 +116,10 @@ const useFFMPEGStyles = makeStyles((theme) => ({
   widthDim: {
     marginRight: '10px',
   },
+  ghost: {
+    transformOrigin: '0 0',
+    transition: '1s all',
+  },
 }));
 
 export default useFFMPEGStyles;

@@ -20,6 +20,7 @@ export default function Header(props) {
     shrink,
     setShrink,
     setFieldData,
+    fieldData,
   } = props;
 
   const theme = useTheme();
@@ -52,6 +53,7 @@ export default function Header(props) {
             shrink={shrink}
             setShrink={setShrink}
             setFieldData={setFieldData}
+            fieldData={fieldData}
           />
         </Grid>
         <Grid xs item>
@@ -75,4 +77,5 @@ Header.propTypes = {
   shrink: PropTypes.any,
   setShrink: PropTypes.any,
   setFieldData: PropTypes.any,
+  fieldData: PropTypes.any,
 };

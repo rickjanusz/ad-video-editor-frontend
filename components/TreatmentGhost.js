@@ -1,32 +1,48 @@
 import React from 'react';
-import { getFieldsForSize } from '../utils/getFieldsForSize';
 
 export default function TreatmentGhost({ fieldData }) {
   const adSize = fieldData[0].size.split('x');
 
+  let offsetLeft = '';
+  let offsetTop = '';
+  function getLifestylePos() {
+    fieldData.map((field) => {
+      if (field.field === 'lifestyle_img') {
+        offsetLeft = Math.floor(field.dims.left);
+        offsetTop = Math.floor(field.dims.top);
+        console.log('Ghost: ', offsetLeft, offsetTop);
+      }
+    });
+  }
+  getLifestylePos();
+
   return (
     <div
+      className="ghost"
+      data-top={offsetTop}
+      data-left={offsetLeft}
+      data-width={adSize[0]}
+      data-height={adSize[1]}
       style={{
         width: `${adSize[0]}px`,
         height: `${adSize[1]}px`,
+        left: `${offsetLeft}px`,
+        top: `${offsetTop}px`,
         position: 'absolute',
-        border: '1px solid green',
+        zIndex: 1000,
       }}
     >
-      {fieldData.map((field) => {
-        console.log('FIELD YO', field.size);
-        return (
-          <div
-            className={field.field}
-            style={{
-              ...field.dims,
-              border: '1px solid red',
-              pointerEvents: 'none',
-              position: 'absolute',
-            }}
-          />
-        );
-      })}
+      {fieldData.map((field) => (
+        <div
+          className={field.field}
+          style={{
+            ...field.dims,
+            border: `2px solid rgba(255, 100, 0, .2)`,
+            pointerEvents: 'none',
+            position: 'absolute',
+          }}
+        />
+      ))}
     </div>
   );
 }

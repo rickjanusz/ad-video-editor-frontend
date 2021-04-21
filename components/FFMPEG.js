@@ -99,10 +99,32 @@ export default function FFMPEG({ props }) {
     // console.log(childDims);
     return childOffset;
   }
-
   // Drag & Drop callback
   function handleStop() {
     getPosition();
+    console.log(parseFloat(scale));
+    if (fieldData) {
+      const ghost = document.querySelector('.ghost');
+      const pos = getPosition();
+      ghost.style.transition = '.3s opacity';
+      ghost.style.opacity = 1;
+      ghost.style.scale = scale;
+      ghost.style.transformOrigin = '0 0';
+      ghost.style.top = `${Math.floor(pos.top - ghost.dataset.top) * scale}px`;
+      ghost.style.left = `${
+        Math.floor(pos.left - ghost.dataset.left) * scale
+      }px`;
+    }
+  }
+
+  function handleStart() {
+    const ghost = document.querySelector('.ghost');
+    ghost.style.opacity = 0;
+    console.log('starting drag');
+  }
+
+  function handleDrag() {
+    console.log('dragging');
   }
 
   function saveFrame() {
@@ -114,10 +136,12 @@ export default function FFMPEG({ props }) {
   }
 
   useEffect(() => {
-    if (fieldData) {
-      console.log({ fieldData });
-    }
     if (video) {
+      if (fieldData) {
+        const ghost = document.querySelector('.ghost');
+
+        ghost.style.scale = scale;
+      }
       // eslint-disable-next-line no-unused-expressions
       shrink
         ? (videoShrink.current.style.scale = 0.4)
@@ -137,7 +161,7 @@ export default function FFMPEG({ props }) {
 
       ro.observe(dragRef.current);
     }
-  }, [video, shrink, fieldData]);
+  }, [video, shrink, fieldData, scale]);
 
   const convertVideoToMP4 = async (vid, ext) => {
     ffmpeg.FS('writeFile', `input.${ext}`, await fetchFile(vid));
@@ -214,6 +238,7 @@ export default function FFMPEG({ props }) {
                 border={15}
                 borderColor={theme.palette.background.paper}
               >
+                {fieldData && <TreatmentGhost fieldData={fieldData} />}
                 <Box className={classes.videoContainer}>
                   <video
                     controls
@@ -231,8 +256,8 @@ export default function FFMPEG({ props }) {
                       defaultPosition={{ x: 0, y: 0 }}
                       grid={[1, 1]}
                       scale={1}
-                      // onStart={handleStart}
-                      // onDrag={handleDrag}
+                      onStart={handleStart}
+                      onDrag={handleDrag}
                       onStop={handleStop}
                     >
                       <div
@@ -243,7 +268,6 @@ export default function FFMPEG({ props }) {
                           width: `${Math.floor(cropWidth * scale)}px`,
                         }}
                       >
-                        {fieldData && <TreatmentGhost fieldData={fieldData} />}
                         <div className={`${classes.handle} handle`} />
                       </div>
                     </Draggable>
