@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'; // import React, { useState, imagetgif from "react";
+import React, { useCallback, useEffect, useRef, useState } from 'react'; // import React, { useState, imagetgif from "react";
 import { fetchFile } from '@ffmpeg/ffmpeg';
 import Draggable from 'react-draggable';
 import NProgress from 'nprogress';
@@ -27,7 +27,7 @@ export default function FFMPEG({ props }) {
     setVideo,
     filename,
     setFilename,
-    shrink,
+    treatmentOverlay,
     fieldData,
   } = props;
 
@@ -77,39 +77,32 @@ export default function FFMPEG({ props }) {
     return Math.floor(num);
   }
 
-  function getPosition() {
-    let shrinkVal = 1;
-    if (shrink) {
-      shrinkVal = 0.4;
-    } else {
-      shrinkVal = 1;
-    }
-
+  const getPositionCallback = useCallback(() => {
     const childDims = dragRef.current.getBoundingClientRect();
     const parentPos = dragParent.current.getBoundingClientRect();
     const vidPos = vidRef.current.getBoundingClientRect();
     const childOffset = {
-      top: parseInt((childDims.top - parentPos.top) / scale / shrinkVal),
-      left: parseInt((childDims.left - parentPos.left) / scale / shrinkVal),
-      width: makeEven(parseInt(childDims.width / scale) / shrinkVal),
-      height: makeEven(parseInt(childDims.height / scale) / shrinkVal),
-      vidWidth: makeEven(parseInt(vidPos.width / scale) / shrinkVal),
-      vidHeight: makeEven(parseInt(vidPos.height / scale) / shrinkVal),
+      top: parseInt((childDims.top - parentPos.top) / scale),
+      left: parseInt((childDims.left - parentPos.left) / scale),
+      width: makeEven(parseInt(childDims.width / scale)),
+      height: makeEven(parseInt(childDims.height / scale)),
+      vidWidth: makeEven(parseInt(vidPos.width / scale)),
+      vidHeight: makeEven(parseInt(vidPos.height / scale)),
     };
     // console.log(childDims);
     return childOffset;
-  }
+  }, [scale]);
+
   // Drag & Drop callback
   function handleStop() {
-    getPosition();
-    console.log(parseFloat(scale));
+    getPositionCallback();
     if (fieldData) {
       const ghost = document.querySelector('.ghost');
-      const pos = getPosition();
-      ghost.style.transition = '.3s opacity';
-      ghost.style.opacity = 1;
+      const pos = getPositionCallback();
+      if (treatmentOverlay) {
+        ghost.style.opacity = 1;
+      }
       ghost.style.scale = scale;
-      ghost.style.transformOrigin = '0 0';
       ghost.style.top = `${Math.floor(pos.top - ghost.dataset.top) * scale}px`;
       ghost.style.left = `${
         Math.floor(pos.left - ghost.dataset.left) * scale
@@ -118,8 +111,12 @@ export default function FFMPEG({ props }) {
   }
 
   function handleStart() {
-    const ghost = document.querySelector('.ghost');
-    ghost.style.opacity = 0;
+    if (fieldData) {
+      if (treatmentOverlay) {
+        const ghost = document.querySelector('.ghost');
+        ghost.style.opacity = 0;
+      }
+    }
     console.log('starting drag');
   }
 
@@ -139,13 +136,26 @@ export default function FFMPEG({ props }) {
     if (video) {
       if (fieldData) {
         const ghost = document.querySelector('.ghost');
+        const pos = getPositionCallback();
 
         ghost.style.scale = scale;
+        ghost.style.transformOrigin = '0 0';
+        ghost.style.transition = '.25s opacity';
+        if (scale) {
+          ghost.style.top = `${
+            Math.floor(pos.top - ghost.dataset.top) * scale
+          }px`;
+          ghost.style.left = `${
+            Math.floor(pos.left - ghost.dataset.left) * scale
+          }px`;
+        }
+        if (treatmentOverlay) {
+          ghost.style.opacity = 1;
+        } else {
+          ghost.style.opacity = 0;
+        }
       }
       // eslint-disable-next-line no-unused-expressions
-      shrink
-        ? (videoShrink.current.style.scale = 0.4)
-        : (videoShrink.current.style.scale = 1);
       saveFrame();
 
       const ro = new ResizeObserver((entries) => {
@@ -161,7 +171,7 @@ export default function FFMPEG({ props }) {
 
       ro.observe(dragRef.current);
     }
-  }, [video, shrink, fieldData, scale]);
+  }, [video, treatmentOverlay, fieldData, scale, getPositionCallback]);
 
   const convertVideoToMP4 = async (vid, ext) => {
     ffmpeg.FS('writeFile', `input.${ext}`, await fetchFile(vid));
@@ -187,7 +197,7 @@ export default function FFMPEG({ props }) {
   async function exportFormat(mimType, mylength, stateFunc) {
     const ext = mimType.split('/').pop();
     ffmpeg.FS('writeFile', 'test.mp4', await fetchFile(video));
-    const dims = getPosition();
+    const dims = getPositionCallback();
 
     await ffmpeg.setProgress(({ ratio }) => {
       NProgress.set(ratio);
@@ -232,7 +242,7 @@ export default function FFMPEG({ props }) {
           >
             <div className="videoCropper">
               <Box
-                className={classes.videoPolaroid + (shrink ? ' shrink' : '')}
+                className={classes.videoPolaroid}
                 ref={videoShrink}
                 boxShadow={7}
                 border={15}
@@ -377,6 +387,6 @@ FFMPEG.propTypes = {
   setVideo: PropTypes.any,
   filename: PropTypes.any,
   setFilename: PropTypes.any,
-  shrink: PropTypes.any,
+  treatmentOverlay: PropTypes.any,
   fieldData: PropTypes.any,
 };

@@ -17,8 +17,8 @@ export default function Header(props) {
     scale,
     setScale,
     json,
-    shrink,
-    setShrink,
+    treatmentOverlay,
+    setTreatmentOverlay,
     setFieldData,
     fieldData,
   } = props;
@@ -50,8 +50,8 @@ export default function Header(props) {
             scale={scale}
             setScale={setScale}
             json={json}
-            shrink={shrink}
-            setShrink={setShrink}
+            treatmentOverlay={treatmentOverlay}
+            setTreatmentOverlay={setTreatmentOverlay}
             setFieldData={setFieldData}
             fieldData={fieldData}
           />
@@ -74,8 +74,8 @@ Header.propTypes = {
   scale: PropTypes.any,
   setScale: PropTypes.any,
   json: PropTypes.any,
-  shrink: PropTypes.any,
-  setShrink: PropTypes.any,
+  treatmentOverlay: PropTypes.any,
+  setTreatmentOverlay: PropTypes.any,
   setFieldData: PropTypes.any,
   fieldData: PropTypes.any,
 };

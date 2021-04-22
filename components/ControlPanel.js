@@ -30,8 +30,8 @@ export default function ControlPanel(props) {
     scale,
     setScale,
     json,
-    shrink,
-    setShrink,
+    treatmentOverlay,
+    setTreatmentOverlay,
     setFieldData,
     fieldData,
   } = props;
@@ -99,7 +99,7 @@ export default function ControlPanel(props) {
   }
 
   const handleShrink = (event) => {
-    setShrink(event.target.checked);
+    setTreatmentOverlay(event.target.checked);
   };
 
   function valuetext(value) {
@@ -213,39 +213,21 @@ export default function ControlPanel(props) {
           </FormControl>
         </Grid>
 
-        <Grid xs item>
-          <Checkbox
-            checked={checked}
-            onChange={handleChecked}
-            inputProps={{ 'aria-label': 'primary checkbox' }}
-          />
-        </Grid>
-        <Grid xs item>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={shrink}
-                onChange={handleShrink}
-                name="shrink"
-                color="primary"
-              />
-            }
-            label="Shrink Me"
-          />
-        </Grid>
-        <Grid xs item>
-          <Slider
-            defaultValue={1}
-            getAriaValueText={valuetext}
-            aria-labelledby="discrete-slider"
-            valueLabelDisplay="auto"
-            step={0.1}
-            marks
-            min={0.4}
-            max={1}
-            style={{ marginTop: '10px' }}
-          />
-        </Grid>
+        {json && (
+          <Grid xs item>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={treatmentOverlay}
+                  onChange={handleShrink}
+                  name="treatmentOverlay"
+                  color="primary"
+                />
+              }
+              label="Show Treatment Overlay"
+            />
+          </Grid>
+        )}
       </Grid>
     </form>
   );
@@ -261,8 +243,8 @@ ControlPanel.propTypes = {
   scale: PropTypes.any,
   setScale: PropTypes.any,
   json: PropTypes.any,
-  shrink: PropTypes.any,
-  setShrink: PropTypes.any,
+  treatmentOverlay: PropTypes.any,
+  setTreatmentOverlay: PropTypes.any,
   setFieldData: PropTypes.any,
   fieldData: PropTypes.any,
 };

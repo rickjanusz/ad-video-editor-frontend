@@ -30,7 +30,7 @@ function MyApp({ Component, apollo }) {
   const [length, setLength] = useState(1);
   const [scale, setScale] = useState(1);
   const [json, setJson] = useState();
-  const [shrink, setShrink] = useState(false);
+  const [treatmentOverlay, setTreatmentOverlay] = useState(false);
   const [fieldData, setFieldData] = useState(false);
 
   useEffect(() => {
@@ -80,8 +80,8 @@ function MyApp({ Component, apollo }) {
             scale={scale}
             setScale={setScale}
             json={json}
-            shrink={shrink}
-            setShrink={setShrink}
+            treatmentOverlay={treatmentOverlay}
+            setTreatmentOverlay={setTreatmentOverlay}
             setFieldData={setFieldData}
             fieldData={fieldData}
           />
@@ -99,7 +99,7 @@ function MyApp({ Component, apollo }) {
             setJson={setJson}
             video={video}
             setVideo={setVideo}
-            shrink={shrink}
+            treatmentOverlay={treatmentOverlay}
             fieldData={fieldData}
           />
           <Footer />

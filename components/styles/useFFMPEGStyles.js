@@ -30,6 +30,7 @@ const useFFMPEGStyles = makeStyles((theme) => ({
     border: `15px solid ${theme.palette.background.paper}`,
     marginBottom: '40px;',
     transition: '1s all',
+    position: 'relative',
   },
   draggableParent: {
     width: '100%',
@@ -115,10 +116,6 @@ const useFFMPEGStyles = makeStyles((theme) => ({
   },
   widthDim: {
     marginRight: '10px',
-  },
-  ghost: {
-    transformOrigin: '0 0',
-    transition: '1s all',
   },
 }));
 

@@ -37,7 +37,7 @@ export default function TreatmentGhost({ fieldData }) {
           className={field.field}
           style={{
             ...field.dims,
-            border: `2px solid rgba(255, 100, 0, .2)`,
+            border: `2px solid rgba(255, 0, 255, .5)`,
             pointerEvents: 'none',
             position: 'absolute',
           }}
