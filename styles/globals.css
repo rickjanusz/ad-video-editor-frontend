@@ -26,7 +26,6 @@
   /* border: 6px dashed white; */
 }
 
-video {
-  /* max-width: 1920px;
-  max-height: 1080px; */
+.ghost {
+  opacity: 0;
 }

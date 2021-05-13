@@ -34,6 +34,7 @@ function MyApp({ Component, apollo }) {
   const [fieldData, setFieldData] = useState(false);
   const [retina, setRetina] = useState(1);
   const [currentAdSize, setCurrentAdSize] = useState('300x250');
+  const [quality, setQuality] = useState('23');
 
   useEffect(() => {
     const localStorageItems = [
@@ -89,6 +90,8 @@ function MyApp({ Component, apollo }) {
             retina={retina}
             setRetina={setRetina}
             setCurrentAdSize={setCurrentAdSize}
+            quality={quality}
+            setQuality={setQuality}
           />
 
           <Component
@@ -109,6 +112,7 @@ function MyApp({ Component, apollo }) {
             fieldData={fieldData}
             retina={retina}
             currentAdSize={currentAdSize}
+            quality={quality}
           />
           <Footer />
         </ThemeProvider>

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default function TreatmentGhost({ fieldData, retina }) {
   const adSize = fieldData[0].size.split('x');
@@ -6,9 +7,9 @@ export default function TreatmentGhost({ fieldData, retina }) {
   let offsetLeft = '';
   let offsetTop = '';
 
-  console.log('adSize[0]', adSize[0]);
+  console.log('adSize[0]', adSize[0], 'retina', retina);
   function getLifestylePos() {
-    fieldData.map((field) => {
+    fieldData.forEach((field) => {
       if (field.field === 'lifestyle_img') {
         offsetLeft = Math.floor(field.dims.left);
         offsetTop = Math.floor(field.dims.top);
@@ -23,11 +24,11 @@ export default function TreatmentGhost({ fieldData, retina }) {
       className="ghost"
       data-top={offsetTop}
       data-left={offsetLeft}
-      data-width={adSize[0] * retina}
-      data-height={adSize[1] * retina}
+      data-width={adSize[0]}
+      data-height={adSize[1]}
       style={{
-        width: `${adSize[0] * retina}px`,
-        height: `${adSize[1] * retina}px`,
+        width: `${adSize[0]}px`,
+        height: `${adSize[1]}px`,
         left: `${offsetLeft}px`,
         top: `${offsetTop}px`,
         position: 'absolute',
@@ -49,3 +50,8 @@ export default function TreatmentGhost({ fieldData, retina }) {
     </div>
   );
 }
+
+TreatmentGhost.propTypes = {
+  fieldData: PropTypes.any,
+  retina: PropTypes.any,
+};

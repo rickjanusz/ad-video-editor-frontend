@@ -31,6 +31,7 @@ export default function FFMPEG({ props }) {
     fieldData,
     retina,
     currentAdSize,
+    quality,
   } = props;
 
   const [crop, setCrop] = useState();
@@ -150,6 +151,10 @@ export default function FFMPEG({ props }) {
             Math.floor(pos.left - ghost.dataset.left) * scale
           }px`;
         }
+        // if (retina) {
+        //   console.log('GHHHHOOOOOOST', retina);
+        //   ghost.style.scale = retina;
+        // }
         if (treatmentOverlay) {
           ghost.style.opacity = 1;
         } else {
@@ -229,7 +234,7 @@ export default function FFMPEG({ props }) {
       '-preset',
       'medium',
       '-crf',
-      '35',
+      `${quality}`,
       `out.${ext}`
     );
 
@@ -406,4 +411,5 @@ FFMPEG.propTypes = {
   fieldData: PropTypes.any,
   retina: PropTypes.any,
   currentAdSize: PropTypes.any,
+  quality: PropTypes.any,
 };

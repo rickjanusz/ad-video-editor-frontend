@@ -24,6 +24,8 @@ export default function Header(props) {
     retina,
     setRetina,
     setCurrentAdSize,
+    quality,
+    setQuality,
   } = props;
 
   const theme = useTheme();
@@ -61,6 +63,8 @@ export default function Header(props) {
             retina={retina}
             setRetina={setRetina}
             setCurrentAdSize={setCurrentAdSize}
+            quality={quality}
+            setQuality={setQuality}
           />
         </Grid>
         <Grid xs item>
@@ -88,4 +92,6 @@ Header.propTypes = {
   retina: PropTypes.any,
   setRetina: PropTypes.any,
   setCurrentAdSize: PropTypes.any,
+  quality: PropTypes.any,
+  setQuality: PropTypes.any,
 };

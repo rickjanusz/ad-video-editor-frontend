@@ -11,7 +11,6 @@ import {
   useTheme,
 } from '@material-ui/core/';
 import React, { useState } from 'react';
-import { set } from 'nprogress';
 import useControlPanelStyles from './styles/useControlPanelStyles';
 import { getFieldData } from '../utils/processData';
 import { getFieldsForSize } from '../utils/getFieldsForSize';
@@ -35,6 +34,8 @@ export default function ControlPanel(props) {
     fieldData,
     setRetina,
     setCurrentAdSize,
+    quality,
+    setQuality,
   } = props;
 
   const theme = useTheme();
@@ -107,10 +108,6 @@ export default function ControlPanel(props) {
     setTreatmentOverlay(event.target.checked);
   };
 
-  function valuetext(value) {
-    return `${value}°C`;
-  }
-
   const [checked, setChecked] = useState(true);
 
   function handleChecked(event) {
@@ -124,11 +121,55 @@ export default function ControlPanel(props) {
     setIsRetina(event.target.checked);
     if (isRetina) {
       setRetina(1);
-      // console.log(retina);
     } else {
       setRetina(2);
-      // console.log('2', retina);
     }
+  }
+
+  const qualityOptions = [
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+  ];
+  function handleQuality(e) {
+    setQuality(e.target.value);
   }
 
   return (
@@ -213,12 +254,33 @@ export default function ControlPanel(props) {
             margin="normal"
             className={classes.formControl}
           >
+            <InputLabel id="standard">Quality</InputLabel>
+            <Select
+              name="quality"
+              onChange={(e) => {
+                handleQuality(e);
+              }}
+              value={quality}
+            >
+              {qualityOptions.map((option) => (
+                <MenuItem value={`${option}`} key={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid xs item>
+          <FormControl
+            fullWidth
+            margin="normal"
+            className={classes.formControl}
+          >
             <InputLabel id="standard">Select A Size</InputLabel>
             <Select
               name="selectASize"
               onChange={(e) => {
                 handleSelectChange(e);
-                // localStorage.setItem('scale', e.target.value);
               }}
               value={size}
             >
@@ -281,4 +343,6 @@ ControlPanel.propTypes = {
   fieldData: PropTypes.any,
   setRetina: PropTypes.any,
   setCurrentAdSize: PropTypes.any,
+  quality: PropTypes.any,
+  setQuality: PropTypes.any,
 };
