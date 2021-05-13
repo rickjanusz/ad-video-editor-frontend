@@ -23,6 +23,7 @@ export default function Header(props) {
     fieldData,
     retina,
     setRetina,
+    setCurrentAdSize,
   } = props;
 
   const theme = useTheme();
@@ -59,6 +60,7 @@ export default function Header(props) {
             fieldData={fieldData}
             retina={retina}
             setRetina={setRetina}
+            setCurrentAdSize={setCurrentAdSize}
           />
         </Grid>
         <Grid xs item>
@@ -83,4 +85,7 @@ Header.propTypes = {
   setTreatmentOverlay: PropTypes.any,
   setFieldData: PropTypes.any,
   fieldData: PropTypes.any,
+  retina: PropTypes.any,
+  setRetina: PropTypes.any,
+  setCurrentAdSize: PropTypes.any,
 };

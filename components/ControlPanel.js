@@ -33,8 +33,8 @@ export default function ControlPanel(props) {
     setTreatmentOverlay,
     setFieldData,
     fieldData,
-    retina,
     setRetina,
+    setCurrentAdSize,
   } = props;
 
   const theme = useTheme();
@@ -79,21 +79,25 @@ export default function ControlPanel(props) {
     if (hasWhiteSpace(a)) {
       // Lifestyle crop
       const c = b[1].split(' ');
-      setCropWidth(b[0] * retina);
-      setCropHeight(c[0] * retina);
+      // setCurrentAdSize(adSizeToMatch[1]);
+      // setCurrentAdHeight(b[1]);
+      setCropWidth(b[0]);
+      setCropHeight(c[0]);
 
       // use regex to get the original ad size which is in parens of the select
       // we are displaying the "lifestyle crop wxh (ad size wxh)"
       // so we have to get it out of the parens
       const regExp = /\(([^)]+)\)/;
       const adSizeToMatch = regExp.exec(a);
+
+      setCurrentAdSize(adSizeToMatch[1]);
       // get adSize from select when its treatment data
       // use this as the match for which fieldData to get
       setFieldData(getFieldsForSize(json[0], adSizeToMatch[1]));
     } else {
       // Full frame crop
-      setCropWidth(b[0] * retina);
-      setCropHeight(b[1] * retina);
+      setCropWidth(b[0]);
+      setCropHeight(b[1]);
       //  console.log(`${b[0]}x${b[1]}`);
     }
     setSize(e.target.value);
@@ -120,10 +124,10 @@ export default function ControlPanel(props) {
     setIsRetina(event.target.checked);
     if (isRetina) {
       setRetina(1);
-      console.log(retina);
+      // console.log(retina);
     } else {
       setRetina(2);
-      console.log('2', retina);
+      // console.log('2', retina);
     }
   }
 
@@ -144,7 +148,7 @@ export default function ControlPanel(props) {
             value={cropWidth}
             onChange={(e) => {
               setCropWidth(e.target.value);
-              localStorage.setItem('cropWidth', e.target.value * retina);
+              localStorage.setItem('cropWidth', e.target.value);
             }}
           />
         </Grid>
@@ -162,7 +166,7 @@ export default function ControlPanel(props) {
             value={cropHeight}
             onChange={(e) => {
               setCropHeight(e.target.value);
-              localStorage.setItem('cropHeight', e.target.value * retina);
+              localStorage.setItem('cropHeight', e.target.value);
             }}
           />
         </Grid>
@@ -275,4 +279,6 @@ ControlPanel.propTypes = {
   setTreatmentOverlay: PropTypes.any,
   setFieldData: PropTypes.any,
   fieldData: PropTypes.any,
+  setRetina: PropTypes.any,
+  setCurrentAdSize: PropTypes.any,
 };

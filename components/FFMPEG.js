@@ -30,6 +30,7 @@ export default function FFMPEG({ props }) {
     treatmentOverlay,
     fieldData,
     retina,
+    currentAdSize,
   } = props;
 
   const [crop, setCrop] = useState();
@@ -160,8 +161,6 @@ export default function FFMPEG({ props }) {
 
       const ro = new ResizeObserver((entries) => {
         for (const entry of entries) {
-          console.log(entry.contentRect.height);
-          console.log(entry.contentRect.width);
           widthRef.current.innerHTML = Math.round(
             entry.borderBoxSize[0].inlineSize
           );
@@ -179,7 +178,7 @@ export default function FFMPEG({ props }) {
     fieldData,
     scale,
     getPositionCallback,
-    saveFrameCallback,
+    // saveFrameCallback,
   ]);
 
   const convertVideoToMP4 = async (vid, ext) => {
@@ -227,6 +226,10 @@ export default function FFMPEG({ props }) {
       '-c:a',
       'copy',
       '-an',
+      '-preset',
+      'medium',
+      '-crf',
+      '35',
       `out.${ext}`
     );
 
@@ -257,7 +260,9 @@ export default function FFMPEG({ props }) {
                 border={15}
                 borderColor={theme.palette.background.paper}
               >
-                {fieldData && <TreatmentGhost fieldData={fieldData} />}
+                {fieldData && (
+                  <TreatmentGhost fieldData={fieldData} retina={retina} />
+                )}
                 <Box className={classes.videoContainer}>
                   <video
                     controls
@@ -283,8 +288,10 @@ export default function FFMPEG({ props }) {
                         className={classes.draggy}
                         ref={dragRef}
                         style={{
-                          height: `${Math.floor(cropHeight * scale)}px`,
-                          width: `${Math.floor(cropWidth * scale)}px`,
+                          height: `${Math.floor(
+                            cropHeight * retina * scale
+                          )}px`,
+                          width: `${Math.floor(cropWidth * retina * scale)}px`,
                         }}
                       >
                         <div className={`${classes.handle} handle`} />
@@ -375,8 +382,7 @@ export default function FFMPEG({ props }) {
         gif={gif}
         jpg={jpg}
         filename={filename}
-        cropHeight={cropHeight}
-        cropWidth={cropWidth}
+        currentAdSize={currentAdSize}
       />
       <GetStarted video={video} />
     </>
@@ -398,4 +404,6 @@ FFMPEG.propTypes = {
   setFilename: PropTypes.any,
   treatmentOverlay: PropTypes.any,
   fieldData: PropTypes.any,
+  retina: PropTypes.any,
+  currentAdSize: PropTypes.any,
 };

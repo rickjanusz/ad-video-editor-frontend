@@ -32,7 +32,8 @@ function MyApp({ Component, apollo }) {
   const [json, setJson] = useState();
   const [treatmentOverlay, setTreatmentOverlay] = useState(false);
   const [fieldData, setFieldData] = useState(false);
-  const [retina, setRetina] = useState(false);
+  const [retina, setRetina] = useState(1);
+  const [currentAdSize, setCurrentAdSize] = useState('300x250');
 
   useEffect(() => {
     const localStorageItems = [
@@ -87,7 +88,9 @@ function MyApp({ Component, apollo }) {
             fieldData={fieldData}
             retina={retina}
             setRetina={setRetina}
+            setCurrentAdSize={setCurrentAdSize}
           />
+
           <Component
             filename={filename}
             setFilename={setFilename}
@@ -105,6 +108,7 @@ function MyApp({ Component, apollo }) {
             treatmentOverlay={treatmentOverlay}
             fieldData={fieldData}
             retina={retina}
+            currentAdSize={currentAdSize}
           />
           <Footer />
         </ThemeProvider>

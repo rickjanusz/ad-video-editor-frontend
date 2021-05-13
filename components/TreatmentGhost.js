@@ -1,10 +1,12 @@
 import React from 'react';
 
-export default function TreatmentGhost({ fieldData }) {
+export default function TreatmentGhost({ fieldData, retina }) {
   const adSize = fieldData[0].size.split('x');
 
   let offsetLeft = '';
   let offsetTop = '';
+
+  console.log('adSize[0]', adSize[0]);
   function getLifestylePos() {
     fieldData.map((field) => {
       if (field.field === 'lifestyle_img') {
@@ -21,11 +23,11 @@ export default function TreatmentGhost({ fieldData }) {
       className="ghost"
       data-top={offsetTop}
       data-left={offsetLeft}
-      data-width={adSize[0]}
-      data-height={adSize[1]}
+      data-width={adSize[0] * retina}
+      data-height={adSize[1] * retina}
       style={{
-        width: `${adSize[0]}px`,
-        height: `${adSize[1]}px`,
+        width: `${adSize[0] * retina}px`,
+        height: `${adSize[1] * retina}px`,
         left: `${offsetLeft}px`,
         top: `${offsetTop}px`,
         position: 'absolute',
@@ -37,7 +39,7 @@ export default function TreatmentGhost({ fieldData }) {
           className={field.field}
           style={{
             ...field.dims,
-            border: `2px solid rgba(255, 0, 255, .5)`,
+            border: `1px solid rgba(255, 0, 255, .5)`,
             pointerEvents: 'none',
             position: 'absolute',
           }}

@@ -5,14 +5,7 @@ import PropTypes from 'prop-types';
 import { useTheme } from '@material-ui/core/styles';
 import usePreviewStyles from './styles/usePreviewStyles';
 
-export default function Preview({
-  crop,
-  gif,
-  jpg,
-  filename,
-  cropHeight,
-  cropWidth,
-}) {
+export default function Preview({ crop, gif, jpg, filename, currentAdSize }) {
   const theme = useTheme();
   const classes = usePreviewStyles(theme);
 
@@ -43,13 +36,13 @@ export default function Preview({
                 justifyContent="center"
                 className={classes.paper}
               >
-                <img src={gif} alt={`cropped_gif_${cropWidth}x${cropHeight}`} />
+                <img src={gif} alt={`cropped_gif_${currentAdSize}`} />
                 <Button
                   variant="contained"
                   fullWidth
                   title={`Download ${filename}`}
                   endIcon={<SystemUpdateAltIcon />}
-                  download={`${filename}_${cropWidth}x${cropHeight}.gif`}
+                  download={`${filename}_${currentAdSize}.gif`}
                   href={gif}
                 >
                   Download GIF
@@ -68,13 +61,13 @@ export default function Preview({
                 justifyContent="center"
                 className={classes.paper}
               >
-                <img src={jpg} alt={`cropped_jpg_${cropWidth}x${cropHeight}`} />
+                <img src={jpg} alt={`cropped_jpg_${currentAdSize}`} />
                 <Button
                   variant="contained"
                   fullWidth
                   title={`Download ${filename}`}
                   endIcon={<SystemUpdateAltIcon />}
-                  download={`${filename}_${cropWidth}x${cropHeight}.jpg`}
+                  download={`${filename}_${currentAdSize}.jpg`}
                   href={jpg}
                 >
                   Download JPG
@@ -100,7 +93,7 @@ export default function Preview({
                   fullWidth
                   title={`Download ${filename}`}
                   endIcon={<SystemUpdateAltIcon />}
-                  download={`${filename}_${cropWidth}x${cropHeight}.mp4`}
+                  download={`${filename}_${currentAdSize}.mp4`}
                   href={crop}
                 >
                   Download Mp4
@@ -120,6 +113,5 @@ Preview.propTypes = {
   gif: PropTypes.any,
   jpg: PropTypes.any,
   filename: PropTypes.any,
-  cropHeight: PropTypes.any,
-  cropWidth: PropTypes.any,
+  currentAdSize: PropTypes.any,
 };
