@@ -21,10 +21,13 @@ export default function Header(props) {
     setTreatmentOverlay,
     setFieldData,
     fieldData,
+    retina,
+    setRetina,
   } = props;
 
   const theme = useTheme();
   const classes = useControlPanelStyles(theme);
+
   return (
     <Box component="main" maxWidth="xl" className={classes.appBar}>
       <Grid container spacing={0}>
@@ -54,6 +57,8 @@ export default function Header(props) {
             setTreatmentOverlay={setTreatmentOverlay}
             setFieldData={setFieldData}
             fieldData={fieldData}
+            retina={retina}
+            setRetina={setRetina}
           />
         </Grid>
         <Grid xs item>

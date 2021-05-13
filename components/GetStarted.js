@@ -73,7 +73,7 @@ const GetStarted = ({ video }) => {
                     component="img"
                     alt="Upload"
                     height="400"
-                    image="/static/images/upload.jpg"
+                    image="./static/images/upload.jpg"
                     title="Upload"
                   />
                   <CardContent>
@@ -98,7 +98,7 @@ const GetStarted = ({ video }) => {
                     component="img"
                     alt="Configure"
                     height="400"
-                    image="/static/images/configure.jpg"
+                    image="./static/images/configure.jpg"
                     title="Configure"
                   />
                   <CardContent>
@@ -123,7 +123,7 @@ const GetStarted = ({ video }) => {
                     component="img"
                     alt="Download"
                     height="400"
-                    image="/static/images/download.jpg"
+                    image="./static/images/download.jpg"
                     title="Download"
                   />
                   <CardContent>

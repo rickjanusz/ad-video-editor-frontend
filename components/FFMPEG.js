@@ -29,6 +29,7 @@ export default function FFMPEG({ props }) {
     setFilename,
     treatmentOverlay,
     fieldData,
+    retina,
   } = props;
 
   const [crop, setCrop] = useState();
@@ -117,20 +118,19 @@ export default function FFMPEG({ props }) {
         ghost.style.opacity = 0;
       }
     }
-    console.log('starting drag');
+    // console.log('starting drag');
   }
 
   function handleDrag() {
-    console.log('dragging');
+    // console.log('dragging');
   }
-
-  function saveFrame() {
+  const saveFrameCallback = useCallback(() => {
     vidRef.current.addEventListener('seeked', (event) => {
       const num = event.srcElement.currentTime;
       timeRef.current.innerHTML = num.toFixed(2);
-      debounce(setTime(num.toFixed(2)), 2000);
+      debounce(setTime(num.toFixed(2)), 3000);
     });
-  }
+  }, [vidRef, timeRef]);
 
   useEffect(() => {
     if (video) {
@@ -156,10 +156,12 @@ export default function FFMPEG({ props }) {
         }
       }
       // eslint-disable-next-line no-unused-expressions
-      saveFrame();
+      saveFrameCallback();
 
       const ro = new ResizeObserver((entries) => {
         for (const entry of entries) {
+          console.log(entry.contentRect.height);
+          console.log(entry.contentRect.width);
           widthRef.current.innerHTML = Math.round(
             entry.borderBoxSize[0].inlineSize
           );
@@ -171,7 +173,14 @@ export default function FFMPEG({ props }) {
 
       ro.observe(dragRef.current);
     }
-  }, [video, treatmentOverlay, fieldData, scale, getPositionCallback]);
+  }, [
+    video,
+    treatmentOverlay,
+    fieldData,
+    scale,
+    getPositionCallback,
+    saveFrameCallback,
+  ]);
 
   const convertVideoToMP4 = async (vid, ext) => {
     ffmpeg.FS('writeFile', `input.${ext}`, await fetchFile(vid));

@@ -2,7 +2,7 @@ import Box from '@material-ui/core/Box';
 import { makeStyles, Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { useTheme } from '@material-ui/core/styles';
-import GetStarted from './GetStarted';
+// import GetStarted from './GetStarted';
 import useFooterStyles from './styles/useFooterStyles';
 
 export default function Footer({ video }) {
@@ -11,23 +11,23 @@ export default function Footer({ video }) {
   const theme = useTheme();
   const classes = useFooterStyles(theme);
 
-  const CheckVideo = () => {
-    if (video) {
-      return <></>;
-    }
-    return (
-      <Box className={classes.wrapper}>
-        <Box className={classes.clip} />
-        <Box className={classes.clip2} />
-        <Box m={1} p={20}>
-          <Typography variant="h4" component="h2" gutterBottom align="center">
-            Getting Started
-          </Typography>
-          <GetStarted theme={theme} />
-        </Box>
-      </Box>
-    );
-  };
+  // const CheckVideo = () => {
+  //   if (video) {
+  //     return <></>;
+  //   }
+  //   // return (
+  //   //   <Box className={classes.wrapper}>
+  //   //     <Box className={classes.clip} />
+  //   //     <Box className={classes.clip2} />
+  //   //     <Box m={1} p={20}>
+  //   //       <Typography variant="h4" component="h2" gutterBottom align="center">
+  //   //         Getting Started
+  //   //       </Typography>
+  //   //       {/* <GetStarted theme={theme} /> */}
+  //   //     </Box>
+  //   //   </Box>
+  //   // );
+  // };
   return (
     <Box
       display="flex"
@@ -35,7 +35,7 @@ export default function Footer({ video }) {
       p={6}
       className={classes.footer}
     >
-      <p>Footer Content Here</p>
+      <p>&copy; {new Date().getFullYear()} Epsilon</p>
     </Box>
   );
 }

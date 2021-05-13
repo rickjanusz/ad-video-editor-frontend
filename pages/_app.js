@@ -32,6 +32,7 @@ function MyApp({ Component, apollo }) {
   const [json, setJson] = useState();
   const [treatmentOverlay, setTreatmentOverlay] = useState(false);
   const [fieldData, setFieldData] = useState(false);
+  const [retina, setRetina] = useState(false);
 
   useEffect(() => {
     const localStorageItems = [
@@ -84,6 +85,8 @@ function MyApp({ Component, apollo }) {
             setTreatmentOverlay={setTreatmentOverlay}
             setFieldData={setFieldData}
             fieldData={fieldData}
+            retina={retina}
+            setRetina={setRetina}
           />
           <Component
             filename={filename}
@@ -101,6 +104,7 @@ function MyApp({ Component, apollo }) {
             setVideo={setVideo}
             treatmentOverlay={treatmentOverlay}
             fieldData={fieldData}
+            retina={retina}
           />
           <Footer />
         </ThemeProvider>

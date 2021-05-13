@@ -41,6 +41,7 @@ export default function TreatmentGhost({ fieldData }) {
             pointerEvents: 'none',
             position: 'absolute',
           }}
+          key={field.field}
         />
       ))}
     </div>

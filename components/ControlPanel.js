@@ -7,12 +7,11 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  Slider,
   Grid,
   useTheme,
-  Checkbox,
 } from '@material-ui/core/';
 import React, { useState } from 'react';
+import { set } from 'nprogress';
 import useControlPanelStyles from './styles/useControlPanelStyles';
 import { getFieldData } from '../utils/processData';
 import { getFieldsForSize } from '../utils/getFieldsForSize';
@@ -34,6 +33,8 @@ export default function ControlPanel(props) {
     setTreatmentOverlay,
     setFieldData,
     fieldData,
+    retina,
+    setRetina,
   } = props;
 
   const theme = useTheme();
@@ -78,8 +79,8 @@ export default function ControlPanel(props) {
     if (hasWhiteSpace(a)) {
       // Lifestyle crop
       const c = b[1].split(' ');
-      setCropWidth(b[0]);
-      setCropHeight(c[0]);
+      setCropWidth(b[0] * retina);
+      setCropHeight(c[0] * retina);
 
       // use regex to get the original ad size which is in parens of the select
       // we are displaying the "lifestyle crop wxh (ad size wxh)"
@@ -91,8 +92,8 @@ export default function ControlPanel(props) {
       setFieldData(getFieldsForSize(json[0], adSizeToMatch[1]));
     } else {
       // Full frame crop
-      setCropWidth(b[0]);
-      setCropHeight(b[1]);
+      setCropWidth(b[0] * retina);
+      setCropHeight(b[1] * retina);
       //  console.log(`${b[0]}x${b[1]}`);
     }
     setSize(e.target.value);
@@ -113,6 +114,19 @@ export default function ControlPanel(props) {
     return <TreatmentGhost fieldData={fieldData} />;
   }
 
+  const [isRetina, setIsRetina] = useState(false);
+
+  function handleRetina(event) {
+    setIsRetina(event.target.checked);
+    if (isRetina) {
+      setRetina(1);
+      console.log(retina);
+    } else {
+      setRetina(2);
+      console.log('2', retina);
+    }
+  }
+
   return (
     <form className={classes.form}>
       <Grid container spacing={3}>
@@ -130,7 +144,7 @@ export default function ControlPanel(props) {
             value={cropWidth}
             onChange={(e) => {
               setCropWidth(e.target.value);
-              localStorage.setItem('cropWidth', e.target.value);
+              localStorage.setItem('cropWidth', e.target.value * retina);
             }}
           />
         </Grid>
@@ -148,7 +162,7 @@ export default function ControlPanel(props) {
             value={cropHeight}
             onChange={(e) => {
               setCropHeight(e.target.value);
-              localStorage.setItem('cropHeight', e.target.value);
+              localStorage.setItem('cropHeight', e.target.value * retina);
             }}
           />
         </Grid>
@@ -228,6 +242,20 @@ export default function ControlPanel(props) {
             />
           </Grid>
         )}
+
+        <Grid xs item>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={isRetina}
+                onChange={handleRetina}
+                name="isRetina"
+                color="primary"
+              />
+            }
+            label="Retina Sizing"
+          />
+        </Grid>
       </Grid>
     </form>
   );
