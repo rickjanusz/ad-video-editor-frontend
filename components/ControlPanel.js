@@ -304,7 +304,7 @@ export default function ControlPanel(props) {
                   color="primary"
                 />
               }
-              label="Show Treatment Overlay"
+              label="Treatment Overlay"
             />
           </Grid>
         )}

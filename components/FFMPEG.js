@@ -96,21 +96,35 @@ export default function FFMPEG({ props }) {
     return childOffset;
   }, [scale]);
 
-  // Drag & Drop callback
-  function handleStop() {
-    getPositionCallback();
+  function handleGhostOverlay() {
     if (fieldData) {
       const ghost = document.querySelector('.ghost');
       const pos = getPositionCallback();
+
+      ghost.style.scale = scale * retina;
+      ghost.style.transformOrigin = '0 0';
+      ghost.style.transition = '.25s opacity';
+      if (scale) {
+        ghost.style.top = `${
+          Math.floor(pos.top - ghost.dataset.top * retina) * scale
+        }px`;
+        ghost.style.left = `${
+          Math.floor(pos.left - ghost.dataset.left * retina) * scale
+        }px`;
+      }
+
       if (treatmentOverlay) {
         ghost.style.opacity = 1;
+      } else {
+        ghost.style.opacity = 0;
       }
-      ghost.style.scale = scale;
-      ghost.style.top = `${Math.floor(pos.top - ghost.dataset.top) * scale}px`;
-      ghost.style.left = `${
-        Math.floor(pos.left - ghost.dataset.left) * scale
-      }px`;
     }
+  }
+
+  // Drag & Drop callback
+  function handleStop() {
+    getPositionCallback();
+    handleGhostOverlay();
   }
 
   function handleStart() {
@@ -136,34 +150,9 @@ export default function FFMPEG({ props }) {
 
   useEffect(() => {
     if (video) {
-      if (fieldData) {
-        const ghost = document.querySelector('.ghost');
-        const pos = getPositionCallback();
-
-        ghost.style.scale = scale;
-        ghost.style.transformOrigin = '0 0';
-        ghost.style.transition = '.25s opacity';
-        if (scale) {
-          ghost.style.top = `${
-            Math.floor(pos.top - ghost.dataset.top) * scale
-          }px`;
-          ghost.style.left = `${
-            Math.floor(pos.left - ghost.dataset.left) * scale
-          }px`;
-        }
-        // if (retina) {
-        //   console.log('GHHHHOOOOOOST', retina);
-        //   ghost.style.scale = retina;
-        // }
-        if (treatmentOverlay) {
-          ghost.style.opacity = 1;
-        } else {
-          ghost.style.opacity = 0;
-        }
-      }
       // eslint-disable-next-line no-unused-expressions
       saveFrameCallback();
-
+      handleGhostOverlay();
       const ro = new ResizeObserver((entries) => {
         for (const entry of entries) {
           widthRef.current.innerHTML = Math.round(
@@ -179,9 +168,7 @@ export default function FFMPEG({ props }) {
     }
   }, [
     video,
-    treatmentOverlay,
-    fieldData,
-    scale,
+    handleGhostOverlay,
     getPositionCallback,
     // saveFrameCallback,
   ]);
@@ -270,6 +257,7 @@ export default function FFMPEG({ props }) {
                 )}
                 <Box className={classes.videoContainer}>
                   <video
+                    style="width:calc(50vw);height:calc(28vw + 125px);margin-top:calc(-70px)"
                     controls
                     ref={vidRef}
                     id="video"

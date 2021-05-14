@@ -12,8 +12,8 @@ const useControlPanelStyles = makeStyles((theme) => ({
     margin: theme.spacing(0),
     backgroundColor: theme.palette.primary.main,
     border: '2px solid rgba(234, 234, 234, 1)',
-    height: 70,
-    width: 70,
+    height: 90,
+    width: 90,
     transform: 'rotate(90deg)',
   },
   appBar: {
@@ -27,8 +27,8 @@ const useControlPanelStyles = makeStyles((theme) => ({
     width: '100vw',
   },
   headerIcon: {
-    width: 32,
-    height: 32,
+    width: 42,
+    height: 42,
   },
 }));
 export default useControlPanelStyles;
