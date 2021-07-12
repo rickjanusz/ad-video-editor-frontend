@@ -35,7 +35,7 @@ export default function Footer({ video }) {
       p={6}
       className={classes.footer}
     >
-      <p>&copy; {new Date().getFullYear()} Epsilon</p>
+      <p>&copy; {new Date().getFullYear()} Rick Janusz</p>
     </Box>
   );
 }
