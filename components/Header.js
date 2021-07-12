@@ -17,10 +17,20 @@ export default function Header(props) {
     scale,
     setScale,
     json,
+    treatmentOverlay,
+    setTreatmentOverlay,
+    setFieldData,
+    fieldData,
+    retina,
+    setRetina,
+    setCurrentAdSize,
+    quality,
+    setQuality,
   } = props;
 
   const theme = useTheme();
   const classes = useControlPanelStyles(theme);
+
   return (
     <Box component="main" maxWidth="xl" className={classes.appBar}>
       <Grid container spacing={0}>
@@ -46,6 +56,15 @@ export default function Header(props) {
             scale={scale}
             setScale={setScale}
             json={json}
+            treatmentOverlay={treatmentOverlay}
+            setTreatmentOverlay={setTreatmentOverlay}
+            setFieldData={setFieldData}
+            fieldData={fieldData}
+            retina={retina}
+            setRetina={setRetina}
+            setCurrentAdSize={setCurrentAdSize}
+            quality={quality}
+            setQuality={setQuality}
           />
         </Grid>
         <Grid xs item>
@@ -66,4 +85,13 @@ Header.propTypes = {
   scale: PropTypes.any,
   setScale: PropTypes.any,
   json: PropTypes.any,
+  treatmentOverlay: PropTypes.any,
+  setTreatmentOverlay: PropTypes.any,
+  setFieldData: PropTypes.any,
+  fieldData: PropTypes.any,
+  retina: PropTypes.any,
+  setRetina: PropTypes.any,
+  setCurrentAdSize: PropTypes.any,
+  quality: PropTypes.any,
+  setQuality: PropTypes.any,
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'; // import React, { useState, imagetgif from "react";
+import React, { useCallback, useEffect, useRef, useState } from 'react'; // import React, { useState, imagetgif from "react";
 import { fetchFile } from '@ffmpeg/ffmpeg';
 import Draggable from 'react-draggable';
 import NProgress from 'nprogress';
@@ -11,6 +11,7 @@ import DragAndDrop from './DragAndDrop';
 import Preview from './Preview';
 import GetStarted from './GetStarted';
 import useFFMPEGStyles from './styles/useFFMPEGStyles';
+import TreatmentGhost from './TreatmentGhost';
 
 // import { gsap } from 'gsap';
 export default function FFMPEG({ props }) {
@@ -26,6 +27,11 @@ export default function FFMPEG({ props }) {
     setVideo,
     filename,
     setFilename,
+    treatmentOverlay,
+    fieldData,
+    retina,
+    currentAdSize,
+    quality,
   } = props;
 
   const [crop, setCrop] = useState();
@@ -58,9 +64,14 @@ export default function FFMPEG({ props }) {
   const dragRef = useRef();
   const dragParent = useRef();
   const vidRef = useRef();
+  const videoShrink = useRef();
   const timeRef = useRef();
   const widthRef = useRef();
   const heightRef = useRef();
+
+  // ////////////////////
+  // GET POSITION OF CROPPER:
+  // ////////////////////
 
   function makeEven(num) {
     if (num % 2 !== 0) {
@@ -68,11 +79,8 @@ export default function FFMPEG({ props }) {
     }
     return Math.floor(num);
   }
-  // ////////////////////
-  // GET POSITION OF CROPPER:
-  // ////////////////////
 
-  function getPosition() {
+  const getPositionCallback = useCallback(() => {
     const childDims = dragRef.current.getBoundingClientRect();
     const parentPos = dragParent.current.getBoundingClientRect();
     const vidPos = vidRef.current.getBoundingClientRect();
@@ -86,25 +94,65 @@ export default function FFMPEG({ props }) {
     };
     // console.log(childDims);
     return childOffset;
+  }, [scale]);
+
+  function handleGhostOverlay() {
+    if (fieldData) {
+      const ghost = document.querySelector('.ghost');
+      const pos = getPositionCallback();
+
+      ghost.style.scale = scale * retina;
+      ghost.style.transformOrigin = '0 0';
+      ghost.style.transition = '.25s opacity';
+      if (scale) {
+        ghost.style.top = `${
+          Math.floor(pos.top - ghost.dataset.top * retina) * scale
+        }px`;
+        ghost.style.left = `${
+          Math.floor(pos.left - ghost.dataset.left * retina) * scale
+        }px`;
+      }
+
+      if (treatmentOverlay) {
+        ghost.style.opacity = 1;
+      } else {
+        ghost.style.opacity = 0;
+      }
+    }
   }
 
   // Drag & Drop callback
   function handleStop() {
-    getPosition();
+    getPositionCallback();
+    handleGhostOverlay();
   }
 
-  function saveFrame() {
+  function handleStart() {
+    if (fieldData) {
+      if (treatmentOverlay) {
+        const ghost = document.querySelector('.ghost');
+        ghost.style.opacity = 0;
+      }
+    }
+    // console.log('starting drag');
+  }
+
+  function handleDrag() {
+    // console.log('dragging');
+  }
+  const saveFrameCallback = useCallback(() => {
     vidRef.current.addEventListener('seeked', (event) => {
       const num = event.srcElement.currentTime;
       timeRef.current.innerHTML = num.toFixed(2);
-      debounce(setTime(num.toFixed(2)), 2000);
+      debounce(setTime(num.toFixed(2)), 3000);
     });
-  }
+  }, [vidRef, timeRef]);
 
   useEffect(() => {
     if (video) {
-      saveFrame();
-
+      // eslint-disable-next-line no-unused-expressions
+      saveFrameCallback();
+      handleGhostOverlay();
       const ro = new ResizeObserver((entries) => {
         for (const entry of entries) {
           widthRef.current.innerHTML = Math.round(
@@ -118,7 +166,12 @@ export default function FFMPEG({ props }) {
 
       ro.observe(dragRef.current);
     }
-  }, [video]);
+  }, [
+    video,
+    handleGhostOverlay,
+    getPositionCallback,
+    // saveFrameCallback,
+  ]);
 
   const convertVideoToMP4 = async (vid, ext) => {
     ffmpeg.FS('writeFile', `input.${ext}`, await fetchFile(vid));
@@ -144,7 +197,7 @@ export default function FFMPEG({ props }) {
   async function exportFormat(mimType, mylength, stateFunc) {
     const ext = mimType.split('/').pop();
     ffmpeg.FS('writeFile', 'test.mp4', await fetchFile(video));
-    const dims = getPosition();
+    const dims = getPositionCallback();
 
     await ffmpeg.setProgress(({ ratio }) => {
       NProgress.set(ratio);
@@ -165,6 +218,10 @@ export default function FFMPEG({ props }) {
       '-c:a',
       'copy',
       '-an',
+      '-preset',
+      'medium',
+      '-crf',
+      `${quality}`,
       `out.${ext}`
     );
 
@@ -190,12 +247,17 @@ export default function FFMPEG({ props }) {
             <div className="videoCropper">
               <Box
                 className={classes.videoPolaroid}
+                ref={videoShrink}
                 boxShadow={7}
                 border={15}
                 borderColor={theme.palette.background.paper}
               >
+                {fieldData && (
+                  <TreatmentGhost fieldData={fieldData} retina={retina} />
+                )}
                 <Box className={classes.videoContainer}>
                   <video
+                    style="width:calc(50vw);height:calc(28vw + 125px);margin-top:calc(-70px)"
                     controls
                     ref={vidRef}
                     id="video"
@@ -211,16 +273,18 @@ export default function FFMPEG({ props }) {
                       defaultPosition={{ x: 0, y: 0 }}
                       grid={[1, 1]}
                       scale={1}
-                      // onStart={handleStart}
-                      // onDrag={handleDrag}
+                      onStart={handleStart}
+                      onDrag={handleDrag}
                       onStop={handleStop}
                     >
                       <div
                         className={classes.draggy}
                         ref={dragRef}
                         style={{
-                          height: `${Math.floor(cropHeight * scale)}px`,
-                          width: `${Math.floor(cropWidth * scale)}px`,
+                          height: `${Math.floor(
+                            cropHeight * retina * scale
+                          )}px`,
+                          width: `${Math.floor(cropWidth * retina * scale)}px`,
                         }}
                       >
                         <div className={`${classes.handle} handle`} />
@@ -311,8 +375,7 @@ export default function FFMPEG({ props }) {
         gif={gif}
         jpg={jpg}
         filename={filename}
-        cropHeight={cropHeight}
-        cropWidth={cropWidth}
+        currentAdSize={currentAdSize}
       />
       <GetStarted video={video} />
     </>
@@ -332,4 +395,9 @@ FFMPEG.propTypes = {
   setVideo: PropTypes.any,
   filename: PropTypes.any,
   setFilename: PropTypes.any,
+  treatmentOverlay: PropTypes.any,
+  fieldData: PropTypes.any,
+  retina: PropTypes.any,
+  currentAdSize: PropTypes.any,
+  quality: PropTypes.any,
 };

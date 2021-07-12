@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { ApolloProvider } from '@apollo/client';
+import { createFFmpeg } from '@ffmpeg/ffmpeg';
 import NProgress from 'nprogress';
 import Router from 'next/router';
 import PropTypes from 'prop-types';
-import { createFFmpeg } from '@ffmpeg/ffmpeg';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/styles';
 import Layout from '../components/layout';
-import withData from '../lib/withData';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import theme from '../components/theme';
+import withData from '../lib/withData';
 import '../styles/nprogress.css';
 import '../styles/globals.css';
-import theme from '../components/theme';
 
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
@@ -30,6 +30,11 @@ function MyApp({ Component, apollo }) {
   const [length, setLength] = useState(1);
   const [scale, setScale] = useState(1);
   const [json, setJson] = useState();
+  const [treatmentOverlay, setTreatmentOverlay] = useState(false);
+  const [fieldData, setFieldData] = useState(false);
+  const [retina, setRetina] = useState(1);
+  const [currentAdSize, setCurrentAdSize] = useState('300x250');
+  const [quality, setQuality] = useState('23');
 
   useEffect(() => {
     const localStorageItems = [
@@ -78,7 +83,17 @@ function MyApp({ Component, apollo }) {
             scale={scale}
             setScale={setScale}
             json={json}
+            treatmentOverlay={treatmentOverlay}
+            setTreatmentOverlay={setTreatmentOverlay}
+            setFieldData={setFieldData}
+            fieldData={fieldData}
+            retina={retina}
+            setRetina={setRetina}
+            setCurrentAdSize={setCurrentAdSize}
+            quality={quality}
+            setQuality={setQuality}
           />
+
           <Component
             filename={filename}
             setFilename={setFilename}
@@ -93,6 +108,11 @@ function MyApp({ Component, apollo }) {
             setJson={setJson}
             video={video}
             setVideo={setVideo}
+            treatmentOverlay={treatmentOverlay}
+            fieldData={fieldData}
+            retina={retina}
+            currentAdSize={currentAdSize}
+            quality={quality}
           />
           <Footer />
         </ThemeProvider>

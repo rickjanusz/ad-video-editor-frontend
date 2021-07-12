@@ -45,7 +45,7 @@ const GetStarted = ({ video }) => {
     card: {
       margin: '0 10px 20px',
       minWidth: '350px',
-      maxWidth: '450px',
+      maxWidth: '360px',
     },
   }));
 
@@ -72,8 +72,8 @@ const GetStarted = ({ video }) => {
                   <CardMedia
                     component="img"
                     alt="Upload"
-                    height="400"
-                    image="/static/images/upload.jpg"
+                    height="350"
+                    image="./static/images/upload.jpg"
                     title="Upload"
                   />
                   <CardContent>
@@ -97,8 +97,8 @@ const GetStarted = ({ video }) => {
                   <CardMedia
                     component="img"
                     alt="Configure"
-                    height="400"
-                    image="/static/images/configure.jpg"
+                    height="350"
+                    image="./static/images/configure.jpg"
                     title="Configure"
                   />
                   <CardContent>
@@ -122,13 +122,13 @@ const GetStarted = ({ video }) => {
                   <CardMedia
                     component="img"
                     alt="Download"
-                    height="400"
-                    image="/static/images/download.jpg"
+                    height="350"
+                    image="./static/images/download.jpg"
                     title="Download"
                   />
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
-                      Export Video, Gif &amp; Poster Images
+                      Export Videos, Gifs &amp; Images
                     </Typography>
                     <Typography
                       variant="body2"
